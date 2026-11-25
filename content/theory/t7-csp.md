@@ -1,6 +1,6 @@
 # Problémy s ohraničeniami (CSP): backtracking, MRV, LCV, forward checking
 
-Podklad: cvičenie z 9. týždňa (Sudoku – `core/board.py`, `core/solver.py`) a štandardné definície z Russell & Norvig (AIMA). K tejto téme nie sú prednáškové slajdy.
+Podklad: cvičenie z 9. týždňa (Sudoku – `core/board.py`, `core/solver.py`), prednášky J. Gazdu z roku 2020 „CSP 1“ a „CSP 2“ (z archívu videí 2020; z roku 2026 sú k dispozícii len prednášky k týždňom 7–8 o vyhľadávaní) a štandardné definície z Russell & Norvig (AIMA).
 
 ## Čo je CSP
 
@@ -17,8 +17,25 @@ Podklad: cvičenie z 9. týždňa (Sudoku – `core/board.py`, `core/solver.py`)
 | **riešenie** | priradenie, ktoré je **úplné a zároveň konzistentné** |
 | unárne ohraničenie | týka sa jednej premennej (`X ≠ 5`) |
 | binárne ohraničenie | týka sa dvojice premenných (`X ≠ Y`) – hrana v grafe ohraničení |
-| globálne (n-árne) ohraničenie | týka sa viacerých premenných naraz, napr. `alldiff` (všetky rôzne) |
-| graf ohraničení | vrcholy = premenné, hrany = binárne ohraničenia |
+| globálne (n-árne) ohraničenie, ohraničenie vyššieho rádu | týka sa 3 a viac premenných naraz, napr. `alldiff` (všetky rôzne) alebo stĺpec kryptoaritmetiky |
+| preferencie (mäkké ohraničenia) | čo je *lepšie*, nie čo je povolené („červená je lepšia ako modrá“) – vedú na optimalizáciu |
+| graf ohraničení | vrcholy = premenné, hrany = binárne ohraničenia; **binárny CSP** má iba binárne ohraničenia |
+
+- Ohraničenie možno zapísať **implicitne** (podmienkou, napr. „dámy `Qi`, `Qj` sa neohrozujú“) alebo **explicitne** (výpočtom povolených dvojíc, napr. `(Q1, Q2) ∈ {(1, 3), (1, 4), …}`).
+- **Diskrétne premenné** s konečnou doménou: `n` premenných s doménou veľkosti `d` → `O(d^n)` úplných priradení (špeciálny prípad: boolovské CSP). Doména môže byť aj nekonečná (celé čísla, reťazce). **Spojité premenné** vedú na lineárne programovanie.
+- Príklady CSP z prednášky: farbenie mapy (Austrália, `D = {red, green, blue}`, susedné štáty rôznou farbou), N-dám, Sudoku, kryptoaritmetika, rozvrhy, hardvérový návrh, doprava (letiská, železničné uzly), detekcia porúch.
+
+### Formulácie N-dám a kryptoaritmetika
+
+| | Formulácia 1 | Formulácia 2 (bežná) |
+|---|---|---|
+| Premenné | `Xij` pre každé políčko | `Qk` = riadok dámy v stĺpci k |
+| Doména | `{0, 1}` (dáma je / nie je) | `{1, 2, …, N}` |
+| Ohraničenia | v riadku, stĺpci a na diagonále nesmú byť dve jednotky; `Σ Xij = N` | každá dvojica `(Qi, Qj)` sa neohrozuje |
+
+Druhá formulácia je menšia (`N^N` namiesto `2^(N²)` priradení) a ohraničenie „jedna dáma v stĺpci“ je v nej splnené automaticky – formulácia problému rozhoduje o rýchlosti.
+
+**Kryptoaritmetika `TWO + TWO = FOUR`**: premenné `F, T, U, W, R, O` a pomocné prenosy `X1, X2, X3`; doména `{0, …, 9}`. Ohraničenia: `alldiff(F, T, U, W, R, O)` (vyšší rád) a stĺpce sčítania `O + O = R + 10·X1`, `X1 + W + W = U + 10·X2`, `X2 + T + T = O + 10·X3`, `X3 = F`; navyše `T ≠ 0`, `F ≠ 0`.
 
 ### Identifikačné vs. plánovacie problémy
 
@@ -70,6 +87,8 @@ return False
 - Použiteľné len na takmer vyplnenej doske. Príklad: prázdne sú `(0,0)` a `(0,1)` so správnymi hodnotami 4 a 3 → 34 priradení (backtracking potrebuje 2).
 - Chyba v prvej bunke sa zistí až po vyplnení **všetkých** ostatných.
 
+**Prečo nie BFS nad CSP** (prednáška 2020, AIMA): stav = čiastočné priradenie, štart = prázdne priradenie, akcia = priraď *ľubovoľnej* voľnej premennej *ľubovoľnú* hodnotu. Na 1. úrovni je potom `n · d` uzlov (Austrália: 7 · 3 = 21), na 2. úrovni `(n − 1) · d` z každého … → `n! · d^n` listov, hoci úplných priradení je len `d^n` (Austrália: 5 040 · 2 187 ≈ 1,1 · 10^7 namiesto 2 187). Navyše všetky riešenia ležia v hĺbke `n`, takže BFS by prešlo celý strom. Náprava: priradenia sú **komutatívne** (poradie nezáleží), preto na každej úrovni stačí priraďovať **jedinú** premennú – presne to robí backtracking.
+
 ## Backtracking (spätné vyhľadávanie)
 
 Backtracking = DFS s dvoma zlepšeniami oproti hrubej sile:
@@ -78,6 +97,23 @@ Backtracking = DFS s dvoma zlepšeniami oproti hrubej sile:
 2. **Kontrola ohraničení priebežne** – skúšajú sa iba hodnoty, ktoré nie sú v konflikte s už priradenými premennými (v Sudoku hodnoty z `get_domain`).
 
 Keď pre premennú nezostane žiadna prípustná hodnota (**slepá ulička, dead end**), algoritmus sa **vráti** k predchádzajúcemu rozhodnutiu, zruší ho (`grid[r][c] = 0`) a skúsi ďalšiu hodnotu.
+
+Všeobecný pseudokód z prednášky (AIMA; prednáška 2020 ho uvádza ako vyžadovaný na skúške):
+
+```text
+function RECURSIVE-BACKTRACKING(assignment, csp):
+    if assignment je úplné: return assignment
+    var ← SELECT-UNASSIGNED-VARIABLE(csp, assignment)        # tu sa zapája MRV
+    for each value in ORDER-DOMAIN-VALUES(var, assignment, csp):   # tu LCV
+        if value je konzistentná s assignment:
+            pridaj {var = value} do assignment
+            result ← RECURSIVE-BACKTRACKING(assignment, csp)
+            if result ≠ failure: return result
+            odober {var = value} z assignment
+    return failure
+```
+
+Prednáška 2020 poznamenáva, že názov „backtracking“ je trochu zavádzajúci: návrat o úroveň vyššie robí aj obyčajné DFS. Podstatné sú dve zlepšenia vyššie.
 
 ```python
 def _dfs(self, use_mrv, use_lcv):
@@ -153,14 +189,47 @@ Algoritmus **AC-3**:
 3. Ak sa `D(X)` zmenšila, vráť do frontu všetky hrany `Z → X` (susedia `X`) – mohli stratiť podporu.
 4. Ak je `D(X)` prázdna → zlyhanie (žiadne riešenie v tejto vetve). Skonči, keď je front prázdny.
 
-Príklad: `X, Y ∈ {1, 2, 3}`, ohraničenie `X < Y`. Hrana `X → Y` odstráni `3` z `X`, hrana `Y → X` odstráni `1` z `Y`. Výsledok: `X ∈ {1, 2}`, `Y ∈ {2, 3}`.
+Príklad: `X, Y ∈ {1, 2, 3}`, ohraničenie `X < Y`. Hrana `X → Y` odstráni `3` z `X`, hrana `Y → X` odstráni `1` z `Y`. Výsledok: `X ∈ {1, 2}`, `Y ∈ {2, 3}`. Z prednášky 2020: s treťou premennou `C ∈ {1, 2, 3}` a ohraničením `B = C` sa po zúžení `B` vráti do frontu hrana `C → B` a odstráni `1` aj z `C` → `A {1, 2}`, `B {2, 3}`, `C {2, 3}`.
+
+Demo z prednášky 2020 (overené kódom): 5 dám, riadky Q1…Q5, po priradení **Q1 = 1, Q2 = 3** zúži AC-3 všetky ostatné domény na jedinú hodnotu (Q3 = 5, Q4 = 2, Q5 = 4) – riešenie je hotové bez ďalšieho hľadania.
+
+Odkiaľ je `O(e · d³)`: kontrola jednej hrany porovná každú hodnotu s každou (`d²`); hrana sa môže do frontu vrátiť najviac `d`-krát (zakaždým ubudne aspoň jedna hodnota); hrán je `e`.
 
 Charakteristiky:
 
 - **zmenšuje prehľadávaný priestor** odstránením nekonzistentných hodnôt z domén premenných,
 - sama riešenie nehľadá a nič negarantuje: po AC-3 môžu doménam zostať viaceré hodnoty a riešenie stále nemusí existovať; nenájde ani „optimálne“ riešenie,
 - používa sa ako predspracovanie alebo po každom priradení počas backtrackingu (MAC – *maintaining arc consistency*),
-- je silnejšia než forward checking (odhalí zlyhanie skôr), ale drahšia na jeden uzol – zložitosť AC-3 je `O(e · d³)` (`e` hrán, doména veľkosti `d`).
+- je silnejšia než forward checking (odhalí zlyhanie skôr), ale drahšia na jeden uzol – zložitosť AC-3 je `O(e · d³)` (`e` hrán, doména veľkosti `d`), pamäť (front hrán) `O(e)`.
+- Po AC-3 môže CSP mať **jedno, viac alebo žiadne** riešenie – hranová konzistencia to sama nerozlíši.
+
+### K-konzistencia
+
+| Úroveň | Význam |
+|---|---|
+| **1-konzistencia** (node consistency) | každá premenná spĺňa svoje **unárne** ohraničenia |
+| **2-konzistencia** (arc consistency) | pre každú hodnotu jednej premennej existuje kompatibilná hodnota druhej |
+| **3-konzistencia** (path consistency) | každé konzistentné priradenie dvoch premenných sa dá rozšíriť na tretiu |
+| **k-konzistencia** | každé konzistentné priradenie `k − 1` premenných sa dá rozšíriť na `k`-tú |
+| **silná k-konzistencia** | je k-, (k−1)-, …, 1-konzistentné súčasne |
+
+- Príklad, kde hranová konzistencia nestačí (prednáška 2020, AIMA): tri navzájom susediace premenné `X1, X2, X3`, každá s doménou `{červená, modrá}`, všetky rôzne. Každá hrana je konzistentná (k červenej sa vždy nájde modrá), AC-3 teda nič neodstráni – a predsa riešenie **neexistuje**. Path consistency to odhalí: priradenie `X1 = modrá, X2 = červená` sa nedá rozšíriť na `X3`.
+- Čím vyššie `k`, tým silnejšie orezávanie, ale aj **vyššia zložitosť** vynútenia konzistencie. V praxi sa používa najviac hranová, výnimočne path consistency.
+- **Silná n-konzistencia** (n = počet premenných) zaručí, že riešenie sa nájde **bez backtrackingu**: vyber hodnotu 1. premennej (unárne OK), 2-konzistencia zaručí povolenú hodnotu 2. premennej, 3-konzistencia povolenú hodnotu 3., atď.
+- **Na skúške** (poradie podľa počtu backtrackov, od najviac po najmenej): **naivné DFS > forward checking > hranová konzistencia > 3-konzistencia**.
+
+## Štruktúra problému
+
+Ako zrýchliť CSP využitím tvaru grafu ohraničení:
+
+- **Nezávislé podproblémy** (napr. Tasmánia je od pevninskej Austrálie oddelená): ak sa graf s `n` premennými rozpadne na časti po `c` premenných, zložitosť je `O((n/c) · d^c)` – **lineárna v n**. Príklad: `n = 80`, `d = 2`, `c = 20` → `2^80` stavov by trvalo asi 4 miliardy rokov pri 10 miliónoch uzlov za sekundu (slajd uvádza „4 milióny rokov“, správne je ≈ 3,8 · 10^9), `4 · 2^20` stavov asi 0,4 s.
+- **CSP v tvare stromu** (graf bez cyklov) sa dá vyriešiť v čase **`O(n · d²)`** namiesto všeobecného `O(d^n)`:
+  1. zvoľ koreň a zoraď premenné tak, aby každý rodič bol pred svojimi deťmi,
+  2. **spätný chod**: pre `i = n … 2` urob hranu `Parent(Xi) → Xi` konzistentnou (odstráň hodnoty z domény rodiča),
+  3. **dopredný chod**: pre `i = 1 … n` priraď `Xi` hodnotu konzistentnú s rodičom – **nikdy sa nevracia**.
+  - Tvrdenie 1: po spätnom chode sú všetky hrany konzistentné (domény potomkov sa už nemenia). Tvrdenie 2: ak sú všetky hrany stromu konzistentné, dopredný chod nikdy nebacktrackuje (dôkaz indukciou).
+- **Takmer stromové CSP – podmienenie (cutset conditioning)**: vyber množinu premenných (**cutset**, veľkosť `c`), po ktorej odstránení ostane strom (pri Austrálii stačí SA). Pre každé priradenie cutsetu prefiltruj domény a zvyšok vyrieš stromovým algoritmom → `O(d^c · (n − c) · d²)`, rýchle pre malé `c`.
+- **Dekompozícia stromu (tree decomposition)**: vytvor strom z **mega-premenných**; každá obsahuje časť pôvodného CSP (podproblém). Podproblémy sa prekrývajú a susedné sa musia zhodnúť na spoločných premenných.
 
 ## Porovnanie: hrubá sila vs. backtracking vs. forward checking
 
@@ -217,6 +286,12 @@ def min_conflicts(csp, max_steps):
 - Príklad (4 dámy, `queens = (1, 3, 0, 3)`, konflikt stĺpcov 1 a 3): pre dámu v stĺpci 3 sú počty konfliktov v riadkoch 0..3 `[1, 3, 0, 1]` → presunie sa do riadku 2 → `(1, 3, 0, 2)`, riešenie.
 
 > **Pozor:** min-conflicts **nevyberá** premennú s najväčším počtom konfliktov (vyberá ľubovoľnú konfliktnú), **nezačína** zo stavu s minimálnym počtom konfliktov (štart je náhodný) a neplatí, že je vhodný len pre malé priestory.
+>
+> Prednáška 2020 pripúšťa pri výbere premennej aj variant „premenná s najväčším počtom konfliktov“. Testové karty (Quizlet) však tvrdenie „vyberá premennú s najviac konfliktmi“ hodnotia ako **nesprávne** – na teste odpovedaj podľa nich: ľubovoľná (náhodná) konfliktná premenná.
+
+- Formulácia pre 4 dámy z prednášky: stavy = 4 dámy v 4 stĺpcoch (`4^4 = 256` stavov), akcia = posuň dámu v jej stĺpci, cieľ = žiadne útoky, evaluačná funkcia `h(n)` = počet útokov (konfliktov).
+- Lokálne vyhľadávanie rieši N-dám takmer v konštantnom čase aj pre `n = 10 000 000`.
+- Výnimka: problémy blízko **kritického pomeru** `R = počet ohraničení / počet premenných`. Pri malom R je problém ľahký (málo ohraničení), pri veľkom tiež (rýchlo vidno nesplniteľnosť); v úzkom pásme okolo kritického R čas výpočtu prudko vyskočí.
 
 ## Typické chytáky
 
@@ -228,6 +303,8 @@ def min_conflicts(csp, max_steps):
 - Brute force kontroluje ohraničenia iba na úplnom priradení; backtracking pri každom priradení.
 - `find_empty()` vracia `None`, keď je doska plná – to je ukončovacia podmienka rekurzie (`return True`).
 - `get_domain` vyplnenej bunky je `[]`, nie `[hodnota]`.
+- Silná n-konzistencia = riešenie bez backtrackingu; počet backtrackov: DFS > forward checking > hranová konzistencia > 3-konzistencia.
+- Stromové CSP je `O(n · d²)` (lineárne v n), všeobecné CSP `O(d^n)`.
 - Po neúspešnej rekurzii treba bunku **vynulovať**, inak zostane na doske chybná hodnota.
 
 ## Rýchle zhrnutie
@@ -243,5 +320,7 @@ def min_conflicts(csp, max_steps):
 - Hranová konzistencia (AC-3): `X → Y` je konzistentná, ak každé `x` má podporu v `D(Y)`; zmenšuje domény, negarantuje riešenie.
 - Počet návratov znižujú: backtracking oproti naivnému DFS, forward checking, hranová konzistencia, MRV/LCV.
 - Min-conflicts: lokálne vyhľadávanie z úplného priradenia; náhodná konfliktná premenná dostane hodnotu s najmenej konfliktmi.
+- Ohraničenia: unárne, binárne, vyššieho rádu, preferencie; k-konzistencia: 1 = node, 2 = arc, 3 = path (vyššie k = viac orezania, vyššia zložitosť).
+- Štruktúra: nezávislé podproblémy `O((n/c) · d^c)`, strom `O(n · d²)`, cutset conditioning `O(d^c · (n − c) · d²)`, dekompozícia stromu na mega-premenné.
 - Identifikačné CSP: backtracking, min-conflicts, hill climbing, simulované žíhanie, genetický algoritmus; cesta v grafe: DFS, BFS, UCS, Greedy, A*.
 - `solve_dfs` / `solve_forward_checking` vracajú `(result, expanded, time)`.

@@ -562,5 +562,70 @@
       { "text": "Na osiach sú precision a recall.", "correct": false }
     ],
     "explanation": "ROC krivka vzniká posúvaním rozhodovacieho prahu klasifikátora: na osi x je FPR, na osi y TPR. Klasifikátor, ktorý háda náhodne, leží na diagonále; dokonalý je v ľavom hornom rohu (TPR = 1, FPR = 0). Pravý dolný roh by znamenal samé chyby. Krivka sa zhŕňa plochou pod ňou (AUC)."
+  },
+  {
+    "id": "t4-q36",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň vytvorenie stratifikovanej krížovej validácie s 5 časťami.",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4)\npipe_svc.fit(X_train, y_train)\n\n________\nfor train, test in skf.split(X_train, y_train):\n    pipe_svc.fit(X_train[train], y_train[train])\n    scores.append(pipe_svc.score(X_train[test], y_train[test]))",
+    "options": [
+      { "text": "`skf = StratifiedKFold(n_splits=5)`", "correct": true },
+      { "text": "`skf = KFold(n_splits=5)`", "correct": false },
+      { "text": "`skf = StratifiedKFold(n_splits=5).split(X_train)`", "correct": false },
+      { "text": "`skf = cross_val_score(pipe_svc, X_train, y_train, cv=5)`", "correct": false }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Stratifikácia (zachovanie pomeru tried v každom folde) je `StratifiedKFold`; `KFold` je bez stratifikácie. Cyklus volá `skf.split(...)`, takže `skf` musí byť samotný objekt, nie už výsledok `split`. `cross_val_score` vráti pole skóre a nemá metódu `split`."
+  },
+  {
+    "id": "t4-q37",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň inicializáciu mriežkového hľadania nad pipeline (presnosť, 5 foldov, všetky jadrá CPU).",
+    "code": "pipe_svc = Pipeline([('scl', StandardScaler()), ('clf', SVC())])\nparam_range = [0.001, 0.01, 0.1, 1, 10, 100]\nparam_grid = [{'clf__C': param_range, 'clf__kernel': ['linear']},\n              {'clf__C': param_range, 'clf__gamma': param_range,\n               'clf__kernel': ['rbf']}]\n\n________\ngs = gs.fit(X_train, y_train)",
+    "options": [
+      { "text": "`gs = GridSearchCV(estimator=pipe_svc, param_grid=param_grid, scoring='accuracy', cv=5, n_jobs=-1)`", "correct": true },
+      { "text": "`gs = GridSearchCV(estimator=SVC(), param_grid=param_grid, scoring='accuracy', cv=5, n_jobs=-1)`", "correct": false },
+      { "text": "`gs = GridSearchCV(param_grid, pipe_svc, scoring='accuracy', cv=5, n_jobs=-1)`", "correct": false },
+      { "text": "`gs = GridSearchCV(estimator=pipe_svc, param_grid=param_grid, scoring='accuracy', cv=-1, n_jobs=5)`", "correct": false }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Kľúče `clf__C` adresujú krok `clf` v pipeline – s holým `SVC()` by `fit` skončil chybou „Invalid parameter 'clf'“. Prvý pozičný argument je estimátor, nie mriežka. `cv` je počet foldov a `n_jobs=-1` znamená všetky jadrá; ich zámena nedáva zmysel."
+  },
+  {
+    "id": "t4-q38",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "teams",
+    "text": "Grid search z príkladu `pipeline_example_2.py` (Teams, cvičenie 6). Ktoré tvrdenia sú pravdivé?",
+    "code": "pipe = Pipeline([('imputer', SimpleImputer()),\n                 ('scaler', MinMaxScaler()),\n                 ('clf', DecisionTreeClassifier())])\nparam_grid = [\n    {'imputer__strategy': ['mean', 'median'],\n     'scaler': [MinMaxScaler(), StandardScaler(), None],\n     'clf': [DecisionTreeClassifier()],\n     'clf__max_depth': [None, 3, 5, 8, 10, 15]},\n    {'imputer__strategy': ['mean', 'median'],\n     'scaler': [MinMaxScaler(), StandardScaler()],\n     'clf': [LogisticRegression(max_iter=200)],\n     'clf__C': [0.001, 0.1, 1.0, 10.0]}]\ngrid = GridSearchCV(pipe, param_grid, cv=5, n_jobs=-1)",
+    "options": [
+      { "text": "Kľúč `'scaler'` bez dvoch podčiarknutí nahrádza celý krok pipeline – grid search tak porovná aj rôzne škálovače.", "correct": true },
+      { "text": "Hodnota `None` v zozname `'scaler'` znamená, že sa krok škálovania vynechá.", "correct": true },
+      { "text": "Prvý slovník dáva 36 kombinácií a druhý 16, spolu 52 kombinácií.", "correct": true },
+      { "text": "Logistická regresia sa vyskúša aj s `max_depth`, lebo všetky kľúče sa skombinujú naprieč slovníkmi.", "correct": false },
+      { "text": "`'MinMaxScaler()'` v pipeline sa pri `'scaler': None` nahradí `StandardScaler()`.", "correct": false }
+    ],
+    "explanation": "`krok__parameter` mení parameter kroku, samotný názov kroku (`'scaler'`, `'clf'`) vymení celý objekt – tak sa v jednej mriežke porovnajú aj rôzne modely a škálovače. `None` (alebo `'passthrough'`) krok vynechá. Slovníky v zozname sa prehľadávajú **každý zvlášť**: 2 · 3 · 6 = 36 (strom) + 2 · 2 · 4 = 16 (logistická regresia) = 52; `max_depth` sa s logistickou regresiou nikdy nekombinuje. Pôvodný príklad má viac parametrov stromu a dáva 2 732 kombinácií, pri `cv=5` teda 13 660 trénovaní."
+  },
+  {
+    "id": "t4-q39",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "theory",
+    "source": "teams",
+    "text": "Pipeline `StandardScaler → SelectKBest(score_func=f_regression) → SVR` sa ladí mriežkou `{'select__k': [5, 8, 10, 12], 'svr__kernel': ['linear', 'rbf'], 'svr__C': [0.1, 1, 10, 100], 'svr__gamma': ['scale', 'auto']}` s `cv=5` a `scoring='r2'` (Teams, `pipeline_example_1.py`). Čo platí?",
+    "options": [
+      { "text": "Počet vybraných príznakov `k` sa ladí ako hyper-parameter spolu s parametrami SVR.", "correct": true },
+      { "text": "Výber príznakov sa v každom folde robí iba na trénovacej časti, takže validačný fold neovplyvní, ktoré príznaky ostanú.", "correct": true },
+      { "text": "Mriežka má 64 kombinácií, teda 320 trénovaní.", "correct": true },
+      { "text": "`scoring='r2'` je chyba – pri grid search sa smie použiť iba presnosť (accuracy).", "correct": false },
+      { "text": "`f_regression` sa používa preto, že SVR nevie pracovať so štandardizovanými dátami.", "correct": false }
+    ],
+    "explanation": "Krok `select` je súčasť pipeline, preto sa `SelectKBest` fituje v každom folde nanovo len na trénovacej časti – bez úniku informácie. `select__k` je parameter kroku ako každý iný. 4 · 2 · 4 · 2 = 64 kombinácií × 5 foldov = 320 trénovaní (plus jedno finálne na celých trénovacích dátach). Pri regresii sa presnosť nedá použiť, R² je štandardná metrika. `f_regression` je skórovacia funkcia pre spojitý cieľ (pri klasifikácii `f_classif` alebo `chi2`)."
   }
 ]

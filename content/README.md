@@ -119,5 +119,5 @@ a single wrong tick means zero points for the question.
 - `code` only for `practical` questions; ≤ 25 lines.
 - `explanation` is required – it is shown in the review and is where the learning happens.
 - Optional `"disputed": true` + a sentence in `explanation` when a Quizlet answer contradicts the lectures.
-- Every fact must be backed by the course materials (or, for the search/CSP topics without lecture slides, by
-  the exercise materials and standard AIMA definitions). No trick questions on trivia.
+- Every fact must be backed by the course materials (for the search/CSP topics: the exercise materials, the
+  lectures of J. Gazda from 2026 and 2020, and standard AIMA definitions). No trick questions on trivia.

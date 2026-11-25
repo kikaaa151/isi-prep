@@ -66,6 +66,39 @@
     "tags": ["GridSearchCV", "cv_results_", "train_test_split", "pandas", "errorbar"]
   },
   {
+    "id": "w05-lecture-learning-curve",
+    "title": "Krivka učenia (learning_curve) – prednáška 3",
+    "week": 5,
+    "file": "w05-lecture-learning-curve.py",
+    "source": "moodle/w01/prednasky/isi03_05.py",
+    "task": "Načítaj dáta Wisconsin breast cancer (`load_breast_cancer(return_X_y=True)`; prednáška ich číta zo súboru `wdbc.data`). Vytvor pipeline `pipe_lr` so `StandardScaler` (krok `scl`) a `LogisticRegression(solver='lbfgs', random_state=1)` (krok `clf`). Funkciou `learning_curve` zmeraj presnosť pre 10 veľkostí trénovacej množiny `np.linspace(0.1, 1.0, 10)` s `cv=10`. Spriemeruj trénovacie a validačné skóre cez foldy (`axis=1`), vypíš veľkosti a priemery a nakresli obe krivky.",
+    "explanation": "- Krivka učenia má na osi x **počet trénovacích vzoriek**: odpovedá na otázku, či by pomohlo viac dát.\n- `learning_curve` vráti trojicu `(train_sizes, train_scores, test_scores)`; skóre majú tvar `(10 veľkostí, 10 foldov)`, preto `np.mean(..., axis=1)` priemeruje cez foldy.\n- `train_sizes` sú podiely z trénovacej časti foldu: 10 % až 100 % z 512 vzoriek → 51 … 512.\n- Pri klasifikátore znamená `cv=10` stratifikovanú 10-násobnú CV.\n- Čítanie: trénovacia presnosť je stále okolo 0,98, validačná rastie z 0,88 na 0,98 a krivky sa zbiehajú → model **nie je pretrénovaný** a viac dát už veľa nepridá. Veľká medzera medzi krivkami by znamenala vysoký rozptyl (overfitting), obe nízke vysokú odchýlku (underfitting).\n- Prednáška kreslí aj pásmo ± smerodajná odchýlka (`plt.fill_between`) – tu je vynechané.",
+    "expectedOutput": "[ 51 102 153 204 256 307 358 409 460 512]\n[0.984 0.988 0.978 0.986 0.984 0.98  0.982 0.985 0.988 0.988]\n[0.88  0.947 0.959 0.959 0.963 0.967 0.97  0.974 0.979 0.981]",
+    "tags": ["learning_curve", "Pipeline", "LogisticRegression", "krivka učenia"]
+  },
+  {
+    "id": "w05-lecture-validation-curve",
+    "title": "Validačná krivka (validation_curve) – prednáška 3",
+    "week": 5,
+    "file": "w05-lecture-validation-curve.py",
+    "source": "moodle/w01/prednasky/isi03_06.py",
+    "task": "Na dátach Wisconsin breast cancer s rovnakou pipeline `pipe_lr` (škálovanie + logistická regresia) zmeraj funkciou `validation_curve` trénovaciu a validačnú presnosť pre hodnoty parametra C `[0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]` (`param_name='clf__C'`, `cv=10`). Vypíš priemery cez foldy a nakresli ich s logaritmickou osou x.",
+    "explanation": "- Validačná krivka má na osi x **hodnotu jedného hyper-parametra** (tu C); krivka učenia má na x veľkosť trénovacej množiny.\n- `param_name='clf__C'` – názov kroku pipeline, dve podčiarknutia, názov parametra. Bez pipeline by to bolo len `'C'`.\n- `validation_curve` vráti iba dvojicu `(train_scores, test_scores)`, tvar `(8 hodnôt C, 10 foldov)`.\n- `plt.xscale('log')` – hodnoty C rastú desaťnásobne, na lineárnej osi by sa zliali.\n- Čítanie: malé C = silná regularizácia → obe presnosti nízke (0,65, **underfitting**). Najlepšia validačná presnosť je pri C = 1 (0,981). Pri veľkom C trénovacia rastie k 0,994, ale validačná klesá na 0,956 → **overfitting**.\n- Pri veľkých C môže `LogisticRegression` hlásiť `ConvergenceWarning` – na výsledok tu nemá vplyv.",
+    "expectedOutput": "[0.653 0.903 0.954 0.983 0.988 0.99  0.991 0.994]\n[0.652 0.898 0.951 0.975 0.981 0.974 0.967 0.956]",
+    "tags": ["validation_curve", "Pipeline", "clf__C", "underfitting", "overfitting"]
+  },
+  {
+    "id": "w05-lecture-nested-cv",
+    "title": "Vnorená krížová validácia (GridSearchCV v cross_val_score) – prednáška 3",
+    "week": 5,
+    "file": "w05-lecture-nested-cv.py",
+    "source": "moodle/w01/prednasky/isi03_08.py",
+    "task": "Na dátach Wisconsin breast cancer vytvor pipeline `pipe_svc` (`StandardScaler` + `SVC(random_state=1)`). Mriežka: pre lineárne jadro hodnoty `clf__C`, pre RBF jadro kombinácie `clf__C` a `clf__gamma` – obe z `[0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]`. Vnútorná slučka: `GridSearchCV` s presnosťou a `cv=2`. Vonkajšia slučka: `cross_val_score` nad celým `gs` s `cv=5`. Vypíš priemer a smerodajnú odchýlku presnosti.",
+    "explanation": "- **Vnorená CV** = krížová validácia + ladenie mriežkou. Vnútorná slučka (`GridSearchCV`, 2 foldy) vyberá parametre, vonkajšia (`cross_val_score`, 5 foldov) odhaduje, ako dobre funguje **celý postup** ladenia na nevidených dátach → 5 × 2 vnorená CV.\n- `cross_val_score` dostane ako estimátor samotný `gs`: v každom vonkajšom folde sa mriežka prehľadá nanovo len na trénovacej časti, takže testovací fold sa ladenia nezúčastní (žiadny únik informácie).\n- Výsledok nie sú najlepšie parametre (tie môžu byť v každom folde iné), ale **nestranný odhad presnosti** (0,974 ± 0,005).\n- Mriežka je zoznam dvoch slovníkov: `gamma` má zmysel len pre RBF, preto ho lineárne jadro nemá → 8 + 64 = 72 kombinácií.",
+    "expectedOutput": "CV accuracy: 0.974 +/- 0.005",
+    "tags": ["nested CV", "GridSearchCV", "cross_val_score", "Pipeline", "SVC"]
+  },
+  {
     "id": "w06-gridsearch-pipeline",
     "title": "GridSearchCV nad pipeline: scaler + SVC, viac kernelov",
     "week": 6,

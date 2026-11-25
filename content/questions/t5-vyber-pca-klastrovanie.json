@@ -1056,5 +1056,33 @@
       }
     ],
     "explanation": "`PCA(n_components=3)` premietne 23 príznakov na 3 nové → `(2212, 3)`. `explained_variance_ratio_` hovorí, akú časť celkového rozptylu zachytáva každý komponent: 0.385 + 0.129 + 0.061 = 0.575. Komponenty sú zoradené zostupne podľa rozptylu, prvý ho zachytáva najviac. PCA je učenie bez učiteľa (`fit(data)` bez `y`) a nové stĺpce sú lineárne kombinácie všetkých pôvodných príznakov, nie vybrané pôvodné stĺpce."
+  },
+  {
+    "id": "t5-q36",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň telo cyklu metódy lakťa: pre každé i vytvor a natrénuj K-means s i klastrami.",
+    "code": "data = pd.read_csv('market_research.csv')\n\ndistortions = []\nfor i in range(1, 11):\n    ________\n    ________\n    distortions.append(km.inertia_)",
+    "options": [
+      {
+        "text": "`km = KMeans(n_clusters=i)` a `km.fit(data)`",
+        "correct": true
+      },
+      {
+        "text": "`km = KMeans(n_clusters=10)` a `km.fit(data)`",
+        "correct": false
+      },
+      {
+        "text": "`km = KMeans(n_clusters=i)` a `km.predict(data)`",
+        "correct": false
+      },
+      {
+        "text": "`km = KMeans(k=i)` a `km.fit(data)`",
+        "correct": false
+      }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Metóda lakťa porovnáva skreslenie (`inertia_` = súčet štvorcov vzdialeností k najbližšiemu centroidu) pre rôzny počet klastrov – preto `n_clusters=i`, nie pevných 10. `inertia_` existuje až po `fit`; `predict` na nenatrénovanom modeli zlyhá. Počet klastrov sa zadáva parametrom `n_clusters`, parameter `k` neexistuje (`TypeError`)."
   }
 ]

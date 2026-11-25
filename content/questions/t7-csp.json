@@ -965,7 +965,7 @@
         "correct": false
       }
     ],
-    "explanation": "Min-conflicts opravuje úplné priradenie: zvolí **ľubovoľnú** (náhodnú) konfliktnú premennú a dá jej hodnotu s minimom konfliktov. Nevyberá premennú s najviac konfliktmi. Postupné priraďovanie s návratom je backtracking."
+    "explanation": "Min-conflicts opravuje úplné priradenie: zvolí **ľubovoľnú** (náhodnú) konfliktnú premennú a dá jej hodnotu s minimom konfliktov. Nevyberá premennú s najviac konfliktmi (prednáška 2020 to spomína ako možný variant, ale testové karty ho hodnotia ako nesprávne). Postupné priraďovanie s návratom je backtracking."
   },
   {
     "id": "t7-q32",
@@ -1095,5 +1095,214 @@
       }
     ],
     "explanation": "`solve_dfs(use_mrv, use_lcv)` vracia trojicu `(result, expanded, time)`: úspech, počet pokusov o priradenie a čas v sekundách. Solver mení priamo objekt `board`, ktorý dostal, takže riešenie je v `board.grid`. `expanded` sa rovná počtu prázdnych buniek iba vtedy, keď sa algoritmus nevracal ani raz."
+  },
+  {
+    "id": "t7-q36",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré priradenia typov ohraničení sú správne?",
+    "options": [
+      {
+        "text": "`alldiff(F, T, U, W, R, O)` v kryptoaritmetike – ohraničenie vyššieho rádu",
+        "correct": true
+      },
+      {
+        "text": "„červená je lepšia ako modrá“ – preferencia (mäkké ohraničenie)",
+        "correct": true
+      },
+      {
+        "text": "`SA ≠ green` – unárne ohraničenie",
+        "correct": true
+      },
+      {
+        "text": "`SA ≠ WA` – unárne ohraničenie",
+        "correct": false
+      },
+      {
+        "text": "implicitné ohraničenie – vymenúva všetky povolené dvojice hodnôt",
+        "correct": false
+      }
+    ],
+    "explanation": "Unárne sa týka jednej premennej (`SA ≠ green`), binárne dvojice (`SA ≠ WA`), vyššieho rádu troch a viac (alldiff, stĺpec sčítania). Preferencia hovorí, čo je lepšie, nie čo je povolené. Vymenovanie povolených dvojíc je explicitný zápis; implicitný je podmienka („dámy sa neohrozujú“)."
+  },
+  {
+    "id": "t7-q37",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o k-konzistencii sú pravdivé?",
+    "options": [
+      {
+        "text": "1-konzistencia (node consistency) znamená, že každá premenná spĺňa svoje unárne ohraničenia.",
+        "correct": true
+      },
+      {
+        "text": "Ak je CSP s n premennými silne n-konzistentné, riešenie sa nájde bez backtrackingu.",
+        "correct": true
+      },
+      {
+        "text": "3-konzistencia sa nazýva aj path consistency.",
+        "correct": true
+      },
+      {
+        "text": "2-konzistencia je iný názov pre node consistency.",
+        "correct": false
+      },
+      {
+        "text": "Čím vyššie k, tým lacnejšie je konzistenciu vynútiť.",
+        "correct": false
+      }
+    ],
+    "explanation": "Úrovne: 1 = node (unárne), 2 = arc (hranová), 3 = path. k-konzistencia: každé konzistentné priradenie k − 1 premenných sa dá rozšíriť na k-tú. Silná n-konzistencia zaručí, že pri postupnom priraďovaní vždy existuje povolená hodnota – návrat netreba. Vyššie k orezáva viac, ale vynútiť ho je drahšie."
+  },
+  {
+    "id": "t7-q38",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "archive",
+    "text": "Zoraď prístupy k riešeniu CSP podľa počtu návratov (backtrackov) od najväčšieho po najmenší.",
+    "options": [
+      {
+        "text": "naivné DFS > forward checking > hranová konzistencia > 3-konzistencia",
+        "correct": true
+      },
+      {
+        "text": "forward checking > naivné DFS > hranová konzistencia > 3-konzistencia",
+        "correct": false
+      },
+      {
+        "text": "3-konzistencia > hranová konzistencia > forward checking > naivné DFS",
+        "correct": false
+      },
+      {
+        "text": "naivné DFS > hranová konzistencia > forward checking > 3-konzistencia",
+        "correct": false
+      }
+    ],
+    "explanation": "Čím silnejšie filtrovanie, tým skôr sa slepá ulička odhalí a tým menej návratov treba. Naivné DFS kontroluje ohraničenia až na konci; forward checking pozerá len na susedov priradenej premennej; hranová konzistencia (2-konzistencia) kontroluje všetky hrany; 3-konzistencia ešte aj trojice. Otázka je zo staršej skúšky."
+  },
+  {
+    "id": "t7-q39",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "lecture",
+    "text": "CSP s n premennými a doménou veľkosti d má graf ohraničení v tvare stromu. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      {
+        "text": "Dá sa vyriešiť v čase `O(n · d²)`.",
+        "correct": true
+      },
+      {
+        "text": "Spätný chod robí hrany `Parent(Xi) → Xi` konzistentnými pre i = n … 2.",
+        "correct": true
+      },
+      {
+        "text": "V doprednom chode sa algoritmus môže vracať, keď hodnota rodiča nemá podporu.",
+        "correct": false
+      },
+      {
+        "text": "Cutset conditioning sa použije práve vtedy, keď graf je už strom.",
+        "correct": false
+      },
+      {
+        "text": "Pre n = 10 a d = 3 by všeobecný backtracking mohol prejsť až 3^10 = 59 049 úplných priradení.",
+        "correct": true
+      }
+    ],
+    "explanation": "Algoritmus pre stromové CSP: zoraď premenné od koreňa, spätným chodom vynúť hranovú konzistenciu rodič → dieťa, potom priraďuj od koreňa. Po spätnom chode má každá hodnota rodiča podporu u dieťaťa, takže dopredný chod sa nikdy nevracia. Cutset conditioning je pre takmer stromové grafy: priradí sa cutset a zvyšok je strom. Všeobecné CSP je O(d^n)."
+  },
+  {
+    "id": "t7-q40",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Graf ohraničení s n = 80 boolovskými premennými (d = 2) sa rozpadá na 4 nezávislé podproblémy po c = 20 premenných. Koľko úplných priradení treba v najhoršom prípade prejsť, ak sa podproblémy riešia osobitne?",
+    "options": [
+      {
+        "text": "`4 · 2^20` (asi 4,2 milióna)",
+        "correct": true
+      },
+      {
+        "text": "`2^80`",
+        "correct": false
+      },
+      {
+        "text": "`80 · 2^20`",
+        "correct": false
+      },
+      {
+        "text": "`2^20`",
+        "correct": false
+      },
+      {
+        "text": "`(80 / 20) · 2^80`",
+        "correct": false
+      }
+    ],
+    "explanation": "Nezávislé podproblémy: O((n/c) · d^c) = 4 · 2^20 ≈ 4,2 · 10^6 – pri 10 miliónoch uzlov za sekundu asi 0,4 s. Spoločné riešenie by bolo 2^80 ≈ 1,2 · 10^24 priradení, čo pri tej istej rýchlosti trvá rádovo miliardy rokov. Zložitosť je pri pevnom c lineárna v n."
+  },
+  {
+    "id": "t7-q41",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Kryptoaritmetika `TWO + TWO = FOUR` ako CSP. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      {
+        "text": "Okrem písmen F, T, U, W, R, O sa zavádzajú pomocné premenné prenosu X1, X2, X3.",
+        "correct": true
+      },
+      {
+        "text": "Stĺpec jednotiek dáva ohraničenie `O + O = R + 10 · X1`.",
+        "correct": true
+      },
+      {
+        "text": "Platí `X3 = F`.",
+        "correct": true
+      },
+      {
+        "text": "F môže byť 0, lebo doména je {0, …, 9}.",
+        "correct": false
+      },
+      {
+        "text": "`alldiff(F, T, U, W, R, O)` je binárne ohraničenie.",
+        "correct": false
+      }
+    ],
+    "explanation": "Každý stĺpec sčítania viaže dve rovnaké číslice, výsledok a prenos: `O + O = R + 10·X1`, `X1 + W + W = U + 10·X2`, `X2 + T + T = O + 10·X3`, a posledný prenos je samotné F. Vodiace číslice T a F nesmú byť 0. alldiff viaže šesť premenných naraz – ohraničenie vyššieho rádu (dá sa rozložiť na 15 binárnych `≠`)."
+  },
+  {
+    "id": "t7-q42",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o dvoch formuláciách N-dám ako CSP sú pravdivé?",
+    "options": [
+      {
+        "text": "Pri premenných `Qk ∈ {1, …, N}` (riadok dámy v stĺpci k) je podmienka „jedna dáma v stĺpci“ splnená automaticky.",
+        "correct": true
+      },
+      {
+        "text": "Pri premenných `Xij ∈ {0, 1}` treba navyše ohraničenie `Σ Xij = N`.",
+        "correct": true
+      },
+      {
+        "text": "Formulácia s `Xij` má menej možných priradení než formulácia s `Qk`.",
+        "correct": false
+      },
+      {
+        "text": "Explicitný zápis ohraničenia vymenúva povolené dvojice, napr. `(Q1, Q2) ∈ {(1, 3), (1, 4), …}`.",
+        "correct": true
+      }
+    ],
+    "explanation": "Formulácia `Qk`: N premenných s doménou N → N^N priradení; jedna dáma na stĺpec vyplýva z reprezentácie. Formulácia `Xij`: N² boolovských premenných → 2^(N²) priradení (pre N = 8: 1,8 · 10^19 oproti 1,7 · 10^7), a počet dám treba vynútiť súčtom. Implicitný zápis je podmienka „Qi a Qj sa neohrozujú“, explicitný je zoznam povolených dvojíc."
   }
 ]

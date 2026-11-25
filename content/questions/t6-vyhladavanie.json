@@ -647,5 +647,148 @@
       { "text": "Všetci štyria nasledovníci majú rovnaké f, lebo každý ťah stojí 1.", "correct": false }
     ],
     "explanation": "Štart: dlaždice 5 a 8 sú každá o jedno políčko vedľa → h = 2. Ťah 5 vráti dlaždicu 5 na miesto: h = 1, g = 1, f = 2. Ťahy 2, 4 a 6 naopak pokazia správne uloženú dlaždicu: h = 3, f = 1 + 3 = 4. Rovnaké majú všetci iba g; f sa líši heuristikou. Halda vyberie najnižšie f, teda stav po ťahu 5 – poradie vloženia (`state_id`) rozhoduje len pri zhode f."
+  },
+  {
+    "id": "t6-q41",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Od čoho podľa prednášky závisí, či je agent racionálny?",
+    "options": [
+      { "text": "od miery úžitku (kritéria úspechu), ktorú zadávame my", "correct": true },
+      { "text": "od vstavanej znalosti prostredia (mapa, prechodový model)", "correct": true },
+      { "text": "od množiny akcií, ktoré má agent k dispozícii", "correct": true },
+      { "text": "od doterajšej postupnosti vnemov", "correct": true },
+      { "text": "od toho, či si agent pamätá celý stavový priestor", "correct": false }
+    ],
+    "explanation": "Racionalita nie je vlastnosť samotného agenta, ale štvorice: miera úžitku, vstavaná znalosť, dostupné akcie a postupnosť vnemov. Ten istý program môže byť raz racionálny a raz nie – stačí zmeniť mieru úžitku (napr. pridať penalizáciu za pohyb vo vysávačovom svete). Pamäť na celý stavový priestor nie je podmienka racionality; aj reflexný agent bez pamäte môže byť racionálny, ak mu stačí aktuálny vnem."
+  },
+  {
+    "id": "t6-q42",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o vlastnostiach prostredia sú pravdivé?",
+    "options": [
+      { "text": "Šach s hodinami je semi-dynamické prostredie – prostredie sa nemení, ale miera úžitku áno.", "correct": true },
+      { "text": "Známe prostredie znamená, že senzory vidia celý stav prostredia.", "correct": false },
+      { "text": "Kontrola výrobkov na páse je epizodická úloha – každé rozhodnutie je samostatné.", "correct": true },
+      { "text": "Poker je čiastočne pozorovateľné a stochastické prostredie s viacerými agentmi.", "correct": true },
+      { "text": "Autonómne taxi je deterministické a diskrétne prostredie.", "correct": false }
+    ],
+    "explanation": "Semi-dynamické: kým agent rozmýšľa, plynie čas na hodinách, nie poloha figúrok. Známe/neznáme hovorí, či agent pozná zákony prostredia (prechodový model) – to je iná dimenzia než pozorovateľnosť. Poker: súperove karty nevidno (čiastočne pozorovateľné), rozdávanie je náhodné (stochastické), hráčov je viac. Taxi je čiastočne pozorovateľné, stochastické, dynamické a spojité – najťažší prípad."
+  },
+  {
+    "id": "t6-q43",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Bludisko Pacmana má 36 dostupných políčok, 30 guľôčok a 2 duchov, z ktorých každý môže byť na 12 pozíciách. Koľko stavov má stavový priestor úlohy „zjedz všetky guľôčky“ (bez duchov)?",
+    "options": [
+      { "text": "`36 · 2^30`", "correct": true },
+      { "text": "`36 · 30`", "correct": false },
+      { "text": "`36 + 2^30`", "correct": false },
+      { "text": "`36 · 2^30 · 12^2`", "correct": false },
+      { "text": "`36`", "correct": false }
+    ],
+    "explanation": "Stav tvorí poloha Pacmana (36 možností) a bitový vektor potravy – pre každú z 30 guľôčok bit zjedená/nezjedená (2^30). Premenné sa násobia: 36 · 2^30 ≈ 3,9 · 10^10. Samotná poloha (36) stačí na úlohu „dostaň sa na políčko“; `36 · 2^30 · 12^2` je plná hra s duchmi, ktorí do tejto úlohy nepatria."
+  },
+  {
+    "id": "t6-q44",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o depth-limited, iteratívnom prehlbovaní a obojsmernom hľadaní sú pravdivé?",
+    "options": [
+      { "text": "Pri b = 10 vygeneruje IDS asi o 11 % viac uzlov než BFS.", "correct": true },
+      { "text": "Obojsmerné hľadanie potrebuje funkciu predchodcov a konkrétny cieľový stav, nie iba cieľový test.", "correct": true },
+      { "text": "Pri b = 10 a d = 6 expanduje obojsmerné hľadanie rádovo 2 220 uzlov oproti 1 111 110 pri BFS.", "correct": true },
+      { "text": "Výsledok „cutoff“ pri depth-limited search znamená, že riešenie neexistuje.", "correct": false },
+      { "text": "Limit ℓ v depth-limited search obmedzuje cenu cesty, nie počet akcií.", "correct": false }
+    ],
+    "explanation": "IDS opakuje plytké úrovne, ale väčšina uzlov je v poslednej úrovni → réžia 11 % pri b = 10 (84 % pri b = 2). Obojsmerné hľadanie stavia dva stromy do hĺbky d/2: 2 · (10 + 100 + 1 000) = 2 220. Potrebuje koreň spätného stromu (cieľový stav) a vedieť generovať predchodcov. Cutoff = narazili sme na limit, treba skúsiť väčší; failure = riešenie naozaj neexistuje. ℓ ráta akcie, orezávanie podľa ceny je až pri A*."
+  },
+  {
+    "id": "t6-q45",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "archive",
+    "text": "Graf: S→A (1), S→B (1), A→C (1), B→C (2), C→G (3). Heuristika: h(S) = 2, h(A) = 4, h(B) = 1, h(C) = 1, h(G) = 0. Čo platí pre A*?",
+    "options": [
+      { "text": "Heuristika je prípustná, ale nie konzistentná.", "correct": true },
+      { "text": "A* graph search (s množinou explored) vráti cestu S → B → C → G s cenou 6.", "correct": true },
+      { "text": "A* tree search (bez explored) vráti optimálnu cestu S → A → C → G s cenou 5.", "correct": true },
+      { "text": "A* graph search vráti optimum 5, lebo prípustnosť stačí aj pri vyhľadávaní v grafe.", "correct": false },
+      { "text": "Heuristika nie je prípustná, lebo h(A) = 4 je väčšie než h(S) = 2.", "correct": false }
+    ],
+    "explanation": "Prípustnosť: h*(A) = 1 + 3 = 4 ≥ 4, h*(B) = 5, h*(C) = 3, h*(S) = 5 – nikde nenadhodnocuje. Konzistencia zlyhá na hrane A→C: h(A) = 4 > 1 + h(C) = 2. Graph search expanduje S, B (f 2), C cez B (g 3, f 4) a C označí za preskúmaný; A (f 5) potom nájde lacnejšiu cestu do C (g 2), ale tá sa zahodí → G s cenou 6. Tree search C expanduje znova a vráti 5. Porovnávať h(A) s h(S) nemá s prípustnosťou nič spoločné."
+  },
+  {
+    "id": "t6-q46",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "archive",
+    "text": "Graf: S→a (1), a→b (1), b→c (1), a→d (3), a→e (8), e→d (1), d→G (2). Heuristika: S 6, a 5, b 6, c 7, d 2, e 1, G 0. Všetky algoritmy sú graph search a testujú cieľ pri výbere z frontu. Čo platí?",
+    "options": [
+      { "text": "A* expanduje uzly v poradí S, a, d, G.", "correct": true },
+      { "text": "Greedy po expanzii uzla a vyberie uzol e.", "correct": true },
+      { "text": "UCS vráti cestu cez uzol b, lebo b má najmenšie g po expanzii a.", "correct": false },
+      { "text": "A* expanduje uzol b, lebo g(b) = 2 je najmenšie vo fronte.", "correct": false },
+      { "text": "Greedy sa uzlu e vyhne, lebo hrana a→e stojí 8.", "correct": false }
+    ],
+    "explanation": "A*: po expanzii a sú vo fronte b (f = 2 + 6 = 8), d (f = 4 + 2 = 6), e (f = 9 + 1 = 10) → d, potom G (f = 6). A* rozhoduje podľa f, nie g. Greedy pozerá iba na h: e má h = 1 (najmenšie), cenu hrany nevidí. UCS síce expanduje b a c (g = 2, 3) skôr než d (g = 4), ale b vedie do slepej uličky c; vráti S → a → d → G s cenou 6."
+  },
+  {
+    "id": "t6-q47",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o optimalite A* (podľa prednášky) sú pravdivé?",
+    "options": [
+      { "text": "UCS expanduje všetky uzly s `g(n) ≤ C*`, A* s prípustnou heuristikou iba uzly s `f(n) ≤ C*`.", "correct": true },
+      { "text": "V dôkaze optimality platí `f(n) ≤ f(G)` pre predchodcu n optimálneho cieľa G, lebo h je prípustná.", "correct": true },
+      { "text": "Dôkaz optimality vyžaduje presnú heuristiku `h = h*`.", "correct": false },
+      { "text": "Pesimistická heuristika (h > h*) zachová optimalitu, iba spomalí hľadanie.", "correct": false },
+      { "text": "Greedy search sa ani pri zlej heuristike nemôže správať ako DFS.", "correct": false }
+    ],
+    "explanation": "Dôkaz: B je suboptimálny cieľ vo fronte, n predchodca optimálneho G. f(n) ≤ f(G), lebo h nenadhodnocuje; f(G) < f(B), lebo B je drahší → n aj G sa vyberú pred B. Stačí prípustnosť, presnosť netreba. Pesimistická heuristika môže nechať dobrý plán vo fronte – optimalitu stráca. Prednáška výslovne varuje, že greedy so zlou heuristikou degeneruje na „zle expandované DFS“."
+  },
+  {
+    "id": "t6-q48",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Na osmičke s riešením dĺžky 12 krokov expanduje UCS asi 3,6 · 10^6 uzlov, A* s misplaced tiles 227 a A* s Manhattan 73. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      { "text": "Manhattan dominuje misplaced tiles: pre každý stav dáva hodnotu aspoň takú veľkú.", "correct": true },
+      { "text": "Manhattan je optimálna cena relaxovaného problému, v ktorom sa dlaždica smie posunúť na susedné políčko aj vtedy, keď nie je prázdne.", "correct": true },
+      { "text": "Misplaced tiles vzniknú z relaxácie, v ktorej sa dlaždica smie presunúť na ľubovoľné políčko.", "correct": true },
+      { "text": "Misplaced tiles expanduje viac uzlov, lebo nie je prípustná.", "correct": false },
+      { "text": "UCS expanduje najviac uzlov, lebo nenájde optimálne riešenie.", "correct": false }
+    ],
+    "explanation": "Obe heuristiky sú prípustné (sú to ceny relaxovaných problémov); Manhattan je bližšie k h*, preto A* s ňou expanduje menej uzlov. UCS je optimálne aj úplné – expanduje veľa preto, že nemá žiadnu heuristiku (h = 0) a rozširuje sa rovnomerne do všetkých smerov. Dominancia má cenu: presnejšiu heuristiku býva drahšie vypočítať."
+  },
+  {
+    "id": "t6-q49",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Vysávačový svet: dve miesta A a B, každé čisté alebo špinavé; akcie vľavo, vpravo, vysávaj. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      { "text": "Stavový priestor má 8 stavov.", "correct": true },
+      { "text": "Reflexný agent tu môže byť racionálny, lebo aktuálny vnem (poloha a špina) stačí na výber optimálnej akcie.", "correct": true },
+      { "text": "Ak pridáme penalizáciu za každý pohyb, agent „stále sa presúvaj a vysávaj“ zostane racionálny.", "correct": false },
+      { "text": "Stavový priestor má 4 stavy – dve polohy krát čisté/špinavé.", "correct": false }
+    ],
+    "explanation": "Poloha vysávača (2) × konfigurácia špiny na dvoch miestach (2 · 2 = 4) = 8 stavov. Reflexný agent je racionálny, len keď vnem nesie všetko potrebné – vo vysávačovom svete áno, v Pacmanovi nie. S penalizáciou za pohyb je zbytočné presúvanie po vyčistení oboch miest stratou úžitku, takže ten istý agent racionálny už nie je."
   }
 ]

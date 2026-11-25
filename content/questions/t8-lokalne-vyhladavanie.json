@@ -1091,5 +1091,121 @@
       }
     ],
     "explanation": "Všetky dámy sú v jednom riadku → `4 · 3 / 2 = 6` konfliktných dvojíc, `h1 = 6 > 3`. `h2`: vezme sa dvojica (0, 1), dvojice (0, 2), (0, 3), (1, 2), (1, 3) zdieľajú už použitú dámu, vezme sa (2, 3) → `bound = 2 ≤ 3`. `h1` teda nie je prípustná, `h2` áno."
+  },
+  {
+    "id": "t8-q36",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": 10,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o local beam search sú pravdivé?",
+    "options": [
+      {
+        "text": "Pracuje s k stavmi naraz; v každom kroku vyberie k najlepších spomedzi potomkov všetkých stavov.",
+        "correct": true
+      },
+      {
+        "text": "Je to to isté ako k nezávislých behov random-restart hill climbingu.",
+        "correct": false
+      },
+      {
+        "text": "Jeho slabinou je, že potomkovia jedného rodiča môžu ovládnuť celý lúč a stratí sa rozmanitosť.",
+        "correct": true
+      },
+      {
+        "text": "Stochastický local beam vyberá potomkov náhodne s pravdepodobnosťou úmernou ich hodnote.",
+        "correct": true
+      },
+      {
+        "text": "Drží v pamäti iba jeden stav ako hill climbing.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pri k nezávislých reštartoch beh nevie nič o ostatných. V local beam sa potomkovia všetkých k stavov porovnajú spolu – dobré stavy „pritiahnu“ výpočet k sebe. To je aj slabina (korelácia, uviaznutie v lokálnom optime); stochastická verzia ju zmierňuje náhodným výberom podľa hodnoty. Genetický algoritmus je jeho pokročilá stochastická verzia s krížením dvoch rodičov."
+  },
+  {
+    "id": "t8-q37",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": 10,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Populácia genetického algoritmu pre 8 dám má fitness 24, 23, 20 a 11 (fitness = počet neohrozujúcich sa dvojíc). S akou pravdepodobnosťou vyberie ruletová selekcia prvého jedinca?",
+    "options": [
+      {
+        "text": "asi 31 % (`24 / 78`)",
+        "correct": true
+      },
+      {
+        "text": "asi 86 % (`24 / 28`)",
+        "correct": false
+      },
+      {
+        "text": "25 % (každý rovnako)",
+        "correct": false
+      },
+      {
+        "text": "asi 51 % (`24 / (24 + 23)`)",
+        "correct": false
+      }
+    ],
+    "explanation": "Ruletová selekcia: pravdepodobnosť = fitness jedinca / súčet fitness celej populácie = 24 / (24 + 23 + 20 + 11) = 24 / 78 ≈ 0,31. 28 je maximálna fitness (8 · 7 / 2 dvojíc), nie súčet populácie. Silnejší jedinec sa vyberá častejšie, ale aj slabý (11 / 78 ≈ 14 %) má šancu."
+  },
+  {
+    "id": "t8-q38",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": 10,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Na doske s 8 dámami vráti `conflicts()` z cvičenia hodnotu 3. Akú hodnotu má fitness z prednášky (počet dvojíc dám, ktoré sa neohrozujú)?",
+    "options": [
+      {
+        "text": "25",
+        "correct": true
+      },
+      {
+        "text": "3",
+        "correct": false
+      },
+      {
+        "text": "28",
+        "correct": false
+      },
+      {
+        "text": "5",
+        "correct": false
+      },
+      {
+        "text": "31",
+        "correct": false
+      }
+    ],
+    "explanation": "Dvojíc dám je 8 · 7 / 2 = 28. `conflicts()` počíta ohrozujúce sa dvojice, fitness neohrozujúce sa → 28 − 3 = 25. Cvičenie `conflicts()` minimalizuje (cieľ 0), prednáška fitness maximalizuje (cieľ 28)."
+  },
+  {
+    "id": "t8-q39",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": 10,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Simulované žíhanie s plánom teploty `T(k) = T_init · (T_final / T_init)^(k / k_max)`, kde `T_init = 2`, `T_final = 0,002`, `k_max = 1000`. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      {
+        "text": "V kroku k = 0 je T = 2 a v kroku k = 1000 je T = 0,002.",
+        "correct": true
+      },
+      {
+        "text": "V kroku k = 500 je T ≈ 0,063.",
+        "correct": true
+      },
+      {
+        "text": "Najlepšie je zvoliť `T_final = 0`.",
+        "correct": false
+      },
+      {
+        "text": "Teplota môže počas behu aj stúpať, hlavne nech na konci klesne.",
+        "correct": false
+      }
+    ],
+    "explanation": "Exponent k / k_max ide od 0 do 1: T(0) = T_init, T(k_max) = T_final. V polovici T = 2 · (0,001)^0,5 ≈ 0,063. Prednáška: teplota musí klesať monotónne, konečnú teplotu treba dať blízko nule, nie presne 0 – vo vzorci `exp(−delta / T)` by sa delilo nulou a pri T = 0 je to už len hill climbing."
   }
 ]

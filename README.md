@@ -25,7 +25,7 @@ Progress lives in the browser's `localStorage` under the single key `isi-prep:v1
 The app is a PWA (`manifest.webmanifest`, `sw.js`, `icons/`): served over HTTPS it can be added to the home
 screen and then runs full-screen and offline. Hosting on GitHub Pages:
 
-1. Create a GitHub repository from **this folder only** (never push `..\materials\`) and push it to `main`.
+1. Create a GitHub repository from **this folder only** (never push `materials\`, it is git-ignored) and push it to `main`.
    A public repository makes the site public; Pages for private repositories need a paid plan.
 2. *Settings → Pages → Build and deployment → Source: GitHub Actions*. The workflow
    `.github/workflows/pages.yml` rebuilds `js/data.js` and publishes on every push to `main`.

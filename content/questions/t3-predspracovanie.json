@@ -522,5 +522,54 @@
       { "text": "Previesť kategorické atribúty na číselné.", "correct": false }
     ],
     "explanation": "Podľa prednášky môže byť cieľom buď samotné nájdenie odľahlých hodnôt (práve ony sú zaujímavé, napr. podvodné transakcie), alebo vyčistenie dát od nich – to však znamená stratu informácie. Dopĺňanie chýbajúcich hodnôt je imputácia a prevod kategorických atribútov na čísla je kódovanie."
+  },
+  {
+    "id": "t3-q34",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň riadok, ktorý nahradí chýbajúce hodnoty veku priemerným vekom.",
+    "code": "ages = titanic_reduced.iloc[:, 1]\nages = np.array(ages)\nmean_age = np.mean(ages[~np.isnan(ages)])\n________\ntitanic_reduced[\"age\"] = ages",
+    "options": [
+      { "text": "`ages[np.isnan(ages)] = mean_age`", "correct": true },
+      { "text": "`ages[ages == np.nan] = mean_age`", "correct": false },
+      { "text": "`ages = mean_age`", "correct": false },
+      { "text": "`ages[~np.isnan(ages)] = mean_age`", "correct": false },
+      { "text": "`ages[np.isnan(ages)] = np.mean(ages)`", "correct": false }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. `np.isnan(ages)` je boolovská maska chýbajúcich hodnôt a priradenie cez masku prepíše iba ich. `nan` sa nerovná ničomu, ani sebe, takže `ages == np.nan` nevyberie nič. `~np.isnan` by prepísal známe veky. `np.mean(ages)` so zahrnutými `nan` vráti `nan`. `ages = mean_age` nahradí celé pole jedným číslom."
+  },
+  {
+    "id": "t3-q35",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň vytvorenie imputera, ktorý doplní chýbajúce hodnoty mediánom stĺpca.",
+    "code": "iris_X = datasets.load_iris().data\nmasking_array = np.random.binomial(1, .25, iris_X.shape).astype(bool)\niris_X[masking_array] = np.nan\n\n________\niris_X_prime = imputer.fit_transform(iris_X)",
+    "options": [
+      { "text": "`imputer = SimpleImputer(strategy='median')`", "correct": true },
+      { "text": "`imputer = SimpleImputer()`", "correct": false },
+      { "text": "`imputer = SimpleImputer(median=True)`", "correct": false },
+      { "text": "`imputer = SimpleImputer(missing_values='median')`", "correct": false }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Spôsob doplnenia určuje `strategy`: `'mean'` (predvolený – preto `SimpleImputer()` doplní priemer), `'median'`, `'most_frequent'`, `'constant'`. `missing_values` hovorí, čo sa považuje za chýbajúcu hodnotu (predvolene `np.nan`). Parameter `median` neexistuje (`TypeError`)."
+  },
+  {
+    "id": "t3-q36",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň inicializáciu kódovača, ktorý zo stĺpca `pclass` (hodnoty 0–2) vytvorí tri stĺpce 0/1.",
+    "code": "________\npclass_reshaped = np.array(titanic_reduced[\"pclass\"]).reshape(-1, 1)\none_hot_encoder = ohe.fit(pclass_reshaped)\nohe_coded = ohe.transform(pclass_reshaped).toarray()",
+    "options": [
+      { "text": "`ohe = OneHotEncoder()`", "correct": true },
+      { "text": "`ohe = LabelEncoder()`", "correct": false },
+      { "text": "`ohe = OneHotEncoder(titanic_reduced[\"pclass\"])`", "correct": false },
+      { "text": "`ohe = StandardScaler()`", "correct": false }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. One-hot kódovanie robí `OneHotEncoder` – pre každú triedu jeden stĺpec 0/1. `LabelEncoder` iba prečísluje triedy na 0, 1, 2 (to sa robí v kroku predtým). Dáta sa konštruktoru nedávajú, prichádzajú až vo `fit`; navyše musia byť 2D, preto `reshape(-1, 1)` (pri 1D poli `fit` hlási chybu)."
   }
 ]

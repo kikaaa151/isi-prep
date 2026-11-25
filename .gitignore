@@ -1,2 +1,8 @@
 __pycache__/
 _site/
+.venv/
+# Course materials (extracted Moodle/Teams/lecture texts) - never push, the repository is public.
+materials/
+# Local audit notes (source inventory, OneDrive audit) - not read by the app or the build.
+ZDROJE.md
+POROVNANIE.md

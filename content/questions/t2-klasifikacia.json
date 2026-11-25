@@ -1062,5 +1062,237 @@
       }
     ],
     "explanation": "`svm.SVR` je regresor (support vector regression), jeho `score` vracia R² – prvý výpis je R² na trénovacej množine (optimistické 0.714). `r2_score(y_test, y_pred)` je R² na teste (0.651) a `mean_absolute_error` je priemerná odchýlka predikcie od skutočnosti (3.413 tisíc dolárov). O zaraďovaní do tried pri regresii nejde."
+  },
+  {
+    "id": "t2-q36",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň vytvorenie modelu SVM s lineárnym jadrom.",
+    "code": "faces = fetch_olivetti_faces()\n\n________\n\nX_train, X_test, y_train, y_test = train_test_split(\n    faces.data, faces.target, test_size=0.25, random_state=0)\n\nsvc.fit(X_train, y_train)\npreds = svc.predict(X_test)",
+    "options": [
+      {
+        "text": "`svc = SVC(kernel='linear')`",
+        "correct": true
+      },
+      {
+        "text": "`svc = SVC(kernel='rbf')`",
+        "correct": false
+      },
+      {
+        "text": "`svc = SVC(linear=True)`",
+        "correct": false
+      },
+      {
+        "text": "`svc = SVC()`",
+        "correct": false
+      },
+      {
+        "text": "`SVC(kernel='linear')`",
+        "correct": false
+      }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Jadro sa volí parametrom `kernel`; lineárne je `'linear'`. Predvolené jadro `SVC()` je `'rbf'`, takže `SVC()` aj `kernel='rbf'` dajú nelineárny model. Parameter `linear` neexistuje (`TypeError`). Bez priradenia do premennej `svc` by ďalší riadok `svc.fit` skončil `NameError`."
+  },
+  {
+    "id": "t2-q37",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň argument tak, aby testovacia množina mala 25 % dát.",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(\n    faces.data, faces.target, ________)",
+    "options": [
+      {
+        "text": "`test_size=0.25`",
+        "correct": true
+      },
+      {
+        "text": "`train_size=0.25`",
+        "correct": false
+      },
+      {
+        "text": "`test_size=25`",
+        "correct": false
+      },
+      {
+        "text": "`random_state=0.25`",
+        "correct": false
+      }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. `test_size` ako desatinné číslo je podiel testovacej množiny. Celé číslo `25` znamená presne 25 vzoriek, nie 25 %. `train_size=0.25` by dalo 25 % na trénovanie a 75 % na test. `random_state` iba fixuje náhodné zamiešanie."
+  },
+  {
+    "id": "t2-q38",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň vytvorenie grafu s rozmermi 7 × 5 palcov, do ktorého sa potom kreslí cez `ax`.",
+    "code": "bins = probs_df.groupby('0').was_correct.agg(['mean', 'count'])\n\n________\nbins['mean'].plot(kind='bar', ax=ax)\nax.set_title(\"Accuracy at 0 class probability\")",
+    "options": [
+      {
+        "text": "`f, ax = plt.subplots(figsize=(7, 5))`",
+        "correct": true
+      },
+      {
+        "text": "`ax = plt.subplots(7, 5)`",
+        "correct": false
+      },
+      {
+        "text": "`f, ax = plt.figure(figsize=(7, 5))`",
+        "correct": false
+      },
+      {
+        "text": "`f, ax = plt.subplots(size=(7, 5))`",
+        "correct": false
+      }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. `plt.subplots` vracia dvojicu (figure, osi) a veľkosť sa zadáva cez `figsize`. `plt.subplots(7, 5)` vytvorí mriežku 7 × 5 grafov a `ax` by bola celá dvojica. `plt.figure` vracia iba figure, takže rozbalenie do dvoch premenných zlyhá. Parameter `size` neexistuje."
+  },
+  {
+    "id": "t2-q39",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "quizlet",
+    "text": "Doplň vytvorenie regresného modelu SVM s polynomiálnym jadrom.",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=33)\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)\n\n________\nclf_svr_poly.fit(X_train, y_train)\nprint(clf_svr_poly.score(X_train, y_train))",
+    "options": [
+      {
+        "text": "`clf_svr_poly = svm.SVR(kernel='poly')`",
+        "correct": true
+      },
+      {
+        "text": "`clf_svr_poly = svm.SVC(kernel='poly')`",
+        "correct": false
+      },
+      {
+        "text": "`clf_svr_poly = svm.SVR(kernel='polynomial')`",
+        "correct": false
+      },
+      {
+        "text": "`clf_svr_poly = svm.SVR(degree='poly')`",
+        "correct": false
+      }
+    ],
+    "explanation": "Karta z Quizletu „ISI Zápočet 2025/26“ (doplnenie kódu); nesprávne možnosti sú doplnené. Regresia = `SVR`, klasifikácia = `SVC` (cena domu je spojitá). Polynomiálne jadro sa volá `'poly'` (predvolený stupeň `degree=3`); `'polynomial'` scikit-learn odmietne chybou. `degree` je číslo – stupeň polynómu, nie typ jadra."
+  },
+  {
+    "id": "t2-q40",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Lekári chcú model, z ktorého vyčítajú, prečo pacienta zaradil do rizikovej skupiny. Ktorý klasifikátor sa hodí najviac?",
+    "options": [
+      {
+        "text": "rozhodovací strom",
+        "correct": true
+      },
+      {
+        "text": "náhodný les s 500 stromami",
+        "correct": false
+      },
+      {
+        "text": "KNN",
+        "correct": false
+      },
+      {
+        "text": "SVM s RBF jadrom",
+        "correct": false
+      }
+    ],
+    "explanation": "Rozhodovací strom je séria otázok na atribúty – cestu od koreňa k listu vie prečítať aj človek (prednáška: interpretovateľnosť a vizualizácia sú jeho hlavná výhoda). Náhodný les platí za vyššiu presnosť stratou interpretovateľnosti, KNN „nenapovedá prečo“ a SVM s jadrom hľadá hranicu v transformovanom priestore, ktorú nevieme jednoducho vysvetliť."
+  },
+  {
+    "id": "t2-q41",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Máš tabuľkové dáta (stĺpce = merané atribúty) a cieľom je čo najvyššia presnosť. Ktoré modely sú podľa prednášky state of the art?",
+    "options": [
+      {
+        "text": "XGBoost (gradient boosting stromov)",
+        "correct": true
+      },
+      {
+        "text": "náhodný les",
+        "correct": true
+      },
+      {
+        "text": "hlboká neurónová sieť – na tabuľkových dátach je vždy najlepšia",
+        "correct": false
+      },
+      {
+        "text": "perceptrón",
+        "correct": false
+      },
+      {
+        "text": "KNN s k = 1",
+        "correct": false
+      }
+    ],
+    "explanation": "Prednáška cituje viaceré štúdie: na tabuľkových dátach stromové modely (XGBoost, náhodné lesy) stále prekonávajú hlboké učenie; TabNet je pokus priniesť do tejto oblasti neurónové siete s mechanizmom pozornosti. Perceptrón zvládne iba lineárne separovateľné dáta a KNN s k = 1 kopíruje šum (pretrénovanie)."
+  },
+  {
+    "id": "t2-q42",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dve triedy sú rozložené ako XOR (nedajú sa oddeliť priamkou). Ktoré klasifikátory ich vedia správne rozdeliť?",
+    "options": [
+      {
+        "text": "SVM s RBF jadrom",
+        "correct": true
+      },
+      {
+        "text": "rozhodovací strom",
+        "correct": true
+      },
+      {
+        "text": "KNN",
+        "correct": true
+      },
+      {
+        "text": "perceptrón",
+        "correct": false
+      },
+      {
+        "text": "SVM s lineárnym jadrom",
+        "correct": false
+      }
+    ],
+    "explanation": "Kernelizácia premietne dáta do viacrozmerného priestoru, kde sú lineárne oddeliteľné – SVM s RBF jadrom XOR rozdelí. Strom aj KNN vytvárajú nelineárne hranice (schodíky, resp. hlasovanie susedov). Perceptrón aj lineárne SVM hľadajú jednu priamku, takže na XOR dosiahnu len okolo 50 % (náhodné hádanie)."
+  },
+  {
+    "id": "t2-q43",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Okrem triedy potrebuješ aj pravdepodobnosť, s akou vzorka do triedy patrí (`predict_proba`). Ktoré modely ju v scikit-learn vrátia bez ďalšieho nastavovania?",
+    "options": [
+      {
+        "text": "logistická regresia",
+        "correct": true
+      },
+      {
+        "text": "náhodný les",
+        "correct": true
+      },
+      {
+        "text": "perceptrón",
+        "correct": false
+      },
+      {
+        "text": "`SVC()` s predvolenými parametrami",
+        "correct": false
+      }
+    ],
+    "explanation": "Logistická regresia je klasifikátor, ktorý pravdepodobnosť počíta priamo – vážený súčet pretlačí cez sigmoidu. Náhodný les vráti podiel stromov, ktoré hlasovali za danú triedu (cvičenie 3, `rf.predict_proba`). Perceptrón má skokovú aktivačnú funkciu, takže vracia iba triedu. `SVC` má `predict_proba` až s `probability=True` (pravdepodobnosti dopočíta dodatočnou kalibráciou)."
   }
 ]

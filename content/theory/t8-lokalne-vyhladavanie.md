@@ -1,6 +1,6 @@
 # Lokálne vyhľadávanie: hill climbing, simulované žíhanie, genetické algoritmy
 
-Podklad: cvičenie z 10. týždňa (N-dám – `core/state.py`, `core/algorithms.py`, na porovnanie `core/search_state.py` a `core/search_algorithms.py`) a štandardné definície z Russell & Norvig (AIMA). K tejto téme nie sú prednáškové slajdy.
+Podklad: cvičenie z 10. týždňa (N-dám – `core/state.py`, `core/algorithms.py`, na porovnanie `core/search_state.py` a `core/search_algorithms.py`), prednáška J. Gazdu z roku 2020 „CSP 2“ (lokálne hľadanie, local beam, genetické algoritmy; z archívu videí) a štandardné definície z Russell & Norvig (AIMA).
 
 ## Systematické vs. lokálne vyhľadávanie
 
@@ -148,13 +148,29 @@ Pravdepodobnosť prijatia horšieho ťahu `exp(−delta / T)`:
 - `delta = 0` → `exp(0) = 1` → ťah na rovnako dobrý stav sa prijme vždy.
 - Ochladzovanie: `cooling` bližšie k 1 = pomalšie chladnutie, dlhší beh, lepšia šanca na globálne optimum. S `t_start = 2.0`, `cooling = 0.995`, `t_min = 0.001` klesne `T` pod `t_min` po 1 517 iteráciách; po `k` krokoch je `T = t_start · cooling^k`.
 - Ak teplota klesá dostatočne pomaly, pravdepodobnosť nájdenia globálneho optima sa blíži k 1 – je to však teoretický výsledok, v praxi **záruka nie je**.
+- Plán teploty z prednášky: `T(k) = T_init · (T_final / T_init)^(k / k_max)` – v kroku 0 je `T = T_init`, v kroku `k_max` je `T = T_final`. Treba zadať **počiatočnú a konečnú teplotu a maximálny počet iterácií**; teplota musí klesať **monotónne** a konečná teplota má byť **blízko nuly, ale nie 0** (delenie nulou v `exp(−delta / T)`). Plán nemusí byť práve tento – prednáška uvádza aj jednoduché `T(k+1) = T(k) − 0,05` (lineárne) alebo `T(k+1) = 0,99 · T(k)` (geometricky, ako `cooling` v cvičení).
 - V AIMA je zápis pre maximalizáciu: `ΔE = hodnota(nový) − hodnota(aktuálny)`, horší ťah (`ΔE < 0`) sa prijme s pravdepodobnosťou `e^(ΔE / T)` – to isté s opačným znamienkom.
 
 > **Na teste:** simulované žíhanie **nevyberá vždy najlepší ťah**, **môže** vykonať ťah, ktorý evaluačnú funkciu zhorší, a používa **parameter teploty**, ktorý riadi pravdepodobnosť takého ťahu a tým bráni zamrznutiu v lokálnom optime. **Nezaručuje** globálne optimum a nie je založené na biologickej evolúcii (to sú genetické algoritmy). Tvrdenie „funguje dobre v diskrétnych aj spojitých priestoroch“ sa v starších testových otázkach medzi správne charakteristiky nepočíta, hoci sa žíhanie dá použiť v oboch.
 
+## Local beam search (lúčové vyhľadávanie)
+
+> Priorita: nižšia. Na prednáške 2020 zaznelo, že local beam „nás nebude zaujímať“ – je tu kvôli slajdom a kvôli genetickému algoritmu, ktorý z neho vychádza.
+
+Hill climbing pracuje s **jedným** stavom, local beam s **k** stavmi naraz:
+
+1. Inicializácia: `k` náhodne vygenerovaných stavov.
+2. Vygeneruj **všetkých potomkov** (susedov) týchto `k` stavov.
+3. Ak je medzi potomkami cieľový (úplný konzistentný) stav, skonči.
+4. Inak vyber `k` **najlepších potomkov** podľa evaluačnej funkcie a opakuj kroky 2–4.
+
+- Rozdiel oproti random-restart hill climbingu (`k` nezávislých behov): v local beam si stavy **odovzdávajú informáciu** – ak jeden stav vygeneruje veľa dobrých potomkov, ostatné vetvy sa zahodia.
+- Problém: potomkovia jedného rodiča môžu ovládnuť celý lúč → stratí sa rozmanitosť a algoritmus uviazne v lokálnom optime.
+- **Stochastický local beam**: `k` potomkov sa vyberá **náhodne**, s pravdepodobnosťou úmernou ich hodnote (analógia prirodzeného výberu).
+
 ## Genetické algoritmy
 
-Inšpirované **biologickou evolúciou** (prirodzený výber). Namiesto jedného stavu sa vyvíja **populácia** stavov.
+Inšpirované **biologickou evolúciou** (prirodzený výber). Namiesto jedného stavu sa vyvíja **populácia** stavov. Prednáška ich opisuje ako **pokročilý stochastický local beam**: potomok nevzniká zo suseda jedného stavu, ale **kombináciou dvoch rodičov**.
 
 | Pojem | Význam | V cvičení (N-dám) |
 |---|---|---|
@@ -190,7 +206,10 @@ def genetic_algorithm(start_state, population_size=100, generations=1000, mutati
     return min(population, key=lambda s: s.conflicts()), history
 ```
 
-- **Turnajová selekcia**: náhodne vyberie `k` jedincov a vráti najlepšieho z nich. Dobrý jedinec má väčšiu šancu, ale nevyberá sa vždy ten najlepší z populácie – zachováva sa rôznorodosť. Väčšie `k` = silnejší selekčný tlak.
+- **Fitness v prednáške** (AIMA) sa **maximalizuje**: počet dvojíc dám, ktoré sa **neohrozujú**. Pre 8 dám je minimum 0 a maximum `8 · 7 / 2 = 28` (riešenie). Cvičenie robí opak – minimalizuje `conflicts()`; platí `fitness = 28 − conflicts()`.
+- **Ruletová selekcia** (z prednášky): pravdepodobnosť výberu jedinca je úmerná jeho fitness. Populácia s fitness 24, 23, 20, 11 → prvý jedinec sa vyberie s pravdepodobnosťou `24 / (24 + 23 + 20 + 11) = 24 / 78 ≈ 31 %`. Silný jedinec môže byť vybraný viackrát, slabý ani raz.
+- Na začiatku sa jedinci v populácii výrazne líšia (potomok môže byť od rodičov veľmi odlišný); počas behu sa rozdiely zmenšujú a jedinci sa na seba podobajú.
+- **Turnajová selekcia** (v cvičení): náhodne vyberie `k` jedincov a vráti najlepšieho z nich. Dobrý jedinec má väčšiu šancu, ale nevyberá sa vždy ten najlepší z populácie – zachováva sa rôznorodosť. Väčšie `k` = silnejší selekčný tlak.
 - **Kríženie**: `cut = random.randint(1, n − 1)` (vrátane oboch hraníc) → dieťa má vždy aspoň jeden gén z každého rodiča. Príklad: `(3, 1, 4, 1, 5, 2)` × `(0, 6, 2, 7, 3, 4)`, `cut = 3` → `(3, 1, 4, 7, 3, 4)`.
 - **Mutácia**: vnáša do populácie **genetickú diverzitu** – nové gény, ktoré by samotným krížením nevznikli; bráni predčasnej konvergencii (populácia rovnakých jedincov).
 - **Elitizmus**: najlepšie `h` v populácii sa medzi generáciami nikdy nezhorší.
@@ -255,6 +274,8 @@ Príklad `(0, 0, 0, 0)`: `h1 = 6`, `h2 = 2`, skutočný najmenší počet ťahov
 - `h` je počet **dvojíc**, nie počet ohrozených dám: 4 dámy v jednom riadku = 6 konfliktov.
 - Počet susedov je `N · (N − 1)`, nie `N²`.
 - Výsledkom lokálneho vyhľadávania je stav, nie cesta – preto sa nehodí na hľadanie cesty v grafe.
+- Local beam s `k` stavmi ≠ `k` nezávislých reštartov: do ďalšieho kola idú `k` najlepší potomkovia **všetkých** stavov spolu.
+- Fitness N-dám v prednáške (neohrozujúce sa dvojice, max 28) sa **maximalizuje**; `conflicts()` v cvičení sa **minimalizuje**.
 
 ## Rýchle zhrnutie
 
@@ -266,7 +287,8 @@ Príklad `(0, 0, 0, 0)`: `h1 = 6`, `h2 = 2`, skutočný najmenší počet ťahov
 - Random restart: opakuj hill climbing z náhodných štartov; očakávaný počet behov `1 / p`.
 - Simulované žíhanie: náhodný sused, lepší vždy, horší s pravdepodobnosťou `exp(−delta / T)`.
 - Teplota klesá (`T = T · cooling`): vysoká = prieskum, nízka = hill climbing.
-- Genetický algoritmus: populácia, fitness, selekcia, kríženie, mutácia, elitizmus; inšpirácia evolúciou.
+- Genetický algoritmus: populácia, fitness, selekcia, kríženie, mutácia, elitizmus; inšpirácia evolúciou; „pokročilý stochastický local beam“.
+- Local beam: `k` stavov → `k` najlepších spomedzi všetkých potomkov (stochastická verzia náhodne podľa hodnoty); ruletová selekcia = fitness / súčet fitness.
 - Mutácia vnáša genetickú diverzitu; kríženie kombinuje rodičov; turnaj vracia najlepšieho z `k` náhodných.
 - Žiadny z algoritmov nezaručuje globálne optimum.
 - `h1 = conflicts` nie je prípustná heuristika pre A*, `h2` (dolný odhad) je.

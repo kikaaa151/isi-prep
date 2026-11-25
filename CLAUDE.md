@@ -60,22 +60,27 @@ Paths like `D:\SKOLA\ISI\...` in that file are from the original machine – ada
 
 Rules that matter:
 - Facts must come from the course materials (source priority: this year's Moodle weeks → Teams archive → lectures
-  → last year's archive and Quizlet). Search/CSP/local search have no lecture slides – standard Russell & Norvig
-  (AIMA) definitions are used there.
+  → last year's archive and Quizlet). Search/CSP/local search have no slides on Moodle; their lecture sources are
+  J. Gazda's 2026 lecture "Vyhľadávanie bez informácie" (weeks 7–8) and his 2020 lectures (informed search,
+  CSP 1, CSP 2) from the user's OneDrive archive (`OneDrive\Skola\ISI\Zapocet\Gofile subory`), completed by
+  standard Russell & Norvig (AIMA) definitions. The audit of that archive (`POROVNANIE.md`) and the source inventory (`ZDROJE.md`) are local, git-ignored notes.
 - Reference codes must actually run; practical questions state real outputs – verify by running code.
 - Question ids are unique across all files; 4–6 options with at least one correct and one wrong (Quizlet cards
   are exempt and kept faithful to the cards; contradicting ones carry `"disputed": true`).
 
-## Course materials (not in this folder)
+## Course materials (`materials\`, git-ignored)
 
-The original machine has a sibling folder `..\materials\` with text extracted from the course (Moodle weeks 1–10
+The local folder `materials\` (in `.gitignore`, never push it – the repository is public) holds text extracted from the course (Moodle weeks 1–10
 codes and notebooks, lecture slides `isi_01..04`, A*/Greedy pseudocode, DFS/BFS sheet, Teams archive, last
 year's codes, `quizlet-flashcards.json`). If it is missing and the task needs the sources:
 - Moodle course: https://moodle.kpi.fei.tuke.sk/course/view.php?id=120 (TUKE SSO login; the user must log in
   themselves – never type their credentials). The lecture PDFs are password-protected; ask the user for the
   password, do not try to bypass it.
 - Teams: `General.zip` of the ISI team (codes of exercises 1–9, some `_sol` solutions, books).
-- Quizlet: https://quizlet.com/990572431/isi-flash-cards/ (81 exam flashcards).
+- Quizlet: https://quizlet.com/990572431/isi-flash-cards/ (81 exam flashcards), plus
+  https://quizlet.com/1127209113/isi-skuska-2024/ (subset of the 81) and
+  https://quizlet.com/1086474347/isi-zapocet-202526/ (its code fill-ins are questions with `"source": "quizlet"`
+  in t2–t5).
 - Algorithm visualisation recommended by the teacher: https://qiao.github.io/PathFinding.js/visual/
 
 Do not publish course materials or copy textbook PDFs into the project.
