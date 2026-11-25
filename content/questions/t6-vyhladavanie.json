@@ -1,0 +1,651 @@
+[
+  {
+    "id": "t6-q01",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré zložky patria do formálnej definície vyhľadávacieho problému?",
+    "options": [
+      { "text": "Počiatočný stav.", "correct": true },
+      { "text": "Akcie a prechodový model (funkcia nasledovníkov).", "correct": true },
+      { "text": "Test cieľa.", "correct": true },
+      { "text": "Cena cesty (súčet cien krokov).", "correct": true },
+      { "text": "Heuristická funkcia `h(n)`.", "correct": false },
+      { "text": "Množina už navštívených stavov.", "correct": false }
+    ],
+    "explanation": "Problém je určený počiatočným stavom, akciami, prechodovým modelom, testom cieľa a cenou cesty. Heuristika je dodatočná znalosť, ktorú využívajú iba informované algoritmy (Greedy, A*), a množina navštívených stavov je dátová štruktúra algoritmu (graph search), nie súčasť problému."
+  },
+  {
+    "id": "t6-q02",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o Loydovej osmičke (8-puzzle) z cvičenia sú pravdivé?",
+    "options": [
+      { "text": "Stav je rozloženie dlaždíc 1–8 a medzery na doske 3×3.", "correct": true },
+      { "text": "Z každého stavu existujú práve 4 ťahy.", "correct": false },
+      { "text": "Každý ťah stojí 1, takže cena cesty sa rovná počtu ťahov.", "correct": true },
+      { "text": "Do cieľa sa dá dostať z ľubovoľného z 9! rozložení dosky.", "correct": false },
+      { "text": "Riešením problému je cieľová doska, nie postupnosť ťahov.", "correct": false }
+    ],
+    "explanation": "Stav je celá doska (`board`), akcia je posun dlaždice susediacej s medzerou a každý ťah stojí 1. Počet ťahov závisí od polohy medzery: 2 v rohu, 3 na hrane, 4 v strede. Dosiahnuteľná je len polovica rozložení (9!/2 = 181 440), druhá polovica je neriešiteľná. Riešením je postupnosť akcií – v kóde zoznam dlaždíc z `reconstruct_path()`; cieľovú dosku poznáme vopred."
+  },
+  {
+    "id": "t6-q03",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čím sa reflexný agent líši od plánujúceho (cieľového) agenta?",
+    "options": [
+      { "text": "Reflexný agent vyberá akciu iba podľa toho, čo práve vníma.", "correct": true },
+      { "text": "Plánujúci agent si pred konaním pomocou modelu sveta premieta dôsledky postupností akcií.", "correct": true },
+      { "text": "Reflexný agent si pred každou akciou prehľadá stavový priestor a porovná možné budúce stavy.", "correct": false },
+      { "text": "Plánujúci agent nepotrebuje model prostredia, stačí mu aktuálny vnem.", "correct": false },
+      { "text": "Reflexný agent vďaka jednoduchým pravidlám garantuje nájdenie optimálneho riešenia.", "correct": false }
+    ],
+    "explanation": "Reflexný agent reaguje pravidlom „podmienka → akcia“ na aktuálny vnem; budúce dôsledky akcií nezvažuje a nič negarantuje. Plánujúci agent má cieľ a model toho, ako akcie menia svet, a vhodnú postupnosť akcií hľadá vopred – to je vyhľadávanie (BFS, DFS, A*, …)."
+  },
+  {
+    "id": "t6-q04",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktorý opis vystihuje racionálneho agenta?",
+    "options": [
+      { "text": "Volí akcie, ktoré maximalizujú jeho očakávaný úžitok vzhľadom na to, čo vníma a čo vie.", "correct": true },
+      { "text": "Pozná skutočný výsledok každej akcie vopred, takže sa nikdy nepomýli.", "correct": false },
+      { "text": "Je to agent, ktorý sa učí z interakcií s prostredím.", "correct": false },
+      { "text": "Je to agent, ktorý vždy nájde najkratšiu cestu do cieľa.", "correct": false }
+    ],
+    "explanation": "Racionalita = maximalizácia očakávaného úžitku (očakávanej hodnoty miery výkonu) pri dostupných informáciách. Racionálny agent nie je vševediaci – môže sa rozhodnúť správne a dopadnúť zle. Učenie ani hľadanie najkratšej cesty nie sú definíciou racionality."
+  },
+  {
+    "id": "t6-q05",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o kritériách hodnotenia vyhľadávacích algoritmov sú správne?",
+    "options": [
+      { "text": "Úplný algoritmus nájde riešenie vždy, keď nejaké existuje.", "correct": true },
+      { "text": "Optimálny algoritmus vráti riešenie s najnižšou cenou cesty.", "correct": true },
+      { "text": "Optimálny algoritmus je ten, ktorý expanduje najmenej uzlov.", "correct": false },
+      { "text": "Úplný algoritmus musí vždy prehľadať celý stavový priestor.", "correct": false },
+      { "text": "Pamäťová zložitosť hovorí, koľko uzlov musí algoritmus držať naraz v pamäti.", "correct": true }
+    ],
+    "explanation": "Úplnosť = záruka nájdenia riešenia, ak existuje. Optimálnosť = kvalita nájdeného riešenia (najnižšia cena cesty), nie rýchlosť hľadania – počet expandovaných uzlov patrí k časovej zložitosti. Úplný algoritmus môže skončiť hneď, ako nájde cieľ."
+  },
+  {
+    "id": "t6-q06",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čím sa vyhľadávanie v grafe (graph search) líši od vyhľadávania v strome (tree search)?",
+    "options": [
+      { "text": "Udržiava množinu už navštívených stavov a tie znova neexpanduje.", "correct": true },
+      { "text": "Dá sa použiť iba vtedy, keď stavový priestor neobsahuje cykly.", "correct": false },
+      { "text": "Potrebuje viac pamäte, lebo si okrem hranice pamätá aj navštívené stavy.", "correct": true },
+      { "text": "Nepotrebuje hranicu (frontier), stačí mu množina navštívených stavov.", "correct": false },
+      { "text": "V kóde z cvičenia mu zodpovedá množina `visited` vo funkciách `bfs` a `dfs`.", "correct": true }
+    ],
+    "explanation": "Tree search si navštívené stavy nepamätá, takže ten istý stav môže expandovať znova a v priestore s cyklami sa môže zacykliť (v osmičke stačí ťah tam a späť). Graph search pridáva množinu navštívených stavov (`visited`, `closed_list`) – práve pre cykly je užitočný; platí za to pamäťou. Hranicu potrebujú obe verzie."
+  },
+  {
+    "id": "t6-q07",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o prehľadávaní do šírky (BFS) sú pravdivé?",
+    "options": [
+      { "text": "Hranica je FIFO front – expanduje sa uzol, ktorý v nej čaká najdlhšie.", "correct": true },
+      { "text": "Ak majú všetky kroky rovnakú cenu, nájde riešenie s najmenším počtom krokov.", "correct": true },
+      { "text": "Aj pri rôznych cenách hrán vždy nájde najlacnejšiu cestu.", "correct": false },
+      { "text": "Jeho pamäťová náročnosť rastie s hĺbkou riešenia iba lineárne.", "correct": false },
+      { "text": "Jeho hlavnou slabinou je pamäť – drží `O(b^d)` uzlov.", "correct": true }
+    ],
+    "explanation": "BFS prehľadáva po úrovniach (FIFO), preto prvý nájdený cieľ je najplytší – optimálne je to len vtedy, keď každý krok stojí rovnako. Pri rôznych cenách treba UCS. Čas aj pamäť sú `O(b^d)`; lineárnu pamäť `O(b·m)` má DFS."
+  },
+  {
+    "id": "t6-q08",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o prehľadávaní do hĺbky (DFS) sú pravdivé?",
+    "options": [
+      { "text": "Pri vyhľadávaní v strome mu stačí pamäť `O(b·m)`, čo je menej než pri BFS.", "correct": true },
+      { "text": "Prvé riešenie, ktoré nájde, je vždy najplytšie.", "correct": false },
+      { "text": "Ak si nepamätá navštívené stavy, v grafe s cyklami sa môže zacykliť.", "correct": true },
+      { "text": "Je úplné aj v nekonečných stavových priestoroch.", "correct": false },
+      { "text": "Z hranice vyberá uzol, ktorý v nej čaká najdlhšie.", "correct": false }
+    ],
+    "explanation": "DFS expanduje najhlbší uzol – hranica je LIFO zásobník (vyberá sa naposledy vložený uzol; najdlhšie čakajúci vyberá BFS). Stačí mu držať aktuálnu vetvu a jej súrodencov, preto má malú pamäť. Vráti prvé riešenie, na ktoré narazí, nie najplytšie. V strome (bez `visited`) sa môže zacykliť alebo stratiť v nekonečnej vetve, takže nie je úplné ani optimálne."
+  },
+  {
+    "id": "t6-q09",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré priradenia „algoritmus – hranica (frontier)“ sú správne?",
+    "options": [
+      { "text": "BFS – FIFO front.", "correct": true },
+      { "text": "DFS – LIFO zásobník.", "correct": true },
+      { "text": "UCS – prioritný front usporiadaný podľa `g(n)`.", "correct": true },
+      { "text": "Greedy best-first – prioritný front usporiadaný podľa `g(n) + h(n)`.", "correct": false },
+      { "text": "A* – prioritný front usporiadaný iba podľa `h(n)`.", "correct": false }
+    ],
+    "explanation": "Algoritmy sa líšia iba tým, ktorý uzol vyberú z hranice: BFS najstarší (FIFO), DFS najnovší (LIFO), UCS s najnižším `g(n)`, Greedy s najnižším `h(n)` a A* s najnižším `f(n) = g(n) + h(n)`. Posledné dve možnosti majú priority vymenené."
+  },
+  {
+    "id": "t6-q10",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorý výraz patrí na vynechané miesto, aby funkcia robila BFS ako na cvičení?",
+    "code": "frontier = deque([start_state])\nvisited = {start_state}\ndiscovered = 1\nexpanded = 0\nwhile frontier:\n    current_state = ________\n    expanded += 1\n    if current_state.is_goal():\n        return current_state, discovered, expanded\n    for tile in current_state.get_possible_moves():\n        next_state = current_state.move_tile(tile)\n        if next_state not in visited:\n            visited.add(next_state)\n            frontier.append(next_state)\n            discovered += 1\nreturn None, discovered, expanded",
+    "options": [
+      { "text": "`frontier.popleft()`", "correct": true },
+      { "text": "`frontier.pop()`", "correct": false },
+      { "text": "`frontier[0]`", "correct": false },
+      { "text": "`heapq.heappop(frontier)`", "correct": false }
+    ],
+    "explanation": "BFS berie stav zo začiatku frontu (krok 4 zadania), nové stavy idú na koniec → FIFO. `frontier.pop()` berie z konca – to je DFS. `frontier[0]` stav z frontu neodstráni, takže cyklus by sa nikdy neskončil. `heapq.heappop` patrí k prioritnému frontu (UCS, Greedy, A*) a nad `deque` nefunguje."
+  },
+  {
+    "id": "t6-q11",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Hotová funkcia `bfs` z cvičenia vyberá stav cez `frontier.popleft()` a nasledovníkov vkladá cez `frontier.append(next_state)`. Ktoré úpravy z nej spravia prehľadávanie do hĺbky (DFS)?",
+    "options": [
+      { "text": "Nahradiť `frontier.popleft()` za `frontier.pop()`.", "correct": true },
+      { "text": "Ponechať `popleft()` a nasledovníkov vkladať cez `frontier.appendleft(next_state)`.", "correct": true },
+      { "text": "Nahradiť množinu `visited` zoznamom.", "correct": false },
+      { "text": "Prechádzať ťahy v opačnom poradí: `for tile in reversed(current_state.get_possible_moves())`.", "correct": false },
+      { "text": "Presunúť test `is_goal()` pred riadok `expanded += 1`.", "correct": false }
+    ],
+    "explanation": "DFS potrebuje LIFO: vyberať treba z toho konca, na ktorý sa vkladá. To spĺňa `append` + `pop()` (riešenie z cvičenia) aj `appendleft` + `popleft()`. Zoznam namiesto množiny iba spomalí test `not in visited`. Opačné poradie ťahov zmení poradie v rámci úrovne, ale stále je to BFS. Presun testu cieľa zmení len počítadlo `expanded`."
+  },
+  {
+    "id": "t6-q12",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Funkcia `dfs(start_state, limit=50_000)` z cvičenia má na začiatku cyklu poistku. Ktorý riadok patrí na vynechané miesto?",
+    "code": "while stack:\n    ________\n        return None, discovered, expanded\n    current_state = stack.pop()\n    expanded += 1\n    if current_state.is_goal():\n        return current_state, discovered, expanded",
+    "options": [
+      { "text": "`if expanded >= limit:`", "correct": true },
+      { "text": "`if len(stack) >= limit:`", "correct": false },
+      { "text": "`if len(current_state.reconstruct_path()) >= limit:`", "correct": false },
+      { "text": "`if discovered >= limit:`", "correct": false }
+    ],
+    "explanation": "Podľa kroku 4 zadania je `limit` strop na počet expandovaných stavov: `if expanded >= limit: return None, discovered, expanded`. Nie je to limit hĺbky (dĺžky cesty), veľkosti zásobníka ani počtu objavených stavov. Navyše `current_state` v prvom prechode cyklu ešte neexistuje."
+  },
+  {
+    "id": "t6-q13",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Funkcie v `core/algorithms.py` vracajú trojicu `(goal_state, discovered, expanded)`. Čo platí?",
+    "options": [
+      { "text": "`expanded` je počet stavov vybratých z hranice, ktorým sa generovali nasledovníci.", "correct": true },
+      { "text": "`discovered` je počet rôznych stavov pridaných do hranice / `visited`, vrátane počiatočného.", "correct": true },
+      { "text": "`discovered` je dĺžka nájdenej cesty.", "correct": false },
+      { "text": "Ak riešenie neexistuje, funkcia vyhodí `NotImplementedError`.", "correct": false },
+      { "text": "`expanded` je na konci vždy väčšie než `discovered`.", "correct": false }
+    ],
+    "explanation": "`discovered` začína na 1 (štart) a zvyšuje sa pri každom novom stave vloženom do hranice; `expanded` začína na 0 a zvyšuje sa pri každom výbere z hranice – expandovať sa dá len objavený stav, takže `expanded ≤ discovered`. Dĺžku cesty GUI počíta zvlášť cez `len(goal_state.reconstruct_path())`. Pri neúspechu sa vráti `(None, discovered, expanded)`; `NotImplementedError` je len v nedokončenej kostre."
+  },
+  {
+    "id": "t6-q14",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "generated",
+    "text": "Čo vypíše tento program (BFS v štýle z cvičenia, štart `A`, cieľ `G`)?",
+    "code": "from collections import deque\n\ngraph = {'A': ['B', 'C'], 'B': ['D', 'E'], 'C': ['F'],\n         'D': [], 'E': ['G'], 'F': ['G'], 'G': []}\nfrontier = deque(['A'])\nvisited = {'A'}\nwhile frontier:\n    node = frontier.popleft()\n    print(node, end=' ')\n    if node == 'G':\n        break\n    for nxt in graph[node]:\n        if nxt not in visited:\n            visited.add(nxt)\n            frontier.append(nxt)",
+    "options": [
+      { "text": "`A B C D E F G`", "correct": true },
+      { "text": "`A B D E G`", "correct": false },
+      { "text": "`A C F G`", "correct": false },
+      { "text": "`A B C D E G`", "correct": false },
+      { "text": "`A B E G`", "correct": false }
+    ],
+    "explanation": "BFS expanduje po úrovniach: A; potom B, C; potom D, E, F; nakoniec G. Cieľ sa testuje až pri výbere z frontu, preto sa pred G expanduje aj F – hoci G bol objavený už pri expanzii E. `A B E G` je nájdená cesta, nie poradie expanzie; `A C F G` by vypísal DFS so zásobníkom."
+  },
+  {
+    "id": "t6-q15",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "generated",
+    "text": "Čo vypíše tento program (DFS v štýle z cvičenia – zásobník, štart `A`, cieľ `G`)?",
+    "code": "graph = {'A': ['B', 'C'], 'B': ['D', 'E'], 'C': ['F'],\n         'D': [], 'E': ['G'], 'F': ['G'], 'G': []}\nstack = ['A']\nvisited = {'A'}\nwhile stack:\n    node = stack.pop()\n    print(node, end=' ')\n    if node == 'G':\n        break\n    for nxt in graph[node]:\n        if nxt not in visited:\n            visited.add(nxt)\n            stack.append(nxt)",
+    "options": [
+      { "text": "`A C F G`", "correct": true },
+      { "text": "`A B D E G`", "correct": false },
+      { "text": "`A B C D E F G`", "correct": false },
+      { "text": "`A C B F G`", "correct": false },
+      { "text": "`A C F G B D E`", "correct": false }
+    ],
+    "explanation": "`stack.pop()` berie naposledy vložený uzol. Po A je zásobník `[B, C]` → vyberie sa C; vloží sa F → `[B, F]` → F; vloží sa G → `[B, G]` → G, koniec. B sa vôbec neexpanduje. `A B D E G` by dalo rekurzívne DFS, ktoré ide najprv do prvého suseda; `A B C D E F G` je poradie BFS."
+  },
+  {
+    "id": "t6-q16",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód? (`get_possible_moves` skúša susedov medzery v poradí hore, dole, vľavo, vpravo.)",
+    "code": "s = PuzzleState([[1, 2, 3],\n                 [4, 0, 6],\n                 [7, 5, 8]])\nprint(s.get_possible_moves())",
+    "options": [
+      { "text": "`[2, 5, 4, 6]`", "correct": true },
+      { "text": "`[2, 4, 6, 5]`", "correct": false },
+      { "text": "`[(0, 1), (2, 1), (1, 0), (1, 2)]`", "correct": false },
+      { "text": "`['up', 'down', 'left', 'right']`", "correct": false },
+      { "text": "`[5, 8]`", "correct": false }
+    ],
+    "explanation": "Metóda vracia čísla dlaždíc susediacich s medzerou, v poradí posunov `(-1, 0), (1, 0), (0, -1), (0, 1)`: nad medzerou je 2, pod ňou 5, vľavo 4, vpravo 6. Nevracia súradnice ani smery. `[5, 8]` je riešenie tejto dosky (výsledok `reconstruct_path()`), nie zoznam možných ťahov."
+  },
+  {
+    "id": "t6-q17",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "s = PuzzleState([[1, 2, 3],\n                 [4, 0, 6],\n                 [7, 5, 8]])\ng = s.move_tile(5).move_tile(8)\nprint(g.reconstruct_path(), g.is_goal(), s.is_goal())",
+    "options": [
+      { "text": "`[5, 8] True False`", "correct": true },
+      { "text": "`[8, 5] True False`", "correct": false },
+      { "text": "`[5, 8] True True`", "correct": false },
+      { "text": "`[None, 5, 8] True False`", "correct": false }
+    ],
+    "explanation": "`move_tile` vracia nový stav a pôvodný nemení, preto `s.is_goal()` ostáva `False`. `reconstruct_path` ide od `g` po `parent` dozadu (zbiera 8, potom 5), zastaví sa na stave s `parent is None` (jeho `moved_tile` nepridá) a zoznam na konci otočí → `[5, 8]`."
+  },
+  {
+    "id": "t6-q18",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Trieda `PuzzleState` definuje `__eq__` (porovnanie dosiek) a `__hash__` (hash dosky ako n-tice n-tíc). Čo vypíše tento kód?",
+    "code": "a = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]])\nb = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]])\nprint(a == b, a is b, len({a, b}))",
+    "options": [
+      { "text": "`True False 1`", "correct": true },
+      { "text": "`False False 2`", "correct": false },
+      { "text": "`True True 1`", "correct": false },
+      { "text": "`True False 2`", "correct": false }
+    ],
+    "explanation": "`a` a `b` sú dva rôzne objekty (`a is b` je `False`), ale majú rovnakú dosku, takže `a == b` je `True` a majú rovnaký hash – množina ich berie ako jeden prvok. Presne preto funguje `if next_state not in visited`. Bez `__eq__` a `__hash__` by vyšlo `False False 2` a algoritmus by tie isté dosky navštevoval stále znova."
+  },
+  {
+    "id": "t6-q19",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Funkciu `bfs` z cvičenia zavoláme na už poskladanej doske. Čo platí?",
+    "code": "start = PuzzleState([[1, 2, 3], [4, 5, 6], [7, 8, 0]])\ngoal_state, discovered, expanded = bfs(start)",
+    "options": [
+      { "text": "`discovered == 1` a `expanded == 1`.", "correct": true },
+      { "text": "`goal_state.reconstruct_path()` vráti prázdny zoznam.", "correct": true },
+      { "text": "`discovered == 1` a `expanded == 0`.", "correct": false },
+      { "text": "`goal_state` je `None`, lebo sa nevykonal žiadny ťah.", "correct": false },
+      { "text": "`discovered == 3`, lebo sa stihnú objaviť obaja nasledovníci štartu.", "correct": false }
+    ],
+    "explanation": "Štart sa počíta ako objavený (`discovered = 1`). V prvom prechode cyklu sa vyberie z frontu, `expanded` sa zvýši na 1 a až potom nasleduje test cieľa, ktorý hneď vráti `(start, 1, 1)` – nasledovníci sa už negenerujú. Štart má `parent is None`, takže cesta je `[]`."
+  },
+  {
+    "id": "t6-q20",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "DFS s limitom hĺbky `l` (depth-limited search) hľadá cieľ, ktorého najplytší výskyt je v hĺbke `d`. Čo platí?",
+    "options": [
+      { "text": "Ak `l < d`, riešenie nenájde.", "correct": true },
+      { "text": "Ak `l > d`, zaručene vráti najplytšie riešenie.", "correct": false },
+      { "text": "Nezablúdi v nekonečnej vetve, lebo hlbšie než `l` nejde.", "correct": true },
+      { "text": "Jeho pamäťová náročnosť rastie s `l` exponenciálne.", "correct": false }
+    ],
+    "explanation": "Limit hĺbky odreže vetvy hlbšie než `l`, čím rieši nekonečné vetvy. Pri príliš malom limite (`l < d`) je však neúplný a pri väčšom môže vrátiť hlbšie riešenie, na ktoré narazí skôr – nie je optimálny. Pamäť ostáva lineárna, `O(b·l)`. Pozor: `limit` vo funkcii `dfs` z cvičenia je limit počtu expanzií, nie hĺbky."
+  },
+  {
+    "id": "t6-q21",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ako funguje iteratívne prehlbovanie (iterative deepening search)?",
+    "options": [
+      { "text": "Opakovane spúšťa DFS s limitom hĺbky 0, 1, 2, …, kým nenájde cieľ.", "correct": true },
+      { "text": "Má pamäťovú náročnosť ako DFS a pri rovnakých cenách krokov nájde najplytšie riešenie ako BFS.", "correct": true },
+      { "text": "Na výber ďalšieho uzla používa heuristiku `h(n)`.", "correct": false },
+      { "text": "Uzly z predošlých iterácií si pamätá, takže žiadny uzol negeneruje dvakrát.", "correct": false },
+      { "text": "V každej iterácii strieda jeden krok BFS a jeden krok DFS.", "correct": false }
+    ],
+    "explanation": "IDS je DFS s postupne rastúcim limitom hĺbky. Tým získa úplnosť a (pri rovnakých cenách krokov) optimálnosť BFS pri pamäti `O(b·d)`. Je neinformované. Horné úrovne generuje v každej iterácii znova – nič si nepamätá –, ale keďže väčšina uzlov je v poslednej úrovni, čas ostáva `O(b^d)`."
+  },
+  {
+    "id": "t6-q22",
+    "topicId": "t6-vyhladavanie",
+    "week": 7,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o obojsmernom vyhľadávaní (bidirectional search) sú pravdivé?",
+    "options": [
+      { "text": "Jedno hľadanie ide od počiatočného stavu, druhé od cieľového; končí sa, keď sa ich hranice stretnú.", "correct": true },
+      { "text": "Vychádza z toho, že `b^(d/2) + b^(d/2)` je oveľa menej než `b^d`.", "correct": true },
+      { "text": "Cieľový stav musí byť explicitne známy.", "correct": true },
+      { "text": "Je to informovaný algoritmus – bez heuristiky sa nedá použiť.", "correct": false },
+      { "text": "Nemusí držať v pamäti žiadnu hranicu, stačí mu aktuálna cesta.", "correct": false }
+    ],
+    "explanation": "Dve hľadania do polovičnej hĺbky expandujú spolu oveľa menej uzlov než jedno do plnej hĺbky, preto sa oplatí najmä pri veľkých priestoroch a hlbokých riešeniach. Podmienkou je známy cieľový stav (a možnosť generovať predchodcov). Heuristiku nepotrebuje – patrí medzi neinformované stratégie. Aby sa dalo zistiť stretnutie, aspoň jedna hranica musí byť celá v pamäti: `O(b^(d/2))`."
+  },
+  {
+    "id": "t6-q23",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré z algoritmov sú neinformované (slepé), teda nepoužívajú heuristiku?",
+    "options": [
+      { "text": "BFS", "correct": true },
+      { "text": "DFS", "correct": true },
+      { "text": "Uniform-Cost Search", "correct": true },
+      { "text": "Iterative deepening search", "correct": true },
+      { "text": "Greedy best-first search", "correct": false },
+      { "text": "A*", "correct": false }
+    ],
+    "explanation": "Neinformované algoritmy poznajú iba definíciu problému. UCS síce pracuje s cenami, ale len s tými už zaplatenými (`g(n)`) – odhad do cieľa nepoužíva. Heuristiku `h(n)` používajú Greedy (priorita `h(n)`) a A* (priorita `g(n) + h(n)`)."
+  },
+  {
+    "id": "t6-q24",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o Uniform-Cost Search (UCS) sú pravdivé?",
+    "options": [
+      { "text": "Z hranice vyberá uzol s najnižšou cenou cesty od štartu `g(n)`.", "correct": true },
+      { "text": "Predpokladá, že všetky hrany majú rovnakú cenu.", "correct": false },
+      { "text": "Nájde najlacnejšiu cestu aj v grafe s rôznymi kladnými cenami hrán.", "correct": true },
+      { "text": "Uzol s nižšou hĺbkou má vždy prednosť pred hlbším uzlom.", "correct": false },
+      { "text": "Ak majú všetky kroky rovnakú cenu, správa sa ako BFS.", "correct": true }
+    ],
+    "explanation": "UCS expanduje uzly v poradí rastúcej kumulatívnej ceny `g(n)` bez ohľadu na hĺbku – hlbší, ale lacnejší uzol ide skôr. Preto je optimálny aj pri rôznych cenách hrán (na rozdiel od BFS). Rovnaké ceny nepredpokladá; ak také sú, poradie podľa `g` je poradie podľa hĺbky, teda BFS."
+  },
+  {
+    "id": "t6-q25",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "generated",
+    "text": "V orientovanom grafe je `graph[u]` zoznam dvojíc (nasledovník, cena hrany). Spustíme UCS zo `S` do `G` (cieľ sa testuje pri výbere uzla z frontu). Čo platí?",
+    "code": "graph = {'S': [('A', 2), ('B', 5)],\n         'A': [('B', 1), ('C', 6)],\n         'B': [('C', 2), ('G', 7)],\n         'C': [('G', 3)],\n         'G': []}",
+    "options": [
+      { "text": "Uzly sa expandujú v poradí S, A, B, C, G.", "correct": true },
+      { "text": "Nájdená cesta je S → A → B → C → G s cenou 8.", "correct": true },
+      { "text": "Nájdená cesta je S → B → G, lebo má najmenej hrán.", "correct": false },
+      { "text": "Uzol B sa expanduje s cenou g = 5.", "correct": false },
+      { "text": "G sa do frontu dostane najprv s cenou 10 a neskôr sa zlepší na 8.", "correct": true }
+    ],
+    "explanation": "S (g 0) → A 2, B 5. Expanzia A (2): B cez A stojí 3 < 5 (zlepšenie), C 8. Expanzia B (3): C 5 (zlepšenie), G 10. Expanzia C (5): G 8 (zlepšenie). Expanzia G (8) → cieľ. Cesta S → A → B → C → G, cena 2 + 1 + 2 + 3 = 8. S → B → G (cena 12) by našlo BFS, ktoré počíta hrany, nie ceny."
+  },
+  {
+    "id": "t6-q26",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Pseudokód A* z cvičenia používa `f(n) = g(n) + h(n)`. Čo znamenajú jednotlivé členy?",
+    "options": [
+      { "text": "`g(n)` je skutočná cena doteraz najlepšej známej cesty zo štartu do n.", "correct": true },
+      { "text": "`h(n)` je odhad ceny z n do cieľa.", "correct": true },
+      { "text": "`g(n)` je odhad ceny z n do cieľa.", "correct": false },
+      { "text": "`h(n)` je počet doteraz expandovaných uzlov.", "correct": false },
+      { "text": "`g(n)` má na začiatku pre všetky stavy hodnotu 0.", "correct": false }
+    ],
+    "explanation": "`g` je to, čo sme už „zaplatili“ (zo štartu do n), `h` je heuristický odhad zvyšku a `f` odhad ceny celej cesty cez n. V pseudokóde je na začiatku `g(n) ← ∞` pre všetky stavy a iba `g(start_state) ← 0`; v Pythone sa nekonečno rieši cez `g.get(neighbor, float(\"inf\"))`."
+  },
+  {
+    "id": "t6-q27",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí pre Greedy best-first search?",
+    "options": [
+      { "text": "Z open listu vyberá stav s najnižšou hodnotou `h(n)`.", "correct": true },
+      { "text": "Cenu už prejdenej cesty `g(n)` pri výbere neberie do úvahy.", "correct": true },
+      { "text": "S prípustnou heuristikou zaručene nájde najlacnejšiu cestu.", "correct": false },
+      { "text": "Je to neinformovaný algoritmus.", "correct": false },
+      { "text": "Vždy expanduje viac uzlov než UCS.", "correct": false }
+    ],
+    "explanation": "Greedy sa riadi len odhadom do cieľa – open list je usporiadaný podľa `h(n)` a `g(n)` sa vôbec nepočíta. Práve preto nie je optimálny, a to ani s prípustnou či konzistentnou heuristikou. Je informovaný (používa `h`) a zvyčajne expanduje oveľa menej uzlov než UCS – je rýchly, len nezaručuje kvalitu riešenia."
+  },
+  {
+    "id": "t6-q28",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "generated",
+    "text": "V orientovanom grafe je `graph[u]` zoznam dvojíc (nasledovník, cena hrany), `h` je heuristika. Akú cestu zo `S` do `G` nájde Greedy best-first search?",
+    "code": "graph = {'S': [('A', 2), ('B', 5)],\n         'A': [('B', 1), ('C', 6)],\n         'B': [('C', 2), ('G', 7)],\n         'C': [('G', 3)],\n         'G': []}\nh = {'S': 6, 'A': 4, 'B': 3, 'C': 2, 'G': 0}",
+    "options": [
+      { "text": "S → B → G s cenou 12", "correct": true },
+      { "text": "S → A → B → C → G s cenou 8", "correct": false },
+      { "text": "S → A → B → G s cenou 10", "correct": false },
+      { "text": "S → B → C → G s cenou 10", "correct": false }
+    ],
+    "explanation": "Greedy porovnáva iba `h`. Po expanzii S sú v open liste A (h 4) a B (h 3) → vyberie B. Po expanzii B pribudnú C (h 2) a G (h 0) → vyberie G, cieľ. Cesta S → B → G stojí 5 + 7 = 12, hoci optimum (S → A → B → C → G) je 8 – ceny hrán Greedy nevidí."
+  },
+  {
+    "id": "t6-q29",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o algoritme A* sú pravdivé?",
+    "options": [
+      { "text": "Z open listu vyberá uzol s najnižšou hodnotou `f(n) = g(n) + h(n)`.", "correct": true },
+      { "text": "S prípustnou heuristikou nájde optimálne riešenie (vyhľadávanie v strome).", "correct": true },
+      { "text": "Čím viac heuristika nadhodnocuje skutočnú cenu, tým istejšie je riešenie optimálne.", "correct": false },
+      { "text": "Cieľ sa testuje pri výbere uzla z open listu, nie pri jeho vygenerovaní.", "correct": true },
+      { "text": "Pamäťovo je úspornejší než DFS, lebo expanduje menej uzlov.", "correct": false }
+    ],
+    "explanation": "A* spája UCS (`g`) a Greedy (`h`). Optimálnosť zaručuje prípustná heuristika pri tree search a konzistentná pri graph search; nadhodnocovanie záruku ruší. Cieľ sa testuje až pri výbere – uzol vložený s horším `g` sa ešte môže zlepšiť. A* drží všetky vygenerované uzly, pamäť je jeho hlavná slabina; DFS má pamäť lineárnu."
+  },
+  {
+    "id": "t6-q30",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "generated",
+    "text": "Na tomto grafe beží A* zo `S` do `G` podľa pseudokódu z cvičenia. Expandoval už `S` a potom `A`. Čo platí o open liste v tejto chvíli?",
+    "code": "graph = {'S': [('A', 2), ('B', 5)],\n         'A': [('B', 1), ('C', 6)],\n         'B': [('C', 2), ('G', 7)],\n         'C': [('G', 3)],\n         'G': []}\nh = {'S': 6, 'A': 4, 'B': 3, 'C': 2, 'G': 0}",
+    "options": [
+      { "text": "B má g = 3 a f = 6.", "correct": true },
+      { "text": "C má g = 8 a f = 10.", "correct": true },
+      { "text": "B má stále g = 5 a f = 8, lebo bol vložený už pri expanzii S.", "correct": false },
+      { "text": "Ako ďalší sa expanduje B.", "correct": true },
+      { "text": "Ako ďalší sa expanduje C, lebo má najnižšie h.", "correct": false }
+    ],
+    "explanation": "Expanzia S: A (g 2, f 2 + 4 = 6), B (g 5, f 5 + 3 = 8). Expanzia A (g 2): pre B je `tentative_g` = 2 + 1 = 3 < 5, takže sa prepíše rodič aj hodnoty: g 3, f 3 + 3 = 6. C je nový: g 2 + 6 = 8, f 8 + 2 = 10. Najnižšie f má B (6), expanduje sa ako ďalší. Podľa samotného h vyberá Greedy, nie A*."
+  },
+  {
+    "id": "t6-q31",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Vnútro cyklu cez susedov vo funkcii `astar(start_state, heuristic)`. Ktorý výraz patrí na vynechané miesto?",
+    "code": "tentative_g = g[current] + 1\nif tentative_g < g.get(neighbor, float(\"inf\")):\n    g[neighbor] = tentative_g\n    state_id += 1\n    heapq.heappush(open_list, (________, state_id, neighbor))",
+    "options": [
+      { "text": "`tentative_g + heuristic(neighbor)`", "correct": true },
+      { "text": "`heuristic(neighbor)`", "correct": false },
+      { "text": "`tentative_g`", "correct": false },
+      { "text": "`g[current] + heuristic(current)`", "correct": false },
+      { "text": "`tentative_g * heuristic(neighbor)`", "correct": false }
+    ],
+    "explanation": "Priorita v A* je `f(neighbor) = g(neighbor) + h(neighbor)`, teda `tentative_g + heuristic(neighbor)`. Samotné `heuristic(neighbor)` by z funkcie spravilo Greedy, samotné `tentative_g` UCS. `g[current] + heuristic(current)` je f aktuálneho stavu, nie suseda."
+  },
+  {
+    "id": "t6-q32",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré vzťahy medzi vyhľadávacími algoritmami platia?",
+    "options": [
+      { "text": "A* s `h(n) = 0` pre všetky stavy je UCS.", "correct": true },
+      { "text": "Ak sa v priorite A* vynechá `g(n)`, vznikne Greedy best-first.", "correct": true },
+      { "text": "Greedy s konzistentnou heuristikou nájde to isté riešenie ako A*.", "correct": false },
+      { "text": "UCS vznikne z BFS nahradením frontu zásobníkom.", "correct": false }
+    ],
+    "explanation": "`f(n) = g(n) + h(n)`: bez `h` ostane `g(n)` → UCS; bez `g` ostane `h(n)` → Greedy. Greedy nie je optimálny ani s konzistentnou heuristikou, lebo ignoruje cenu prejdenej cesty. Zásobník namiesto frontu dáva DFS; UCS vznikne z BFS nahradením frontu prioritným frontom podľa `g(n)`."
+  },
+  {
+    "id": "t6-q33",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Kedy je heuristika `h` prípustná (admissible)? `h*(n)` označuje skutočnú cenu optimálnej cesty z n do cieľa.",
+    "options": [
+      { "text": "Keď pre každý stav platí `h(n) ≤ h*(n)`.", "correct": true },
+      { "text": "Keď pre každý stav platí `h(n) ≥ h*(n)`.", "correct": false },
+      { "text": "Iba keď pre každý stav platí `h(n) = h*(n)`.", "correct": false },
+      { "text": "Keď pre každý stav platí `h(n) ≤ g(n)`.", "correct": false }
+    ],
+    "explanation": "Prípustná heuristika nikdy nenadhodnocuje skutočnú cenu do cieľa (je optimistická). Presná rovnosť nie je potrebná – aj `h(n) = 0` je prípustná. S `g(n)`, cenou zo štartu, definícia nesúvisí."
+  },
+  {
+    "id": "t6-q34",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o konzistentnej (monotónnej) heuristike sú pravdivé?",
+    "options": [
+      { "text": "Pre každý stav n a jeho nasledovníka n' platí `h(n) ≤ c(n, n') + h(n')`.", "correct": true },
+      { "text": "Každá konzistentná heuristika je aj prípustná.", "correct": true },
+      { "text": "Každá prípustná heuristika je aj konzistentná.", "correct": false },
+      { "text": "Hodnoty `f(n)` pozdĺž cesty s ňou klesajú.", "correct": false },
+      { "text": "Zaručuje optimálnosť A* aj pri vyhľadávaní v grafe (s closed listom).", "correct": true }
+    ],
+    "explanation": "Konzistencia je trojuholníková nerovnosť: odhad stavu nepresiahne cenu kroku plus odhad nasledovníka. Vyplýva z nej prípustnosť, naopak to neplatí. Hodnoty `f` pozdĺž cesty s ňou neklesajú, takže keď A* stav expanduje, už k nemu pozná najlacnejšiu cestu – preto je graph search s closed listom optimálny."
+  },
+  {
+    "id": "t6-q35",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "generated",
+    "text": "Pre graf s cieľom `G` je daná heuristika `h`. Ktoré tvrdenia o nej platia?",
+    "code": "graph = {'S': [('A', 2), ('B', 5)],\n         'A': [('B', 1), ('C', 6)],\n         'B': [('C', 2), ('G', 7)],\n         'C': [('G', 3)],\n         'G': []}\nh = {'S': 6, 'A': 5, 'B': 3, 'C': 2, 'G': 0}",
+    "options": [
+      { "text": "Je prípustná.", "correct": true },
+      { "text": "Je konzistentná.", "correct": false },
+      { "text": "Konzistenciu porušuje hrana A → B, lebo h(A) = 5 > 1 + h(B) = 4.", "correct": true },
+      { "text": "Nie je prípustná, lebo h(A) = 5 je viac než cena hrany A → B.", "correct": false },
+      { "text": "A* (vyhľadávanie v strome) s ňou stále nájde cestu s optimálnou cenou 8.", "correct": true }
+    ],
+    "explanation": "Skutočné ceny do cieľa: `h*(C)` = 3, `h*(B)` = 2 + 3 = 5, `h*(A)` = 1 + 5 = 6, `h*(S)` = 2 + 6 = 8. Všade platí `h ≤ h*` (6 ≤ 8, 5 ≤ 6, 3 ≤ 5, 2 ≤ 3) → prípustná. Konzistencia sa overuje po hranách: A → B dáva 5 ≤ 1 + 3, čo neplatí → nekonzistentná. Prípustnosť sa neporovnáva s cenou jednej hrany, ale s celou cestou do cieľa. Prípustnosť stačí na optimálnosť A* pri tree search."
+  },
+  {
+    "id": "t6-q36",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí pre heuristiky h1 = `count_misplaced_tiles()` a h2 = `manhattan_distance()` v osmičke?",
+    "options": [
+      { "text": "Obe sú prípustné.", "correct": true },
+      { "text": "Pre každý stav platí h2(n) ≥ h1(n).", "correct": true },
+      { "text": "A* s h2 expanduje spravidla menej stavov než A* s h1.", "correct": true },
+      { "text": "A* s h2 nájde kratšiu cestu než A* s h1.", "correct": false },
+      { "text": "h1 započítava aj medzeru, h2 nie.", "correct": false }
+    ],
+    "explanation": "Jeden ťah pohne jednou dlaždicou o jedno políčko, takže ani počet zle uložených dlaždíc, ani súčet ich vzdialeností nenadhodnocuje. Každá zle uložená dlaždica má vzdialenosť aspoň 1, preto h2 ≥ h1 – h2 dominuje a A* s ňou expanduje menej (na stave z cvičenia 77 oproti 302). Dĺžka cesty je rovnaká, obe sú prípustné → obe dajú optimum. Medzeru vynechávajú obe (`flat[i] != 0`, `if val != 0`)."
+  },
+  {
+    "id": "t6-q37",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Akú hodnotu vráti `count_misplaced_tiles()` pre túto dosku? Cieľ je `1 2 3 / 4 5 6 / 7 8 _`.",
+    "code": "s = PuzzleState([[8, 1, 3],\n                 [4, 0, 2],\n                 [7, 6, 5]])\nprint(s.count_misplaced_tiles())",
+    "options": [
+      { "text": "5", "correct": true },
+      { "text": "6", "correct": false },
+      { "text": "3", "correct": false },
+      { "text": "10", "correct": false }
+    ],
+    "explanation": "Na svojom mieste sú dlaždice 3, 4 a 7. Zle sú 8, 1, 2, 6 a 5 → 5. Medzera sa nepočíta (podmienka `flat[i] != 0`); s ňou by vyšlo 6. Hodnota 3 je počet správne uložených dlaždíc a 10 je Manhattan distance tejto dosky."
+  },
+  {
+    "id": "t6-q38",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Akú hodnotu vráti `manhattan_distance()` pre túto dosku? Cieľ je `1 2 3 / 4 5 6 / 7 8 _`.",
+    "code": "s = PuzzleState([[7, 2, 4],\n                 [5, 0, 6],\n                 [8, 3, 1]])\nprint(s.manhattan_distance())",
+    "options": [
+      { "text": "14", "correct": true },
+      { "text": "6", "correct": false },
+      { "text": "12", "correct": false },
+      { "text": "16", "correct": false },
+      { "text": "20", "correct": false }
+    ],
+    "explanation": "Vzdialenosti (riadky + stĺpce) k cieľovému políčku `((val - 1) // 3, (val - 1) % 3)`: 7 → 2, 2 → 0, 4 → 3, 5 → 1, 6 → 0, 8 → 1, 3 → 3, 1 → 4; spolu 14. Medzera sa nepočíta (s ňou by vyšlo 16). Hodnota 6 je počet zle uložených dlaždíc a 20 je skutočná dĺžka optimálneho riešenia – heuristika ju nesmie prekročiť."
+  },
+  {
+    "id": "t6-q39",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "generated",
+    "text": "Ktoré z týchto funkcií sú pre osmičku prípustné heuristiky (dajú sa bezpečne použiť ako `heuristic` v A*)?",
+    "options": [
+      { "text": "`lambda s: 0`", "correct": true },
+      { "text": "`lambda s: s.count_misplaced_tiles()`", "correct": true },
+      { "text": "`lambda s: s.manhattan_distance()`", "correct": true },
+      { "text": "`lambda s: 2 * s.manhattan_distance()`", "correct": false },
+      { "text": "`lambda s: s.count_misplaced_tiles() + s.manhattan_distance()`", "correct": false },
+      { "text": "`lambda s: max(s.count_misplaced_tiles(), s.manhattan_distance())`", "correct": true }
+    ],
+    "explanation": "Prípustná heuristika nesmie pre žiadny stav prekročiť skutočný počet ťahov. Nula, misplaced tiles aj Manhattan to spĺňajú, a teda aj ich maximum. Protipríklad pre zvyšné dve: doska `1 2 3 / 4 5 _ / 7 8 6` je 1 ťah od cieľa, ale `2 * manhattan` aj súčet oboch heuristík dajú 2 – nadhodnocujú, A* s nimi stráca záruku optimálnosti."
+  },
+  {
+    "id": "t6-q40",
+    "topicId": "t6-vyhladavanie",
+    "week": 8,
+    "type": "practical",
+    "source": "moodle",
+    "text": "A* s heuristikou `manhattan_distance()` štartuje z tejto dosky (riešenie má 2 ťahy: 5, 8). `get_possible_moves()` vráti `[2, 5, 4, 6]`. Čo platí po expanzii počiatočného stavu?",
+    "code": "start = PuzzleState([[1, 2, 3],\n                     [4, 0, 6],\n                     [7, 5, 8]])",
+    "options": [
+      { "text": "Heuristika počiatočného stavu je 2.", "correct": true },
+      { "text": "Nasledovník po ťahu dlaždicou 5 má g = 1, h = 1, f = 2.", "correct": true },
+      { "text": "Nasledovníci po ťahoch 2, 4 a 6 majú f = 4.", "correct": true },
+      { "text": "Ako ďalší sa expanduje nasledovník po ťahu 2, lebo bol do open listu vložený prvý.", "correct": false },
+      { "text": "Všetci štyria nasledovníci majú rovnaké f, lebo každý ťah stojí 1.", "correct": false }
+    ],
+    "explanation": "Štart: dlaždice 5 a 8 sú každá o jedno políčko vedľa → h = 2. Ťah 5 vráti dlaždicu 5 na miesto: h = 1, g = 1, f = 2. Ťahy 2, 4 a 6 naopak pokazia správne uloženú dlaždicu: h = 3, f = 1 + 3 = 4. Rovnaké majú všetci iba g; f sa líši heuristikou. Halda vyberie najnižšie f, teda stav po ťahu 5 – poradie vloženia (`state_id`) rozhoduje len pri zhode f."
+  }
+]

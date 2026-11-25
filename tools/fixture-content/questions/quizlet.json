@@ -1,0 +1,32 @@
+[
+  {
+    "id": "qz-01",
+    "topicId": "t2-slovniky",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré typy môžu byť kľúčom slovníka?",
+    "options": [
+      { "text": "`str`", "correct": true },
+      { "text": "`list`", "correct": false },
+      { "text": "`tuple` čísel", "correct": true },
+      { "text": "`dict`", "correct": false }
+    ],
+    "explanation": "Kľúč musí byť hashovateľný. Kartička na Quizlete uvádza aj `list`, čo je v rozpore s prednáškou.",
+    "disputed": true
+  },
+  {
+    "id": "qz-02",
+    "topicId": "t1-zoznamy",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo z uvedeného je v Pythone postupnosť (sequence)?",
+    "options": [
+      { "text": "`list`", "correct": true },
+      { "text": "`tuple`", "correct": true },
+      { "text": "`str`", "correct": true }
+    ],
+    "explanation": "Vzorová kartička, na ktorej sú správne všetky možnosti: zoznam, n-tica aj reťazec sú postupnosti. Treba označiť všetky tri."
+  }
+]

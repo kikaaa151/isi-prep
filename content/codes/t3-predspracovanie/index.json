@@ -1,0 +1,112 @@
+[
+  {
+    "id": "w04-titanic-load",
+    "title": "Titanic 1: načítanie a oboznámenie sa s dátami",
+    "week": 4,
+    "file": "w04-titanic-load.py",
+    "source": "moodle/w04/tasks/ex_01_showcase.py",
+    "task": "Načítaj dataset Titanic zo súboru `data/titanic.txt` pomocou pandas do premennej `titanic_data`. Cieľový atribút `survived` ulož ako NumPy pole do `titanic_y`. Potom sa s dátami oboznám: vypíš prvé riadky (`head`), stĺpce a dátové typy (`info`), základné štatistiky (`describe(include=\"all\")`), počet chýbajúcich hodnôt v každom stĺpci (`isna().sum()`), rozdelenie tried v `survived` (`value_counts`) a podiel preživších podľa pohlavia (`groupby`).",
+    "explanation": "Prvý krok predspracovania je **oboznámiť sa s dátami** – formát, typy, chýbajúce hodnoty.\n\n- `pd.read_csv` vráti `DataFrame`: jeden riadok = jeden cestujúci (1313 riadkov, 11 stĺpcov).\n- `titanic_data.survived` je stĺpec (Series); `np.array(...)` z neho spraví pole cieľových hodnôt 0/1.\n- `info()` vypisuje sama (bez `print`) a ukáže počet nenulových hodnôt a typ každého stĺpca.\n- `describe(include=\"all\")` zahrnie aj textové stĺpce (počet unikátnych hodnôt, najčastejšia hodnota).\n- `isna().sum()` – `isna()` dá tabuľku True/False, `sum()` ich po stĺpcoch spočíta. Vek chýba pri **680** cestujúcich, `room`, `ticket` a `boat` takmer všade.\n- `value_counts()` – 864 neprežilo, 449 prežilo (triedy nie sú vyvážené).\n- `groupby(\"sex\")[\"survived\"].mean()` – priemer z hodnôt 0/1 je podiel preživších: ženy 0.66, muži 0.17. Pohlavie je teda silný atribút.",
+    "expectedOutput": "Tabuľky s prehľadom dát; chýbajúce hodnoty: age 680, embarked 492, home.dest 559, room 1236, ticket 1244, boat 966; survived: 0 → 864, 1 → 449; podiel preživších: female 0.663, male 0.167",
+    "tags": ["pandas", "read_csv", "isna", "value_counts", "groupby", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-drop-features",
+    "title": "Titanic 2: výber atribútov (drop)",
+    "week": 4,
+    "file": "w04-titanic-drop-features.py",
+    "source": "moodle/w04/tasks/ex_02_showcase.py",
+    "task": "Načítaj Titanic (`titanic_data`, `titanic_y` zo stĺpca `survived`). Odstráň atribúty, ktoré sa zdajú irelevantné – `row.names`, `survived`, `name`, `embarked`, `home.dest`, `room`, `ticket`, `boat` – tak, aby v `titanic_reduced` ostali iba `pclass`, `age` a `sex`. Vypíš údaje cestujúceho s indexom 12.",
+    "explanation": "- `drop(columns=[...])` **vráti nový DataFrame** bez uvedených stĺpcov; pôvodný `titanic_data` sa nemení.\n- Odstraňuje sa aj `survived` – je to cieľ, nesmie ostať medzi vstupnými atribútmi (uložili sme si ho do `titanic_y`).\n- `row.names` a `name` sú identifikátory, `room`, `ticket` a `boat` majú takmer samé chýbajúce hodnoty.\n- `titanic_reduced.loc[12]` vyberie riadok podľa **menovky indexu** 12. Tento cestujúci sa na cvičení sleduje po každom kroku: má chýbajúci vek (`NaN`), triedu `1st` a pohlavie `female`, takže na ňom vidno imputáciu aj obe kódovania.",
+    "expectedOutput": "Passenger data\npclass       1st\nage          NaN\nsex       female\nName: 12, dtype: object",
+    "tags": ["pandas", "drop", "loc", "feature selection", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-impute-age",
+    "title": "Titanic 3: imputácia veku priemerom (ručne)",
+    "week": 4,
+    "file": "w04-titanic-impute-age.py",
+    "source": "moodle/w04/tasks/ex_03_showcase.py",
+    "task": "Po načítaní a výbere atribútov (`titanic_reduced` so stĺpcami `pclass`, `age`, `sex`) nahraď chýbajúci vek priemerným vekom – ručne cez NumPy: vyber stĺpec veku cez `iloc`, preveď ho na pole `ages`, vypočítaj `mean_age` iba zo známych hodnôt, dosaď ho na miesta `nan` a zapíš pole späť do stĺpca `age`. Údaje cestujúceho 12 vypíš pred imputáciou aj po nej.",
+    "explanation": "- `titanic_reduced.iloc[:, 1]` – všetky riadky, stĺpec na **pozícii** 1 (poradie je `pclass`, `age`, `sex`).\n- `np.isnan(ages)` je maska True/False; `~` ju neguje, takže `ages[~np.isnan(ages)]` sú iba známe veky. Obyčajné `np.mean(ages)` by vrátilo `nan`.\n- `ages[np.isnan(ages)] = mean_age` – priradenie cez masku prepíše iba chýbajúce hodnoty.\n- Posledný riadok zapíše doplnené pole späť do DataFrame.\n- Cestujúci 12 mal `age NaN`, po imputácii má 31.19 (priemer známych vekov).\n\n**Pozor:** je to zjednodušenie. Správne sa dáta najprv rozdelia na trénovacie a testovacie a priemer sa počíta iba z trénovacích (domáca úloha so `SimpleImputer`).",
+    "expectedOutput": "Pred: age NaN\nPo: age 31.194181",
+    "tags": ["imputácia", "numpy", "isnan", "iloc", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-label-encoder",
+    "title": "Titanic 4: LabelEncoder pre pohlavie",
+    "week": 4,
+    "file": "w04-titanic-label-encoder.py",
+    "source": "moodle/w04/tasks/ex_04_task.py",
+    "task": "Nadviaž na predošlé kroky (načítanie, drop, imputácia veku priemerom). Kategorický atribút `sex` (male/female) preveď na celé čísla 0/1 pomocou `LabelEncoder` (premenná `enc`): natrénuj ho na stĺpci `sex`, vypíš triedy, ktoré našiel (`classes_`), a zakódované hodnoty ulož späť do `titanic_reduced[\"sex\"]`. Vypíš cestujúceho 12 pred kódovaním a po ňom.",
+    "explanation": "- `enc.fit(...)` si zapamätá unikátne hodnoty stĺpca a **zoradí ich abecedne**: `classes_ = ['female' 'male']`.\n- `enc.transform(...)` nahradí každú hodnotu jej poradím v `classes_`, teda female → 0, male → 1.\n- Výsledok treba priradiť späť do stĺpca, inak sa DataFrame nezmení (ďalšie kroky s tým počítajú).\n- Pri atribúte s **dvoma** hodnotami kódovanie 0/1 nevadí. Pri nominálnom atribúte s viac hodnotami by čísla 0, 1, 2 naznačovali poradie, ktoré neexistuje – preto sa `pclass` v ďalšom kroku kóduje one-hot.",
+    "expectedOutput": "Categorical classes: ['female' 'male']\nCestujúci 12: sex female → 0",
+    "tags": ["LabelEncoder", "classes_", "kódovanie", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-one-hot",
+    "title": "Titanic 5: one-hot kódovanie triedy cestujúceho",
+    "week": 4,
+    "file": "w04-titanic-one-hot.py",
+    "source": "moodle/w04/tasks/ex_05_showcase.py",
+    "task": "Po imputácii veku a zakódovaní pohlavia zakóduj atribút `pclass` (1st/2nd/3rd) metódou one-hot. Krok 1: tým istým `LabelEncoder`-om (`enc`, výsledok `fit` ulož do `label_encoder`) preveď triedy na celé čísla 0–2. Krok 2: `OneHotEncoder` (`ohe`) – stĺpec preveď na pole tvaru (n, 1) (`pclass_reshaped`), natrénuj kóder (`one_hot_encoder = ohe.fit(...)`), transformuj a výsledok preveď na husté pole `ohe_coded`. Pôvodný stĺpec `pclass` odstráň a pridaj tri nové stĺpce `class 1`, `class 2`, `class 3`. Vypíš cestujúceho 12.",
+    "explanation": "- `enc.fit(titanic_reduced[\"pclass\"])` kóder pretrénuje na nový stĺpec; `fit` vracia ten istý objekt, preto sa dá uložiť do `label_encoder`. Výsledok: 1st → 0, 2nd → 1, 3rd → 2.\n- `OneHotEncoder` očakáva **2D vstup** – `reshape(-1, 1)` spraví z vektora dĺžky n maticu n × 1 (−1 = dopočítaj počet riadkov).\n- `transform` vracia **riedku maticu**; `.toarray()` ju prevedie na bežné pole n × 3, kde je v každom riadku práve jedna jednotka.\n- Pôvodný `pclass` sa zahodí (`drop`) a nahradia ho tri stĺpce 0/1 – žiadna trieda tak nie je „väčšia“ než iná.\n- Cestujúci 12 (1st): `class 1 = 1.0`, `class 2 = 0.0`, `class 3 = 0.0`.",
+    "expectedOutput": "Passenger data\nage        31.194181\nsex         0.000000\nclass 1     1.000000\nclass 2     0.000000\nclass 3     0.000000",
+    "tags": ["OneHotEncoder", "LabelEncoder", "reshape", "toarray", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-decision-tree",
+    "title": "Titanic 6: rozdelenie dát a rozhodovací strom",
+    "week": 4,
+    "file": "w04-titanic-decision-tree.py",
+    "source": "moodle/w04/tasks/ex_06_task.py",
+    "task": "Celé riešenie Titanicu: načítanie, drop, imputácia veku, `LabelEncoder` pre `sex` a `pclass`, one-hot pre `pclass`. Predspracované dáta (`titanic_reduced`, `titanic_y`) rozdeľ na trénovaciu a testovaciu množinu (`train_test_split`, `test_size=0.25`, `random_state=33`). Na trénovacej natrénuj rozhodovací strom `clf` (`criterion='entropy'`, `max_depth=5`, `min_samples_leaf=5`), predikuj triedy testovacej množiny do `y_pred_test` a vypíš presnosť (accuracy).",
+    "explanation": "- `train_test_split` vracia štvoricu v poradí `X_train, X_test, y_train, y_test`; `test_size=0.25` dá 984 trénovacích a 329 testovacích vzoriek, `random_state=33` robí rozdelenie opakovateľným.\n- `tree.DecisionTreeClassifier`: `criterion='entropy'` (delenie podľa informačného zisku), `max_depth=5` a `min_samples_leaf=5` obmedzujú rast stromu, aby sa nepretrénoval.\n- `fit` iba na trénovacích dátach, `predict` na testovacích.\n- `metrics.accuracy_score(y_test, y_pred_test)` – najprv skutočné, potom predikované triedy; výsledok je podiel správnych predikcií.\n- Škálovanie tu netreba – rozhodovacie stromy sú na mierku atribútov necitlivé.",
+    "expectedOutput": "0.7811550151975684",
+    "tags": ["train_test_split", "DecisionTreeClassifier", "accuracy_score", "Titanic"]
+  },
+  {
+    "id": "w04-titanic-tree-plot",
+    "title": "Titanic 7: vizualizácia stromu a jeho chýb",
+    "week": 4,
+    "file": "w04-titanic-tree-plot.py",
+    "source": "moodle/w04/tasks/ex_07_showcase.py",
+    "task": "K natrénovanému stromu z predošlej úlohy (predspracovanie je to isté, v riešení zapísané skrátene) doplň vyhodnotenie a vizualizáciu: vypíš presnosť na testovacej množine, maticu zámien a dôležitosti atribútov (`feature_importances_`). Potom strom vykresli cez `tree.plot_tree` do obrázka veľkosti 25 × 18 s názvami atribútov `age`, `sex`, `1st_class`, `2nd_class`, `3rd_class`, názvami tried `not survived`, `survived` a vyfarbenými uzlami.",
+    "explanation": "- Predspracovanie je rovnaké ako v predošlých úlohách, len zapísané kratšie (`enc.fit(...).transform(...)` na jednom riadku) – `fit` vracia kóder, takže volania sa dajú reťaziť.\n- `metrics.confusion_matrix(y_test, y_pred_test)` – riadky sú skutočné triedy, stĺpce predikované: `[[186 16] [56 71]]`. Model častejšie nespozná preživšieho (56), než by omylom označil nepreživšieho za preživšieho (16).\n- `clf.feature_importances_` – poradie zodpovedá stĺpcom `X_train` (`age`, `sex`, `class 1`, `class 2`, `class 3`); najdôležitejšie je pohlavie (≈ 0.51). Notebook kreslí to isté cez `ConfusionMatrixDisplay.from_predictions` a `barh`.\n- `tree.plot_tree(clf, feature_names=..., class_names=..., filled=True)` – `feature_names` musia byť v poradí stĺpcov, `class_names` v poradí tried 0, 1; `filled=True` vyfarbí uzly podľa prevládajúcej triedy.\n- `plt.figure(figsize=(25, 18))` – veľký obrázok, inak je strom s hĺbkou 5 nečitateľný.",
+    "expectedOutput": "0.7811550151975684\n[[186  16]\n [ 56  71]]\n[0.15 0.51 0.06 0.00 0.28] (približne) a obrázok stromu",
+    "tags": ["plot_tree", "confusion_matrix", "feature_importances_", "DecisionTreeClassifier", "Titanic"]
+  },
+  {
+    "id": "w04-standard-scaler",
+    "title": "Škálovanie: StandardScaler na datasete wine",
+    "week": 4,
+    "file": "w04-standard-scaler.py",
+    "source": "moodle/w04/tasks/ex_08_task.py",
+    "task": "Načítaj dataset wine (`datasets.load_wine()`, `X, y`). Vypíš priemer a štandardnú odchýlku prvých troch atribútov (`X[:, :3]`, po stĺpcoch). Prvé tri atribúty preškáluj pomocou `preprocessing.StandardScaler` (`my_scaler`, zvlášť `fit` a `transform`, výsledok `X2`), vypíš priemer a štandardnú odchýlku po škálovaní a porovnaj. Nakoniec nakresli vedľa seba boxploty troch atribútov pred škálovaním a po ňom.",
+    "explanation": "- `X[:, :3]` – všetky riadky, prvé tri stĺpce; `mean(axis=0)` a `std(axis=0)` počítajú **po stĺpcoch** (pre každý atribút zvlášť).\n- `fit` sa naučí priemer a štandardnú odchýlku každého stĺpca, `transform` potom vypočíta `x' = (x − μ) / σ`.\n- Pred škálovaním: priemery `[13.0, 2.34, 2.37]`, odchýlky `[0.81, 1.11, 0.27]` – atribúty majú rôzne mierky.\n- Po škálovaní: priemery ≈ 0 (čísla rádu 1e-15 sú zaokrúhľovacia chyba) a odchýlky presne `[1. 1. 1.]`.\n- Boxploty: pred škálovaním je každý atribút v inej výške a šírke, po škálovaní sú všetky sústredené okolo nuly s porovnateľným rozptylom.\n\nNa reálnej úlohe sa `fit` volá iba na trénovacích dátach a `transform` na trénovacích aj testovacích.",
+    "expectedOutput": "[13.00061798  2.33634831  2.36651685]\n[0.80954291 1.11400363 0.27357229]\nScaled\n[≈0 ≈0 ≈0]\n[1. 1. 1.]",
+    "tags": ["StandardScaler", "škálovanie", "štandardizácia", "boxplot"]
+  },
+  {
+    "id": "w04-simple-imputer",
+    "title": "Imputácia: SimpleImputer na datasete iris",
+    "week": 4,
+    "file": "w04-simple-imputer.py",
+    "source": "moodle/w04/tasks/ex_09_task.py",
+    "task": "Načítaj iris (`iris_X = iris.data`) a umelo v ňom vytvor chýbajúce hodnoty: generátorom `np.random.default_rng(0)` vyrob binomickú masku (`rng.binomial(1, .25, iris_X.shape)`) typu bool a podľa nej nahraď asi 25 % hodnôt za `nan`. Vypíš prvých 5 riadkov. Chýbajúce hodnoty doplň cez `SimpleImputer` (objekt `impute`) s predvolenou stratégiou (priemer) do `iris_X_prime` a vypíš prvých 5 riadkov; zopakuj so `strategy='median'` (`iris_X_median`). Nakresli histogramy dĺžky okvetného lístka (stĺpec 2) po oboch imputáciách s odlíšením známych a doplnených hodnôt.",
+    "explanation": "- `rng.binomial(1, .25, iris_X.shape)` vráti maticu núl a jednotiek (jednotka s pravdepodobnosťou 0.25); `.astype(bool)` z nej spraví masku a `iris_X[masking_array] = np.nan` prepíše vybrané prvky.\n- `SimpleImputer()` má predvolenú stratégiu `mean` – chýbajúcu hodnotu nahradí **priemerom svojho stĺpca** (počítaným zo známych hodnôt).\n- `fit_transform` = `fit` (naučí sa štatistiku každého stĺpca) + `transform` (doplní ju).\n- `strategy='median'` dopĺňa medián stĺpca; ten je odolnejší voči odľahlým hodnotám. V stĺpci 2 je rozdiel dobre viditeľný: priemer 3.98, medián 4.5.\n- Histogram: `masking_array[:, 2]` hovorí, ktoré hodnoty stĺpca 2 boli doplnené. Všetky doplnené hodnoty tvoria jeden vysoký stĺpec v priemere, resp. mediáne – imputácia konštantou skresľuje rozdelenie atribútu.",
+    "expectedOutput": "[[5.1 3.5 1.4 0.2]\n [nan nan 1.4 0.2]\n [4.7 nan nan 0.2] ...\nImputed (mean): druhý riadok [5.854 3.046 1.4 0.2]\nImputed (median): druhý riadok [5.7 3. 1.4 0.2]",
+    "tags": ["SimpleImputer", "imputácia", "mean", "median", "nan"]
+  },
+  {
+    "id": "w04-titanic-split-imputer",
+    "title": "Domáca úloha: rozdelenie dát pred imputáciou (SimpleImputer)",
+    "week": 4,
+    "file": "w04-titanic-split-imputer.py",
+    "source": "moodle/w04/tasks/ex_03_showcase.py (HOMEWORK)",
+    "task": "Domáca úloha z cvičenia: sprav imputáciu veku metodicky správne. Načítaj Titanic a ponechaj `pclass`, `age`, `sex` (`titanic_reduced`). **Najprv** rozdeľ dáta (`train_test_split`, `test_size=0.25`, `random_state=33`), až potom doplň chýbajúci vek cez `SimpleImputer(strategy='mean')` (`imp`): `fit` iba na stĺpci `age` trénovacej množiny, `transform` na trénovacej aj testovacej. Vypíš počet chýbajúcich vekov pred imputáciou a po nej a naučený priemer (`statistics_`).",
+    "explanation": "- Na cvičení sa priemer veku počítal zo všetkých cestujúcich – do trénovania tak pretiekla informácia z testovacích dát. Správny postup: **najprv rozdeliť, potom imputovať**.\n- `X_train[[\"age\"]]` (dvojité zátvorky) je DataFrame s jedným stĺpcom – `SimpleImputer` potrebuje 2D vstup.\n- `imp.fit(X_train[[\"age\"]])` sa naučí priemer **iba z trénovacích** dát (`imp.statistics_` ≈ 31.03; zo všetkých dát vyšlo 31.19).\n- `imp.transform(...)` vráti pole tvaru (n, 1); `.ravel()` ho sploští, aby sa dalo priradiť do stĺpca.\n- Testovacia množina sa dopĺňa **tým istým** priemerom z trénovacích dát – na testovacích sa nikdy nevolá `fit`.\n- To isté pravidlo platí pre škálovanie: `fit` na trénovacích, `transform` na oboch.",
+    "expectedOutput": "Missing ages: 517 163\nMean age of the training set: [31.02962141]\nMissing ages: 0 0",
+    "tags": ["SimpleImputer", "train_test_split", "fit", "transform", "data leakage", "Titanic"]
+  }
+]

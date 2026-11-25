@@ -1,0 +1,112 @@
+[
+  {
+    "id": "w07-state-init",
+    "title": "PuzzleState: doska, rodič, __eq__ a __hash__",
+    "week": 7,
+    "file": "w07-state-init.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/state.py",
+    "task": "Napíš triedu `PuzzleState` – stav Loydovej osmičky. Konštruktor `__init__(self, board, parent=None, moved_tile=None)` si uloží **kópiu** dosky (zoznam zoznamov, `0` = medzera) do `self.board`, rozmer do `self.size`, ďalej `self.parent`, `self.moved_tile` a pozíciu medzery do `self._blank_pos` (zistí ju metóda `_find_blank()`). Metóda `_find_blank()` prejde dosku po riadkoch a stĺpcoch a vráti dvojicu `(r, c)` políčka s hodnotou 0; ak ho nenájde, vyhodí `ValueError(\"No blank tile (0) found in the board\")`. Doplň `__eq__` (rovnaké sú dva objekty `PuzzleState` s rovnakou doskou) a `__hash__` (hash dosky prevedenej na n-ticu n-tíc).",
+    "explanation": "Táto časť robí zo stavu **uzol vyhľadávania**, ktorý sa dá uložiť do množiny.\n\n1. `[row[:] for row in board]` – hlboká kópia dosky. Bez nej by všetky stavy zdieľali tie isté riadky a ťah v jednom stave by pokazil ostatné.\n2. `parent` a `moved_tile` – odkaz na stav, z ktorého sme prišli, a dlaždica, ktorou sme ťahali. Z nich sa na konci poskladá cesta (`reconstruct_path`).\n3. `_find_blank()` – dvojitý cyklus, hľadá hodnotu `0`. Pozícia sa uloží raz v konštruktore, ťahy ju potom len čítajú.\n4. `__eq__` – porovnáva **obsah** dosky, nie identitu objektu. `isinstance` chráni pred porovnaním s iným typom.\n5. `__hash__` – zoznam nie je hashovateľný, preto `tuple(tuple(row) for row in self.board)`.\n\nPozor: `__eq__` a `__hash__` musia ísť spolu. Vďaka nim funguje `next_state not in visited` – dva rôzne objekty s rovnakou doskou sa berú ako ten istý stav. `parent` do porovnania nevstupuje.",
+    "expectedOutput": "a = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]]); b = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]])\na._blank_pos -> (1, 1)\na == b -> True, a is b -> False, len({a, b}) -> 1",
+    "tags": ["PuzzleState", "__eq__", "__hash__", "8-puzzle"]
+  },
+  {
+    "id": "w07-state-moves",
+    "title": "PuzzleState: get_possible_moves a move_tile",
+    "week": 7,
+    "file": "w07-state-moves.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/state.py",
+    "task": "Napíš dve metódy triedy `PuzzleState` (funkcia nasledovníkov). `get_possible_moves(self)` vráti zoznam **čísel dlaždíc**, ktoré susedia s medzerou (`self._blank_pos`) – susedov skúšaj v poradí hore, dole, vľavo, vpravo, teda posuny `(-1, 0), (1, 0), (0, -1), (0, 1)`, a ber len políčka vnútri dosky. `move_tile(self, tile)` nájde medzi susedmi medzery dlaždicu `tile`, skopíruje dosku, vymení v kópii medzeru s dlaždicou a vráti **nový** `PuzzleState(new_board, parent=self, moved_tile=tile)`. Ak dlaždica s medzerou nesusedí, vyhodí `ValueError(f\"Tile {tile} cannot move into blank position\")`.",
+    "explanation": "Tieto dve metódy sú **akcie** a **prechodový model** problému.\n\n1. `r, c = self._blank_pos` – ťahá sa vždy okolo medzery.\n2. `for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]` – štyria susedia: hore, dole, vľavo, vpravo. Poradie určuje poradie ťahov, a teda aj poradie expanzie v BFS a DFS.\n3. `0 <= nr < self.size and 0 <= nc < self.size` – kontrola hraníc: v rohu ostanú 2 ťahy, na hrane 3, v strede 4.\n4. `get_possible_moves` vracia **hodnoty dlaždíc** (`self.board[nr][nc]`), nie smery ani súradnice.\n5. `move_tile` znova prejde susedov a hľadá toho s hodnotou `tile`. Dosku **kopíruje** (`[row[:] for row in self.board]`) – pôvodný stav sa nesmie zmeniť, je to rodič.\n6. Výmena jedným riadkom: `new_board[r][c], new_board[nr][nc] = new_board[nr][nc], new_board[r][c]`.\n7. `parent=self, moved_tile=tile` – tu sa stavia strom hľadania; algoritmy sa o rodičov nestarajú.",
+    "expectedOutput": "s = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]])\ns.get_possible_moves() -> [2, 5, 4, 6]\ns.move_tile(5).board -> [[1, 2, 3], [4, 5, 6], [7, 0, 8]]",
+    "tags": ["PuzzleState", "nasledovníci", "prechodový model", "8-puzzle"]
+  },
+  {
+    "id": "w07-state-goal-path",
+    "title": "PuzzleState: is_goal a reconstruct_path",
+    "week": 7,
+    "file": "w07-state-goal-path.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/state.py",
+    "task": "Napíš dve metódy triedy `PuzzleState`. `is_goal(self)` vráti `True`, ak je doska poskladaná: sploštená doska (`flat`) sa rovná zoznamu `expected` = čísla 1 až `size ** 2 - 1` a na konci 0. `reconstruct_path(self)` vráti zoznam dlaždíc (`moved_tile`), ktorými sa ťahalo od počiatočného stavu po tento stav: choď po odkazoch `parent`, kým nie je `None`, zbieraj `moved_tile` do `path` a na konci zoznam otoč.",
+    "explanation": "**Test cieľa** a **riešenie** problému.\n\n1. `list(range(1, self.size ** 2)) + [0]` – pre 3×3 je to `[1, 2, 3, 4, 5, 6, 7, 8, 0]`; funguje pre ľubovoľný rozmer.\n2. `[num for row in self.board for num in row]` – sploštenie dosky po riadkoch (vonkajší cyklus je prvý).\n3. `reconstruct_path` začína v cieľovom stave a ide **dozadu** po `parent`. Počiatočný stav má `parent is None`, tam sa cyklus zastaví – jeho `moved_tile` sa už nepridá.\n4. Ťahy sa zbierajú od posledného po prvý, preto `list(reversed(path))`.\n\nGUI volá `goal_state.reconstruct_path()` na stave, ktorý vráti algoritmus, a `len(path)` zobrazí ako Path length. Pre počiatočný stav, ktorý je rovno cieľom, je cesta prázdna.",
+    "expectedOutput": "g = PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]]).move_tile(5).move_tile(8)\ng.is_goal() -> True\ng.reconstruct_path() -> [5, 8]",
+    "tags": ["PuzzleState", "test cieľa", "rekonštrukcia cesty", "parent"]
+  },
+  {
+    "id": "w07-bfs",
+    "title": "BFS – prehľadávanie do šírky",
+    "week": 7,
+    "file": "w07-bfs.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/algorithms.py",
+    "task": "Napíš funkciu `bfs(start_state)` podľa krokov zo zadania. Hranica `frontier` je `deque` so štartovým stavom, `visited` je množina so štartovým stavom, počítadlá `discovered = 1` a `expanded = 0`. Kým hranica nie je prázdna: vyber stav **zo začiatku** frontu do `current_state`, zvýš `expanded`; ak je cieľom, vráť `(current_state, discovered, expanded)`. Pre každú dlaždicu z `get_possible_moves()` vytvor `next_state = current_state.move_tile(tile)`; ak ešte nie je vo `visited`, pridaj ho do `visited` aj **na koniec** hranice a zvýš `discovered`. Ak sa hranica vyprázdni, vráť `(None, discovered, expanded)`. Nezabudni na import.",
+    "explanation": "BFS = graph search s **FIFO frontom** – expanduje stavy po úrovniach, preto prvý nájdený cieľ je najbližšie k štartu (najmenej ťahov).\n\n1. `deque([start_state])` – pozor na hranaté zátvorky: `deque(start_state)` by sa pokúsil stav iterovať.\n2. `visited = {start_state}` – množina; funguje vďaka `__eq__` a `__hash__` stavu.\n3. `frontier.popleft()` – **zo začiatku** (najstarší stav). Toto je riadok, ktorý robí BFS.\n4. `expanded += 1` hneď po vybratí; test cieľa `is_goal()` až potom (cieľ sa teda tiež počíta ako expandovaný).\n5. `move_tile(tile)` vráti nový stav s nastaveným rodičom.\n6. Nový stav sa označí za navštívený **pri vložení** do hranice – tak sa ten istý stav nedostane do frontu dvakrát. Tri veci idú spolu: `visited.add`, `frontier.append`, `discovered += 1`.\n7. Návrat je vždy trojica; pri neúspechu je prvý prvok `None`.\n\nVlastnosti: úplné, optimálne pri rovnakej cene ťahov, čas aj pamäť `O(b^d)`.",
+    "expectedOutput": "bfs(PuzzleState([[1, 2, 3], [4, 0, 6], [7, 5, 8]])) -> cesta [5, 8], discovered 16, expanded 9\nstav 8 1 3 / 4 _ 2 / 7 6 5 -> cesta dĺžky 14, discovered 9021, expanded 5961",
+    "tags": ["BFS", "deque", "FIFO", "visited", "neinformované vyhľadávanie"]
+  },
+  {
+    "id": "w07-dfs",
+    "title": "DFS – prehľadávanie do hĺbky s limitom expanzií",
+    "week": 7,
+    "file": "w07-dfs.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/algorithms.py",
+    "task": "Napíš funkciu `dfs(start_state, limit=50_000)` podľa krokov zo zadania. Hranica `stack` je obyčajný zoznam so štartovým stavom, `visited` množina so štartovým stavom, `discovered = 1`, `expanded = 0`. Kým zásobník nie je prázdny: najprv skontroluj limit – ak `expanded >= limit`, vráť `(None, discovered, expanded)`. Potom vyber stav **z konca** zásobníka do `current_state`, zvýš `expanded`; ak je cieľom, vráť `(current_state, discovered, expanded)`. Každého nenavštíveného nasledovníka `next_state` pridaj do `visited` aj na koniec zásobníka a zvýš `discovered`. Po skončení cyklu vráť `(None, discovered, expanded)`.",
+    "explanation": "DFS je to isté ako BFS, len hranica je **LIFO zásobník**.\n\n1. `stack = [start_state]` – stačí zoznam, žiadny import.\n2. `if expanded >= limit` – poistka na **počet expanzií** (nie na hĺbku). Je to prvý príkaz v cykle; pri prekročení sa vráti `None`, aj keď riešenie existuje.\n3. `stack.pop()` – **z konca** (naposledy vložený stav). Toto je jediný rozdiel oproti `frontier.popleft()` v BFS.\n4. Zvyšok je rovnaký: `expanded += 1`, test cieľa, generovanie nasledovníkov, `visited.add` + `stack.append` + `discovered += 1`.\n\nKeďže sa berie posledný vložený nasledovník, DFS ide stále hlbšie po poslednom ťahu z `get_possible_moves()`. Vďaka `visited` sa nezacyklí, ale cesta je obrovská (desaťtisíce ťahov) – DFS **nie je optimálne**. Na mnohých stavoch s predvoleným limitom 50 000 riešenie vôbec nenájde.\n\nVlastnosti: pamäť `O(b·m)` pri tree search, neoptimálne, v strome ani neúplné.",
+    "expectedOutput": "stav 1 6 5 / 3 2 8 / 4 7 _ -> cesta dĺžky 40828, discovered 74115, expanded 44412 (BFS: 16 ťahov)\nstav 8 1 3 / 4 _ 2 / 7 6 5 -> (None, 82489, 50000) – narazí na limit",
+    "tags": ["DFS", "zásobník", "LIFO", "limit", "neinformované vyhľadávanie"]
+  },
+  {
+    "id": "w08-heuristics",
+    "title": "Heuristiky: misplaced tiles a Manhattan distance",
+    "week": 8,
+    "file": "w08-heuristics.py",
+    "source": "moodle/w07/cv_07_source_code/code/core/state.py",
+    "task": "Napíš dve heuristiky ako metódy triedy `PuzzleState`. `count_misplaced_tiles(self)` vráti počet dlaždíc, ktoré nie sú na svojom cieľovom mieste: porovnaj sploštenú dosku `flat` so zoznamom `expected` (1 až `size ** 2 - 1`, potom 0) a medzeru (0) nepočítaj. `manhattan_distance(self)` vráti súčet Manhattanských vzdialeností dlaždíc od ich cieľových políčok: pre každú hodnotu `val != 0` na pozícii `(r, c)` je cieľový riadok `goal_r = (val - 1) // size` a stĺpec `goal_c = (val - 1) % size`; do `distance` pripočítaj `abs(goal_r - r) + abs(goal_c - c)`.",
+    "explanation": "Obe heuristiky odhadujú počet ťahov do cieľa a **nikdy nenadhodnocujú** – sú prípustné (aj konzistentné).\n\n1. `flat[i] != 0 and flat[i] != expected[i]` – dlaždica je zle, ak na pozícii `i` nie je to, čo tam má byť. Podmienka `flat[i] != 0` **vynecháva medzeru**; s ňou by heuristika na doske 1 ťah od cieľa dala 2 a prestala by byť prípustná.\n2. `sum(1 for i in ... if ...)` – spočíta, koľko indexov spĺňa podmienku.\n3. Manhattan: dlaždica `val` patrí na index `val - 1` sploštenej dosky → riadok `// size`, stĺpec `% size`. Napr. dlaždica 6 v 3×3: `(5 // 3, 5 % 3) = (1, 2)`.\n4. `abs(goal_r - r) + abs(goal_c - c)` – koľko políčok treba dlaždicu posunúť zvislo a vodorovne. `if val != 0` opäť vynecháva medzeru.\n\nPrečo sú prípustné: jeden ťah pohne jednou dlaždicou o jedno políčko. Manhattan je vždy ≥ misplaced (**dominuje**), preto s ňou `A*` expanduje menej stavov. GUI posiela do `greedy` a `astar` práve `lambda s: s.manhattan_distance()`.",
+    "expectedOutput": "PuzzleState([[8, 1, 3], [4, 0, 2], [7, 6, 5]]): count_misplaced_tiles() -> 5, manhattan_distance() -> 10 (optimum je 14 ťahov)",
+    "tags": ["heuristika", "misplaced tiles", "Manhattan distance", "prípustná heuristika"]
+  },
+  {
+    "id": "w08-greedy",
+    "title": "Greedy best-first search",
+    "week": 8,
+    "file": "w08-greedy.py",
+    "source": "moodle/w08/pseudocodes.pdf",
+    "task": "Napíš funkciu `greedy(start_state, heuristic)` podľa pseudokódu `Greedy_Best_First`; `heuristic` je funkcia stavu (GUI posiela `lambda s: s.manhattan_distance()`). `open_list` je halda (`heapq`) s trojicami `(priorita, state_id, stav)`, kde priorita je `heuristic(stav)` a `state_id` počítadlo od 0. Popri nej drž množinu `in_open` (stavy v open liste) a množinu `closed_list`; `discovered = 1`, `expanded = 0`. V cykle vyber stav s najnižšou prioritou do `current`, odstráň ho z `in_open`, zvýš `expanded`; ak je cieľom, vráť `(current, discovered, expanded)`, inak ho pridaj do `closed_list`. Suseda `neighbor`, ktorý je v `closed_list`, preskoč (`continue`); ak nie je v `in_open`, zvýš `state_id`, vlož ho do haldy s prioritou `heuristic(neighbor)`, pridaj do `in_open` a zvýš `discovered`. Na konci vráť `(None, discovered, expanded)`.",
+    "explanation": "Greedy vyberá stav, ktorý **vyzerá najbližšie k cieľu** – priorita je iba `h(n)`.\n\n1. `open_list` – prioritný front usporiadaný podľa `h(n)`. V Pythone zoznam, s ktorým pracuje `heapq`; štart sa vloží s `heuristic(start_state)`.\n2. Trojica `(h, state_id, stav)`: pri rovnakom `h` rozhodne `state_id` (skôr vložený vyhráva). Bez neho by Python porovnával dva `PuzzleState` → `TypeError`.\n3. `heapq.heappop(open_list)` – vráti záznam s najnižším `h` („current ← state in open_list with lowest h value“ + „remove current from open_list“).\n4. Test cieľa je **pred** pridaním do `closed_list`, presne ako v pseudokóde.\n5. `if neighbor in closed_list: continue` – už expandovaný stav sa neotvára znova.\n6. `if neighbor not in in_open` – halda nevie rýchlo odpovedať, či v nej stav je, preto pomocná množina `in_open`.\n7. `parent(neighbor) ← current` netreba písať – spravil to `move_tile`.\n\nNikde sa nepočíta `g` – skutočná dĺžka cesty sa ignoruje. Preto je Greedy rýchly (málo expanzií), ale **neoptimálny**.",
+    "expectedOutput": "stav 8 1 3 / 4 _ 2 / 7 6 5, Manhattan -> cesta dĺžky 36, discovered 312, expanded 179 (optimum 14)",
+    "tags": ["Greedy", "best-first", "heapq", "open list", "closed list", "h(n)"]
+  },
+  {
+    "id": "w08-astar",
+    "title": "A* search",
+    "week": 8,
+    "file": "w08-astar.py",
+    "source": "moodle/w08/pseudocodes.pdf",
+    "task": "Napíš funkciu `astar(start_state, heuristic)` podľa pseudokódu `A_Star`. `open_list` je halda s trojicami `(f, state_id, stav)`, štart má `f = heuristic(start_state)`; `closed_list` je množina, `g = {start_state: 0}` slovník cien ciest, `discovered = 1`, `expanded = 0`. V cykle vyber stav s najnižším f do `current`; ak už je v `closed_list` (zastaraný záznam), preskoč ho. Zvýš `expanded`; ak je cieľom, vráť `(current, discovered, expanded)`, inak ho pridaj do `closed_list`. Suseda v `closed_list` preskoč. Spočítaj `tentative_g = g[current] + 1`; ak je menšie než `g` suseda (chýbajúci stav = nekonečno), tak: ak sused ešte v `g` nie je, zvýš `discovered`; ulož `g[neighbor] = tentative_g`, zvýš `state_id` a vlož suseda do haldy s prioritou `tentative_g + heuristic(neighbor)`. Na konci vráť `(None, discovered, expanded)`.",
+    "explanation": "Kostra je ako Greedy, ale priorita je **`f(n) = g(n) + h(n)`** a sleduje sa cena cesty `g`.\n\n1. Štart: `g = 0`, takže `f(start) = h(start)`.\n2. `g = {start_state: 0}` – „g(n) ← ∞ for every state“ sa v Pythone rieši tým, že stav v slovníku nie je: `g.get(neighbor, float(\"inf\"))`.\n3. `tentative_g = g[current] + 1` – `cost(current, neighbor)` je v osmičke vždy 1.\n4. `if tentative_g < g(neighbor)` – suseda berieme, ak je nový alebo sme k nemu našli **kratšiu cestu**. Vtedy sa prepíše `g` a vloží sa nový záznam s novým `f`.\n5. „Update neighbor's priority“ – `heapq` prioritu meniť nevie, preto sa vloží **nový** záznam a starý v halde ostane. Keď sa neskôr vyberie, stav už je v `closed_list` → `if current in closed_list: continue`.\n6. Rodič: nový objekt `neighbor` z `move_tile` už má `parent = current`, takže lepšia cesta sa zapamätá sama.\n7. Test cieľa je **pri výbere** z open listu, nie pri vložení suseda – inak by sa mohla vrátiť dlhšia cesta.\n8. `discovered` sa zvyšuje len pri stave, ktorý vidíme prvý raz (počet rôznych stavov).\n\nS prípustnou heuristikou (Manhattan, misplaced tiles) vráti `A*` **rovnako dlhú cestu ako BFS**, len expanduje oveľa menej stavov.",
+    "expectedOutput": "stav 8 1 3 / 4 _ 2 / 7 6 5, Manhattan -> cesta dĺžky 14, discovered 128, expanded 77 (BFS: 14, 9021, 5961)",
+    "tags": ["A*", "heapq", "f(n) = g(n) + h(n)", "open list", "closed list", "informované vyhľadávanie"]
+  },
+  {
+    "id": "w08-ucs",
+    "title": "UCS – Uniform-Cost Search ako variant A*",
+    "week": 8,
+    "file": "w08-ucs.py",
+    "source": "moodle/w08/pseudocodes.pdf",
+    "task": "Uprav algoritmus z predošlej úlohy na Uniform-Cost Search: funkcia `ucs(start_state)` **bez heuristiky**. Všetko ostáva rovnaké (`open_list` ako halda trojíc, `closed_list`, slovník `g`, počítadlá, preskakovanie zastaraných záznamov, `tentative_g = g[current] + 1`), iba priorita je samotná cena cesty: štart sa vkladá s prioritou `0` a sused s prioritou `tentative_g`.",
+    "explanation": "UCS = `A*` s `h(n) = 0`: z `f(n) = g(n) + h(n)` ostane iba `g(n)`.\n\n1. `open_list = [(0, state_id, start_state)]` – priorita štartu je `g = 0`.\n2. `heapq.heappop` vyberá stav s **najnižšou kumulatívnou cenou od štartu**, bez ohľadu na hĺbku.\n3. `tentative_g < g.get(neighbor, float(\"inf\"))` – rovnaká kontrola lepšej cesty ako v `A*`.\n4. Do haldy ide `(tentative_g, state_id, neighbor)` – žiadna heuristika, UCS je **slepé** vyhľadávanie.\n\nTri algoritmy, jeden riadok rozdielu – priorita suseda: UCS `tentative_g`, Greedy `heuristic(neighbor)`, `A*` `tentative_g + heuristic(neighbor)`.\n\nUCS je optimálne aj pri rôznych cenách hrán. V osmičke stojí každý ťah 1, takže UCS expanduje stavy po úrovniach rovnako ako BFS a dáva rovnaké čísla.",
+    "expectedOutput": "stav 8 1 3 / 4 _ 2 / 7 6 5 -> cesta dĺžky 14, discovered 9021, expanded 5961 (rovnako ako BFS)",
+    "tags": ["UCS", "uniform-cost", "heapq", "g(n)", "neinformované vyhľadávanie"]
+  },
+  {
+    "id": "w08-run-compare",
+    "title": "Spustenie a porovnanie algoritmov bez GUI",
+    "week": 8,
+    "file": "w08-run-compare.py",
+    "source": "moodle/w07/cv_07_source_code/code/gui/visualizer.py",
+    "task": "Napíš skript (spúšťa sa z priečinka `code/`), ktorý spraví to isté čo `run_algorithm` v GUI. Importuj `PuzzleState` z `core.state` a `bfs`, `dfs`, `greedy`, `astar` z `core.algorithms`. Vytvor `start` z dosky `[[1, 6, 5], [3, 2, 8], [4, 7, 0]]` a heuristiku `h = lambda s: s.manhattan_distance()`. V cykle cez trojice `(name, func, heuristic)` – BFS a DFS s `None`, Greedy a `A*` s `h` – zavolaj algoritmus (s heuristikou `func(start, heuristic)`, bez nej `func(start)`), rozbaľ `goal_state, discovered, expanded`, z cieľového stavu získaj `path` cez `reconstruct_path()` a vypíš `name`, dĺžku cesty, `discovered` a `expanded`.",
+    "explanation": "Takto sa funkcie z `core/algorithms.py` používajú a porovnávajú.\n\n1. `PuzzleState([[1, 6, 5], [3, 2, 8], [4, 7, 0]])` – stav sa vytvára z dosky; `parent` je `None`, takže cesta sa počíta od neho.\n2. `h = lambda s: s.manhattan_distance()` – heuristika sa posiela ako **funkcia** stavu; presne takto ju posiela GUI v `run_greedy` a `run_astar`.\n3. BFS a DFS sa volajú s jedným argumentom, Greedy a `A*` s dvoma – preto vetvenie `if heuristic`.\n4. Každý algoritmus vráti trojicu `(goal_state, discovered, expanded)`.\n5. `goal_state.reconstruct_path()` – zoznam ťahov; jeho dĺžka je to, čo GUI ukazuje ako Path length.\n\nČo vidno vo výstupe: BFS a `A*` majú **rovnakú** (optimálnu) dĺžku 16, `A*` expanduje 122 stavov namiesto 7 551; Greedy je najrýchlejší, ale cesta má 20 ťahov; DFS nájde cestu dlhú 40 828 ťahov. Pozor: ak DFS narazí na limit, vráti `None` – GUI to ošetruje podmienkou `if goal_state:`.",
+    "expectedOutput": "BFS 16 12125 7551\nDFS 40828 74115 44412\nGreedy 20 115 68\nA* 16 201 122",
+    "tags": ["porovnanie", "BFS", "DFS", "Greedy", "A*", "reconstruct_path"]
+  }
+]

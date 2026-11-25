@@ -1,0 +1,146 @@
+[
+  {
+    "id": "w10-nqueens-conflicts",
+    "title": "N-dám: heuristika conflicts (počet ohrozujúcich sa dvojíc)",
+    "week": 10,
+    "file": "w10-nqueens-conflicts.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/state.py",
+    "task": "Napíš dve metódy triedy `NQueensState` (stav má `self.queens` – tuple, `queens[col] = row`, `self.n` a medzipamäť `self._conflicts`, na začiatku `None`). `_line_counts(self)` vráti trojicu zoznamov `rows`, `diag`, `anti` – počet dám v každom riadku (dĺžka `n`), na každej diagonále (index `r - c + n - 1`) a antidiagonále (index `r + c`), obe dĺžky `2 * n - 1`. `conflicts(self)` pri prvom volaní spočíta a uloží do `self._conflicts` súčet `k * (k - 1) // 2` cez všetky počty `k` zo všetkých troch zoznamov a vráti ho.",
+    "explanation": "`conflicts()` je heuristika `h`, ktorú lokálne vyhľadávanie **minimalizuje**; `h = 0` je riešenie.\n\n- Dámy sa ohrozujú v riadku alebo na diagonále (v stĺpci nie – každý stĺpec má práve jednu).\n- Na diagonále je rozdiel `r - c` konštantný, na antidiagonále súčet `r + c`. Posun `+ n - 1` robí z rozdielu nezáporný index.\n- `k` dám na jednej čiare tvorí `k * (k - 1) // 2` dvojíc (kombinácie po dvoch).\n- Výsledok sa ukladá do `self._conflicts`, aby sa nepočítal opakovane.\n\nPočíta sa počet **dvojíc**, nie počet ohrozených dám: 4 dámy v jednom riadku dajú 6.",
+    "expectedOutput": "NQueensState((0, 1, 2, 3)).conflicts() -> 6; (0, 3, 0, 3) -> 3; (1, 3, 0, 3) -> 1; (1, 3, 0, 2) -> 0",
+    "tags": [
+      "N-queens",
+      "heuristika",
+      "conflicts",
+      "lokálne vyhľadávanie"
+    ]
+  },
+  {
+    "id": "w10-nqueens-neighbors",
+    "title": "N-dám: susedné stavy (move_queen, neighbors, random_neighbor)",
+    "week": 10,
+    "file": "w10-nqueens-neighbors.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/state.py",
+    "task": "Napíš tri metódy triedy `NQueensState`. `move_queen(self, col, row)` vráti **nový** stav, v ktorom je dáma stĺpca `col` v riadku `row` (kópia `new_queens`). `neighbors(self)` vráti zoznam všetkých susedov – každú dámu presunie do každého iného riadku jej stĺpca (list comprehension cez `col`, `row`). `random_neighbor(self)` vráti jedného náhodného suseda: vylosuj `col` cez `random.randrange(self.n)` a `row` cez `random.randrange(self.n - 1)`; ak je `row` väčší alebo rovný aktuálnemu riadku dámy, zvýš ho o 1.",
+    "explanation": "Okolie stavu = presun **jednej** dámy v rámci jej stĺpca.\n\n- Stav je nemenný (tuple), preto `move_queen` vytvára kópiu `list(self.queens)` a nový objekt.\n- `neighbors`: podmienka `row != self.queens[col]` vynechá aktuálnu pozíciu → `N * (N - 1)` susedov (8 dám: 56).\n- `random_neighbor`: losuje sa z `n - 1` riadkov a posun `row += 1` pre `row >= aktuálny` aktuálny riadok preskočí – každý iný riadok má rovnakú pravdepodobnosť a nikdy sa nevráti ten istý stav.",
+    "expectedOutput": "len(NQueensState.random(8).neighbors()) -> 56; len(NQueensState.random(4).neighbors()) -> 12",
+    "tags": [
+      "N-queens",
+      "susedia",
+      "neighbors",
+      "lokálne vyhľadávanie"
+    ]
+  },
+  {
+    "id": "w10-nqueens-best-neighbor",
+    "title": "N-dám: najlepší sused best_neighbor",
+    "week": 10,
+    "file": "w10-nqueens-best-neighbor.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/state.py",
+    "task": "Napíš metódu `best_neighbor(self)` triedy `NQueensState`, ktorá vráti suseda s najnižším počtom konfliktov (zhody náhodne). Počítaj inkrementálne: zober `n`, `h = self.conflicts()` a počty `rows, diag, anti = self._line_counts()`. Pre každý stĺpec `c` s dámou v riadku `old_r` vypočítaj `base` = `h` bez útokov na starom políčku (od `h` odčítaj `rows[old_r] - 1`, `diag[...] - 1`, `anti[...] - 1`). Pre každý iný riadok `r` je `value = base + rows[r] + diag[r - c + n - 1] + anti[r + c]`. Udržuj `best_value` a zoznam ťahov `best_moves` s touto hodnotou; na konci vyber ťah cez `random.choice` a vráť `self.move_queen(c, r)`.",
+    "explanation": "Výsledok je rovnaký ako `min(self.neighbors(), key=conflicts)`, ale bez vytvárania všetkých `N * (N - 1)` dosiek.\n\n- **`base`**: dáma na starom políčku je v konflikte s `rows[old_r] - 1` dámami v riadku (seba nepočíta) a podobne na oboch diagonálach – tieto dvojice presunom zaniknú.\n- **`value`**: na novom políčku pribudne konflikt s každou dámou, ktorá už je v riadku `r` a na diagonálach nového políčka.\n- Lepšia hodnota začne nový zoznam `best_moves`, rovnaká sa doň pridá.\n- `random.choice(best_moves)` rozhoduje zhody náhodne – preto dva behy hill climbingu z tej istej dosky môžu skončiť inde.",
+    "expectedOutput": "NQueensState((1, 3, 0, 3)).best_neighbor().queens -> (1, 3, 0, 2)",
+    "tags": [
+      "N-queens",
+      "best_neighbor",
+      "hill climbing",
+      "lokálne vyhľadávanie"
+    ]
+  },
+  {
+    "id": "w10-hill-climbing",
+    "title": "Hill climbing na N-dámach",
+    "week": 10,
+    "file": "w10-hill-climbing.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/algorithms.py",
+    "task": "Doplň funkciu `hill_climbing(start_state, max_steps=1000)` (TODO 1). Začni s `current = start_state` a `history = [current]`. Najviac `max_steps`-krát opakuj: ak je `current` cieľ, skonči; zober najlepšieho suseda `neighbor = current.best_neighbor()`; ak **nie je lepší** (nemá nižší počet konfliktov), skonči; inak sa doň presuň a pridaj ho do `history`. Vráť dvojicu `current, history`.",
+    "explanation": "Steepest-descent hill climbing: stále do **najlepšieho** suseda, kým sa dá zlepšovať.\n\n- `current.is_goal()` → `h == 0`, netreba pokračovať.\n- `neighbor.conflicts() >= current.conflicts()` → najlepší sused nie je lepší → **uviazli sme** (lokálne minimum alebo planina). Podmienka `>=` zakazuje aj ťahy na rovnako dobrý stav, inak by sa algoritmus mohol točiť na planine.\n- Horší stav sa neprijme nikdy, `h` v `history` preto ostro klesá.\n- `history` obsahuje štart a každý navštívený stav – dĺžka je počet krokov + 1.\n- Vracia sa **dvojica** `(final_state, history)` – GUI ju prehrá ako animáciu.",
+    "expectedOutput": "Štart (1, 3, 0, 3) -> koniec (1, 3, 0, 2), len(history) = 2; štart (0, 3, 1, 2) -> uviazne, len(history) = 1; náhodné dosky 8x8: asi 14 % vyriešených",
+    "tags": [
+      "hill climbing",
+      "N-queens",
+      "lokálne vyhľadávanie",
+      "lokálne minimum"
+    ]
+  },
+  {
+    "id": "w10-random-restart-hill-climbing",
+    "title": "Random-restart hill climbing",
+    "week": 10,
+    "file": "w10-random-restart-hill-climbing.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/algorithms.py",
+    "task": "Doplň funkciu `random_restart_hill_climbing(start_state, max_restarts=50)` (TODO 3, bonus). Spusti `hill_climbing` zo `start_state` a ulož `result, history`. Ak výsledok nie je cieľ, spúšťaj `hill_climbing` znova z novej náhodnej dosky `NQueensState.random(start_state.n)` – spolu najviac `max_restarts` behov – a čiastkové histórie (`part`) pripájaj do `history`. Vráť posledný výsledok a spojenú históriu.",
+    "explanation": "Hill climbing uviazne? Skús to znova odinakiaľ.\n\n- Prvý beh ide z dosky v GUI, ďalšie z **náhodných** dosiek rovnakej veľkosti.\n- `range(max_restarts - 1)` – prvý beh už prebehol, spolu teda najviac `max_restarts` behov.\n- `if result.is_goal(): break` – po úspechu sa už nereštartuje.\n- `history.extend(part)` spojí histórie do jedného zoznamu; `history[0]` zostáva štartový stav.\n\nAk jeden beh uspeje s pravdepodobnosťou `p`, treba v priemere `1 / p` behov (8 dám: `p ≈ 0,14` → asi 7).",
+    "expectedOutput": "Náhodné dosky 8x8: takmer 100 % vyriešených (do 50 behov)",
+    "tags": [
+      "hill climbing",
+      "random restart",
+      "N-queens",
+      "lokálne vyhľadávanie"
+    ]
+  },
+  {
+    "id": "w10-simulated-annealing",
+    "title": "Simulované žíhanie na N-dámach",
+    "week": 10,
+    "file": "w10-simulated-annealing.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/algorithms.py",
+    "task": "Doplň funkciu `simulated_annealing(start_state, t_start=2.0, cooling=0.995, t_min=0.001, max_steps=20_000)` (TODO 2). Začni s `current = start_state`, `history = [current]`, `T = t_start`. Najviac `max_steps`-krát opakuj: skonči, ak je `current` cieľ alebo `T < t_min`; zober náhodného suseda a vypočítaj `delta = h(sused) - h(aktuálny)`; ak `delta < 0`, prijmi ho, inak ho prijmi s pravdepodobnosťou `exp(-delta / T)` (použi `random.random()` a `math.exp`); pridaj `current` do `history` (aj keď bol ťah odmietnutý); ochlaď `T = T * cooling`. Vráť `current, history`.",
+    "explanation": "Žíhanie = hill climbing, ktorý občas prijme **horší** ťah, aby unikol z lokálneho minima.\n\n- Sused je **náhodný** (`random_neighbor`), nie najlepší.\n- `delta < 0` → zlepšenie, prijme sa vždy. `or` sa vyhodnocuje skrátene, takže `math.exp` sa počíta len pre `delta >= 0`.\n- `random.random() < math.exp(-delta / T)` → udalosť s pravdepodobnosťou `exp(-delta / T)`: čím väčšie zhoršenie a čím nižšia teplota, tým menšia šanca. Pre `delta = 0` je to 1 – prijme sa vždy.\n- `history.append(current)` je **mimo** podmienky – jeden záznam na iteráciu, aby graf `h` a `T` v GUI sedel.\n- `T = T * cooling` – geometrické ochladzovanie; pri predvolených hodnotách klesne `T` pod `t_min` po 1 517 iteráciách.",
+    "expectedOutput": "Náhodné dosky 8x8 s predvolenými parametrami: asi 85 % vyriešených, najviac 1517 krokov",
+    "tags": [
+      "simulated annealing",
+      "teplota",
+      "N-queens",
+      "lokálne vyhľadávanie"
+    ]
+  },
+  {
+    "id": "w10-genetic-operators",
+    "title": "Genetické operátory: crossover, mutate, tournament_selection",
+    "week": 10,
+    "file": "w10-genetic-operators.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/state.py",
+    "task": "Napíš dve metódy triedy `NQueensState` a jednu funkciu modulu. `crossover(self, other)` – jednobodové kríženie: vylosuj `cut` cez `random.randint(1, self.n - 1)` a vráť nový stav, ktorého stĺpce `[0, cut)` sú zo `self` a zvyšok z `other`. `mutate(self)` – vráti náhodného suseda. `tournament_selection(population, k=3)` – náhodne vyber `k` jedincov (`random.sample`) a vráť toho s najnižším počtom konfliktov.",
+    "explanation": "Doska je **chromozóm**, riadok dámy v jednom stĺpci je **gén**.\n\n- **Kríženie:** `random.randint(1, n - 1)` vracia hodnotu vrátane oboch hraníc, takže dieťa má vždy aspoň jeden gén z každého rodiča. `self.queens[:cut] + other.queens[cut:]` spojí dve tuple.\n- **Mutácia:** presun jednej náhodnej dámy = `random_neighbor()`; vnáša do populácie nové gény (diverzitu).\n- **Turnajová selekcia:** `random.sample(population, k)` vyberie `k` rôznych jedincov, `min(..., key=lambda s: s.conflicts())` vráti najlepšieho z nich. Lepší jedinci vyhrávajú častejšie, ale nie vždy vyhrá najlepší z celej populácie.\n\n`tournament_selection` je funkcia na úrovni modulu, nie metóda.",
+    "expectedOutput": "(3, 1, 4, 1, 5, 2) x (0, 6, 2, 7, 3, 4), cut = 3 -> (3, 1, 4, 7, 3, 4)",
+    "tags": [
+      "genetický algoritmus",
+      "kríženie",
+      "mutácia",
+      "turnajová selekcia"
+    ]
+  },
+  {
+    "id": "w10-genetic-algorithm",
+    "title": "Genetický algoritmus na N-dámach",
+    "week": 10,
+    "file": "w10-genetic-algorithm.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/algorithms.py",
+    "task": "Doplň funkciu `genetic_algorithm(start_state, population_size=100, generations=1000, mutation_rate=0.5, elite=2)` (TODO 4). Populácia = `start_state` + (`population_size - 1`) náhodných dosiek rovnakej veľkosti `n`; `history = []`. Pre každú generáciu: zoraď populáciu podľa konfliktov (najlepší prvý), pridaj najlepšieho do `history` a skonči, ak je cieľ. Nová populácia `new_population` začína `elite` najlepšími jedincami; kým nie je plná, vyber dvoch rodičov `parent1`, `parent2` cez `tournament_selection(population)`, vytvor `child = parent1.crossover(parent2)`, s pravdepodobnosťou `mutation_rate` ho zmutuj a pridaj. Nahraď populáciu novou. Vráť najlepšieho jedinca populácie a `history`.",
+    "explanation": "Jedna iterácia = jedna **generácia**.\n\n1. **Inicializácia:** doska z GUI + náhodné dosky cez `NQueensState.random(n)`.\n2. **Hodnotenie:** `population.sort(key=lambda s: s.conflicts())` – fitness je počet konfliktov, menej je lepšie.\n3. **Záznam a koniec:** `history.append(population[0])`; ak je najlepší jedinec cieľ, `break`.\n4. **Elitizmus:** `population[:elite]` prejde do novej generácie nezmenené – najlepšie `h` sa nikdy nezhorší.\n5. **Reprodukcia:** dva turnaje → kríženie → mutácia s pravdepodobnosťou `mutation_rate` (`random.random() < mutation_rate`).\n6. **Výmena generácie:** `population = new_population`.\n7. **Návrat:** `min(population, key=...)` – po `break` je populácia zoradená, po vyčerpaní generácií nie, preto `min`.\n\nPri 100 jedincoch a `elite = 2` vznikne v každej generácii 98 detí.",
+    "expectedOutput": "Náhodné dosky 8x8 s predvolenými parametrami: asi 80 % vyriešených do 1000 generácií",
+    "tags": [
+      "genetický algoritmus",
+      "populácia",
+      "elitizmus",
+      "N-queens"
+    ]
+  },
+  {
+    "id": "w10-queens-search-heuristics",
+    "title": "N-dám pre A*: heuristiky h1 (konflikty) a h2 (dolný odhad)",
+    "week": 10,
+    "file": "w10-queens-search-heuristics.py",
+    "source": "moodle/w10/cv_10_codebase/code/core/search_state.py",
+    "task": "Napíš tri metódy triedy `QueensSearchState` (stav má `self.queens`, `self.n` a medzipamäť `self._pairs`, na začiatku `None`). `_attacking_pairs(self)` vráti (a uloží do `self._pairs`) zoznam dvojíc stĺpcov `(c1, c2)`, `c1 < c2`, ktorých dámy sa ohrozujú – rovnaký riadok alebo `abs` rozdielu riadkov rovný `c2 - c1` (skratka `q = self.queens`). `conflicts(self)` (heuristika h1) vráti počet týchto dvojíc. `min_moves_lower_bound(self)` (heuristika h2) pažravo vyberá dvojice, ktoré nezdieľajú žiadnu dámu: prejdi dvojice v poradí, a ak ani `c1`, ani `c2` nie je v množine `used`, pridaj oba do `used` a zvýš `bound`; vráť `bound`.",
+    "explanation": "Hotový kód vyučujúcich na porovnanie lokálneho vyhľadávania s A*.\n\n- **Test ohrozenia:** rovnaký riadok `q[c1] == q[c2]`, alebo diagonála – rozdiel riadkov sa rovná rozdielu stĺpcov.\n- **h1 = počet konfliktných dvojíc** – to isté číslo ako `NQueensState.conflicts()`. **Nie je prípustná**: jeden ťah môže odstrániť viac dvojíc naraz (dáma ohrozená troma inými: h1 = 3, stačí 1 ťah).\n- **h2 = dolný odhad:** v každej konfliktnej dvojici sa musí pohnúť aspoň jedna dáma. Dvojice bez spoločnej dámy potrebujú každá vlastný ťah, takže ich počet nikdy neprekročí skutočný počet ťahov → **prípustná**.\n\nA* nájde najkratšiu postupnosť ťahov zaručene len s h2.",
+    "expectedOutput": "(0, 0, 0, 0): h1 = 6, h2 = 2, najkratšie riešenie má 3 ťahy; (0, 3, 0, 3): h1 = 3, h2 = 2",
+    "tags": [
+      "A*",
+      "heuristika",
+      "prípustnosť",
+      "N-queens"
+    ]
+  }
+]

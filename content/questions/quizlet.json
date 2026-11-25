@@ -1,0 +1,2194 @@
+[
+  {
+    "id": "qz-01",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je účel krížovej validácie (cross validation) vo strojovom učení?",
+    "options": [
+      {
+        "text": "Znížiť pretrénovanie",
+        "correct": true
+      },
+      {
+        "text": "Zvýšiť presnosť modelu na trénovacích dátach",
+        "correct": false
+      },
+      {
+        "text": "Otestovať výkon modelu na nových dátach",
+        "correct": true
+      },
+      {
+        "text": "Poskytnúť interpretovateľnosť modelu",
+        "correct": false
+      }
+    ],
+    "explanation": "Krížová validácia odhaduje výkon modelu na nových (nevidených) dátach – každá vzorka je raz vo validačnej časti. Keďže model a hyperparametre vyberáme podľa validačného skóre, a nie podľa trénovacej presnosti, pomáha odhaliť a obmedziť pretrénovanie. Trénovaciu presnosť nezvyšuje a interpretovateľnosť nerieši."
+  },
+  {
+    "id": "qz-02",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo zobrazuje krivka učenia vo strojovom učení?",
+    "options": [
+      {
+        "text": "Vzťah medzi zložitosťou modelu a chybou",
+        "correct": false
+      },
+      {
+        "text": "Vývoj trénovacej a validačnej chyby vzhľadom na veľkosť datasetu",
+        "correct": true
+      },
+      {
+        "text": "Vplyv hyperparametra/ov na výkon modelu",
+        "correct": false
+      },
+      {
+        "text": "Čas potrebný na natrénovanie modelu",
+        "correct": false
+      }
+    ],
+    "explanation": "Krivka učenia (learning curve) ukazuje trénovaciu a validačnú presnosť (chybu) ako funkciu veľkosti trénovacej množiny. Vplyv hyperparametra na výkon ukazuje validačná krivka."
+  },
+  {
+    "id": "qz-03",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Veľký rozdiel medzi trénovacou a validačnou chybou obvykle naznačuje:",
+    "options": [
+      {
+        "text": "Podtrénovanie (underfitting)",
+        "correct": false
+      },
+      {
+        "text": "Pretrénovanie (overfitting)",
+        "correct": true
+      },
+      {
+        "text": "Správne natrénovanie modelu",
+        "correct": false
+      },
+      {
+        "text": "Vysokú presnosť",
+        "correct": false
+      }
+    ],
+    "explanation": "Model, ktorý je na trénovacích dátach oveľa lepší než na validačných, je príliš tesne naviazaný na trénovacie dáta – pretrénovanie (vysoký rozptyl). Pri podtrénovaní sú obe chyby vysoké a blízko seba."
+  },
+  {
+    "id": "qz-04",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V zhlukovaní/klastrovaní K-means metódou sa hodnota hyper-parametra 'K' určuje ako?",
+    "options": [
+      {
+        "text": "Vyberie sa náhodne",
+        "correct": false
+      },
+      {
+        "text": "Je to počet premenných v datasete",
+        "correct": false
+      },
+      {
+        "text": "Určuje sa podľa siluetovej metódy",
+        "correct": false
+      },
+      {
+        "text": "Je to počet zhlukov/clusterov",
+        "correct": true
+      }
+    ],
+    "explanation": "K je počet zhlukov (centroidov), ktorý treba algoritmu zadať vopred (`n_clusters`). Nevyberá sa náhodne a nesúvisí s počtom premenných. Lakťová metóda alebo silueta pomáhajú vhodné K odhadnúť, ale samotné K znamená počet zhlukov."
+  },
+  {
+    "id": "qz-05",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V kontexte algoritmu DBSCAN, čo je 'epsilon okolie/polomer'?",
+    "options": [
+      {
+        "text": "Minimálna vzdialenosť medzi jadrovými bodmi",
+        "correct": false
+      },
+      {
+        "text": "Maximálny polomer okolia okolo jadrového bodu",
+        "correct": true
+      },
+      {
+        "text": "Priemerná vzdialenosť bodov v zhluku",
+        "correct": false
+      },
+      {
+        "text": "Hranica datasetu",
+        "correct": false
+      }
+    ],
+    "explanation": "ε (`eps`) je polomer okolia bodu, v ktorom DBSCAN počíta susedov: bod je jadrový (hlavný), ak má v tomto okolí aspoň MinPts bodov. Nie je to vzdialenosť medzi jadrovými bodmi ani priemerná vzdialenosť v zhluku."
+  },
+  {
+    "id": "qz-06",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich tvrdení sú pravdivé o algoritme Min-conflicts v CSP?",
+    "options": [
+      {
+        "text": "Je to typ lokálneho vyhľadávacieho algoritmu.",
+        "correct": true
+      },
+      {
+        "text": "Používa sa na nájdenie sub-optimálneho, no nie optimálneho riešenia.",
+        "correct": false
+      },
+      {
+        "text": "Vyberá premennú, ktorá je zapojená do najväčšieho počtu konfliktov.",
+        "correct": false
+      },
+      {
+        "text": "Je efektívny len pre malé stavové priestory",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts je lokálne vyhľadávanie pre CSP: začne z úplného priradenia, opakovane vyberie náhodnú premennú, ktorá je v konflikte, a dá jej hodnotu s najmenším počtom konfliktov. Nevyberá premennú s najväčším počtom konfliktov, hľadá priradenie bez konfliktov (nie „suboptimálne“ riešenie) a je efektívny aj pre obrovské problémy, napr. milión dám."
+  },
+  {
+    "id": "qz-07",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo predstavuje pojem „planina“ (plateau) v heuristickom vyhľadávaní typu hill climbing?",
+    "options": [
+      {
+        "text": "Oblasť, kde majú všetky susedné stavy nižšiu, resp. vyššiu hodnotu evaluačnej funkcie.",
+        "correct": false
+      },
+      {
+        "text": "Oblasť, kde majú všetky susedné stavy približne rovnakú hodnotu evaluačnej funkcie.",
+        "correct": true
+      },
+      {
+        "text": "Je to stav s unikátnym lokálnym optimom.",
+        "correct": false
+      },
+      {
+        "text": "Je to stav s unikátnym globálnym optimom",
+        "correct": false
+      }
+    ],
+    "explanation": "Planina (plateau) je plochá oblasť stavového priestoru – susedné stavy majú rovnakú hodnotu evaluačnej funkcie, takže hill climbing nevie, ktorým smerom pokračovať. Stav, ktorého všetci susedia sú horší, je lokálne optimum."
+  },
+  {
+    "id": "qz-08",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú vlastnosti používania pažravých algoritmov typu greedy?",
+    "options": [
+      {
+        "text": "Reálne váhy zo štartovacieho stavu k aktuálnemu stavu počas plánovania sa zanedbávajú",
+        "correct": true
+      },
+      {
+        "text": "Sú charakteristické nájdením kompletného riešenia pri malých časových/pamäťových nárokoch",
+        "correct": false
+      },
+      {
+        "text": "Riešia vybraný vyhľadávací problém len s exponenciálnou pamäťovou zložitosťou",
+        "correct": false
+      },
+      {
+        "text": "V kombinácii s hranovou konzistenciou garantujú nájdenie optimálneho riešenia",
+        "correct": false
+      }
+    ],
+    "explanation": "Pažravé (greedy best-first) vyhľadávanie radí uzly iba podľa heuristiky h(n) – cenu cesty od štartu g(n) zanedbáva. Preto nie je optimálne a v stromovom vyhľadávaní ani úplné; hranová konzistencia je pojem z CSP a optimalitu mu nedodá."
+  },
+  {
+    "id": "qz-09",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú kľúčové charakteristiky vyhľadávacieho algoritmu A*?",
+    "options": [
+      {
+        "text": "Používa heuristiku pre odhad váh na dosiahnutie cieľa.",
+        "correct": true
+      },
+      {
+        "text": "Garantuje optimálne riešenie za predpokladu prípustnej heuristiky.",
+        "correct": true
+      },
+      {
+        "text": "Expanduje prioritne uzly s nižšou hodnotou kriteriálnej funkcie.",
+        "correct": true
+      },
+      {
+        "text": "S výhodou funguje s heuristickou informáciou, ktorá nadhodnocuje reálne váhy do cieľa",
+        "correct": false
+      }
+    ],
+    "explanation": "A* radí uzly podľa f(n) = g(n) + h(n), kde h je heuristický odhad ceny do cieľa, a expanduje uzol s najnižším f. S prípustnou heuristikou (nenadhodnocuje) nájde optimálne riešenie. Nadhodnocujúca heuristika optimalitu pokazí."
+  },
+  {
+    "id": "qz-10",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich tvrdení sú pravdivé o reflexných agentoch v AI?",
+    "options": [
+      {
+        "text": "Konajú výhradne na základe aktuálneho vnímania stavu.",
+        "correct": true
+      },
+      {
+        "text": "Zohľadňujú budúce dôsledky svojich akcií pri realizácii akcie v aktuálnom stave.",
+        "correct": false
+      },
+      {
+        "text": "Udržiavajú predchádzajúce stavy prostredia a ich vplyv na akcie počas procesu plánovania.",
+        "correct": false
+      },
+      {
+        "text": "Garantujú nájdenie kompletného a optimálneho riešenia pri jednoduchých vyhľadávacích problémoch",
+        "correct": false
+      }
+    ],
+    "explanation": "Reflexný agent volí akciu len podľa aktuálneho vnemu (stavu) – nezvažuje budúce dôsledky akcií a neplánuje. Preto ani nezaručuje úplné či optimálne riešenie."
+  },
+  {
+    "id": "qz-11",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú základné vlastnosti prípustnej heuristiky v A* vyhľadávaní?",
+    "options": [
+      {
+        "text": "Hodnota heuristickej funkcie nie je väčšia ako kumulatívne váhy akcií agenta z aktuálneho stavu k cieľu",
+        "correct": true
+      },
+      {
+        "text": "Ponúka efektívne návrhy štruktúrovaných priestorov",
+        "correct": false
+      },
+      {
+        "text": "Vedie k optimálnemu riešeniu vo vyhľadávaní v strome",
+        "correct": true
+      },
+      {
+        "text": "Odhaduje presné váhy zo súčasného stavu k cieľovému stavu",
+        "correct": false
+      }
+    ],
+    "explanation": "Prípustná heuristika nikdy nenadhodnocuje: h(n) ≤ skutočná cena najlacnejšej cesty z n do cieľa. S prípustnou heuristikou je A* v stromovom vyhľadávaní optimálny. Cenu nemusí odhadovať presne – stačí, že ju neprekročí."
+  },
+  {
+    "id": "qz-12",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú vlastnosti konzistentnej heuristiky v A* vyhľadávaní?",
+    "options": [
+      {
+        "text": "Hodnota heuristickej funkcie nie je väčšia ako kumulatívne váhy akcií agenta z aktuálneho stavu k cieľu",
+        "correct": true
+      },
+      {
+        "text": "Hodnota heuristickej funkcie aktuálneho stavu je vždy menšia alebo rovná hodnote heuristickej funkcie potomka a váhe potrebnej k dosiahnutiu potomka",
+        "correct": true
+      },
+      {
+        "text": "Ponúka efektívne riešenie návrhu štruktúrovaných priestorov",
+        "correct": false
+      },
+      {
+        "text": "Využitím konzistentnej heuristiky hodnota kriteriálnej funkcie klesá počas plánovania",
+        "correct": false
+      }
+    ],
+    "explanation": "Konzistentná heuristika spĺňa h(n) ≤ c(n, n') + h(n') pre každého potomka n'. Každá konzistentná heuristika je zároveň prípustná (nenadhodnocuje). Hodnota f = g + h pri nej pozdĺž cesty neklesá – tvrdenie o klesajúcej kriteriálnej funkcii je teda nesprávne."
+  },
+  {
+    "id": "qz-13",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich algoritmov môžu riešiť identifikačné problémy s ohraničeniami?",
+    "options": [
+      {
+        "text": "Genetický algoritmus",
+        "correct": true
+      },
+      {
+        "text": "Simulované žíhanie",
+        "correct": true
+      },
+      {
+        "text": "Hill Climbing",
+        "correct": true
+      },
+      {
+        "text": "Algoritmus Min-conflicts",
+        "correct": true
+      }
+    ],
+    "explanation": "Všetky štyri sú lokálne vyhľadávacie algoritmy: pracujú s úplným priradením a postupne ho vylepšujú, takže sa dajú použiť na identifikačné problémy s ohraničeniami (napr. N dám), kde záleží na cieľovom stave, nie na ceste. Na tejto kartičke sú správne všetky možnosti."
+  },
+  {
+    "id": "qz-14",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú úlohy procesu 'mutácie' v genetických algoritmoch?",
+    "options": [
+      {
+        "text": "Zaistiť konvergenciu k optimálnemu riešeniu CSP problému",
+        "correct": false
+      },
+      {
+        "text": "Zaviesť genetickú diverzitu vo forme mutácie génu v novom stave",
+        "correct": true
+      },
+      {
+        "text": "Vytvárať možnosti kríženia medzi rodičmi aktuálneho stavu",
+        "correct": false
+      },
+      {
+        "text": "Kombinovať vlastnosti rodičov v populácii",
+        "correct": false
+      }
+    ],
+    "explanation": "Mutácia náhodne zmení gén nového jedinca, čím vnáša do populácie rôznorodosť a bráni uviaznutiu. Kombinovanie vlastností rodičov je kríženie; konvergenciu k optimu mutácia nezaručuje."
+  },
+  {
+    "id": "qz-15",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo patrí medzi základné charakteristiky hranovej konzistencie?",
+    "options": [
+      {
+        "text": "Nájsť optimálne riešenie",
+        "correct": false
+      },
+      {
+        "text": "Zmenšiť vyhľadávací priestor odstránením nekonzistentných hodnôt z domén premenných",
+        "correct": true
+      },
+      {
+        "text": "Dekomponovať spätné vyhľadávanie na naivný DFS prístup",
+        "correct": false
+      },
+      {
+        "text": "Zabezpečiť optimálnosť spätného vyhľadávania",
+        "correct": false
+      }
+    ],
+    "explanation": "Hranová konzistencia (arc consistency) odstraňuje z domén hodnoty, ku ktorým v doméne susednej premennej neexistuje žiadna konzistentná hodnota – zmenší prehľadávaný priestor a odhalí zlyhanie skôr. Sama optimalitu nezaručuje."
+  },
+  {
+    "id": "qz-16",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Kernelizácia v SVM sa používa na:",
+    "options": [
+      {
+        "text": "Zrýchlenie trénovacieho procesu",
+        "correct": false
+      },
+      {
+        "text": "Spracovanie lineárne neseparovateľných údajov tým, že sa mapujú do viacdimenzionálneho priestoru",
+        "correct": true
+      },
+      {
+        "text": "Zníženie pretrénovania modelu",
+        "correct": false
+      },
+      {
+        "text": "Zníženie počtu podporných vektorov",
+        "correct": false
+      }
+    ],
+    "explanation": "Kernelizácia mapuje dáta do priestoru vyššej dimenzie, kde sa lineárne neseparovateľné triedy (napr. XOR) dajú oddeliť nadrovinou. Nie je to zrýchlenie tréningu ani ochrana pred pretrénovaním."
+  },
+  {
+    "id": "qz-17",
+    "topicId": "t1-zaklady",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktorá z nasledujúcich metód je technikou učenia s učiteľom?",
+    "options": [
+      {
+        "text": "K-means clustering",
+        "correct": false
+      },
+      {
+        "text": "Analýza hlavných komponentov (PCA)",
+        "correct": false
+      },
+      {
+        "text": "Náhodné lesy",
+        "correct": true
+      },
+      {
+        "text": "Autoenkódery",
+        "correct": false
+      }
+    ],
+    "explanation": "Náhodný les je klasifikátor (alebo regresor) trénovaný na označených dátach – učenie s učiteľom. K-means, PCA a autoenkódery pracujú bez označení tried (učenie bez učiteľa)."
+  },
+  {
+    "id": "qz-18",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "K v KNN znamená:",
+    "options": [
+      {
+        "text": "Číslo jadra (kernel)",
+        "correct": false
+      },
+      {
+        "text": "Znalostná základňa",
+        "correct": false
+      },
+      {
+        "text": "Počet zhlukov (clusterov)",
+        "correct": false
+      },
+      {
+        "text": "Počet najbližších susedov",
+        "correct": true
+      }
+    ],
+    "explanation": "KNN = K najbližších susedov: vzorka dostane triedu podľa väčšiny medzi K najbližšími trénovacími vzorkami. Počet zhlukov je K v K-means."
+  },
+  {
+    "id": "qz-19",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je hlavný účel škálovania údajov v strojovom učení?",
+    "options": [
+      {
+        "text": "Znížiť časovú zložitosť algoritmov",
+        "correct": false
+      },
+      {
+        "text": "Zabezpečiť, aby rôzne premenné boli na podobnom rozsahu",
+        "correct": true
+      },
+      {
+        "text": "Prekonvertovať všetky premenné na binárne hodnoty",
+        "correct": false
+      },
+      {
+        "text": "Identifikovať a odstrániť odľahlé hodnoty",
+        "correct": false
+      }
+    ],
+    "explanation": "Škálovanie dostane príznaky na porovnateľný rozsah, aby príznak s veľkými hodnotami nedominoval (dôležité pre algoritmy so vzdialenosťami a gradientom). Odľahlé hodnoty neodstraňuje a nič neprevádza na binárne hodnoty."
+  },
+  {
+    "id": "qz-20",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je hlavný rozdiel medzi normalizáciou a štandardizáciou?",
+    "options": [
+      {
+        "text": "Normalizácia škáluje údaje na pevný rozsah, zatiaľ čo štandardizácia škáluje údaje tak, aby mali nulový priemer a jednotkovú varianciu",
+        "correct": true
+      },
+      {
+        "text": "Normalizácia odstraňuje odľahlé hodnoty, zatiaľ čo štandardizácia nie",
+        "correct": false
+      },
+      {
+        "text": "Normalizácia sa používa len pre numerické údaje, zatiaľ čo štandardizácia sa používa pre všetky druhy údajov",
+        "correct": false
+      },
+      {
+        "text": "Medzi nimi nie je významný rozdiel",
+        "correct": false
+      }
+    ],
+    "explanation": "Normalizácia (min-max) škáluje na pevný rozsah, typicky 0 až 1: x' = (x − min) / (max − min). Štandardizácia dá priemer 0 a jednotkový rozptyl: x' = (x − μ) / σ. Ani jedna odľahlé hodnoty neodstraňuje."
+  },
+  {
+    "id": "qz-21",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ako model perceptrónu spracúva dáta, ktoré nie sú lineárne separovateľné?",
+    "options": [
+      {
+        "text": "Metóda nemôže konvergovať na dátach, ktoré nie sú lineárne separovateľné",
+        "correct": true
+      },
+      {
+        "text": "Používa metódy jadier",
+        "correct": false
+      },
+      {
+        "text": "Automaticky transformuje vlastnosti",
+        "correct": false
+      },
+      {
+        "text": "Aplikuje spätnú propagáciu",
+        "correct": false
+      }
+    ],
+    "explanation": "Učiace pravidlo perceptrónu konverguje, len ak sú triedy lineárne separovateľné; inak sa váhy menia donekonečna (preto sa obmedzuje počet epoch). Jadrá používa SVM, spätnú propagáciu viacvrstvové neurónové siete."
+  },
+  {
+    "id": "qz-22",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký typ aktivačnej funkcie sa typicky používa v perceptróne?",
+    "options": [
+      {
+        "text": "Lineárna",
+        "correct": false
+      },
+      {
+        "text": "Sigmoidná",
+        "correct": false
+      },
+      {
+        "text": "Hyperbolický tangens",
+        "correct": false
+      },
+      {
+        "text": "Skoková (step) funkcia",
+        "correct": true
+      }
+    ],
+    "explanation": "Perceptrón používa skokovú (prahovú) funkciu: výstup je jedna trieda, ak vážený súčet vstupov prekročí prah, inak druhá. Sigmoida patrí k logistickej regresii, lineárna aktivácia k Adaline."
+  },
+  {
+    "id": "qz-23",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú základné charakteristiky heuristických algoritmov?",
+    "options": [
+      {
+        "text": "Nájdu vždy optimálne riešenie",
+        "correct": false
+      },
+      {
+        "text": "Sú rýchlejšie v porovnaní s analytickými riešeniami",
+        "correct": true
+      },
+      {
+        "text": "Ich pamäťová náročnosť je vždy väčšia ako náročnosť BFS algoritmu",
+        "correct": false
+      },
+      {
+        "text": "Sú kompletné, no nie optimálne",
+        "correct": true
+      }
+    ],
+    "explanation": "Kľúč kartičky: heuristické algoritmy sú rýchlejšie než úplné (analytické) riešenia a za to obetujú záruku optimality. Sporné je tvrdenie „sú kompletné, no nie optimálne“: podľa učebnice (AIMA) úplnosť vo všeobecnosti zaručená nie je – pažravé stromové vyhľadávanie sa môže zacykliť, hill climbing uviazne v lokálnom optime – a naopak A* s prípustnou heuristikou optimálny je.",
+    "disputed": true
+  },
+  {
+    "id": "qz-24",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Stratifikovaná validácia (stratified cross-validation) sa používa na:",
+    "options": [
+      {
+        "text": "Zabezpečenie, že každý fold krížovej validácie má podobný pomer tried",
+        "correct": true
+      },
+      {
+        "text": "Zníženie zložitosti modelu",
+        "correct": false
+      },
+      {
+        "text": "Zvýšenie rýchlosti tréningu",
+        "correct": false
+      },
+      {
+        "text": "Vyvarovanie sa škálovania vlastností",
+        "correct": false
+      }
+    ],
+    "explanation": "Stratifikovaná k-fold validácia vzorkuje foldy tak, aby zastúpenie tried v každom zodpovedalo ich zastúpeniu v celej dátovej sade – dôležité pri nevyvážených triedach."
+  },
+  {
+    "id": "qz-25",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z týchto algoritmov využívajú heuristickú informáciu pri hľadaní cesty v grafovej štruktúre?",
+    "options": [
+      {
+        "text": "Vyhľadávanie do šírky (BFS algoritmus)",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie s uniformnými váhami (UCS algoritmus)",
+        "correct": false
+      },
+      {
+        "text": "A* vyhľadávanie",
+        "correct": true
+      },
+      {
+        "text": "Hladový algoritmus (greedy algoritmus)",
+        "correct": true
+      }
+    ],
+    "explanation": "Informované algoritmy používajú heuristiku h(n): A* (f = g + h) a pažravé vyhľadávanie (iba h). BFS a UCS sú neinformované – UCS používa len cenu cesty g(n)."
+  },
+  {
+    "id": "qz-26",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V akých scenároch vyhľadávania cesty v grafe je obojsmerné vyhľadávanie efektívne?",
+    "options": [
+      {
+        "text": "Keď je vyhľadávací strom veľmi hlboký",
+        "correct": true
+      },
+      {
+        "text": "Keď sú známe počiatočný stav aj cieľový stav",
+        "correct": true
+      },
+      {
+        "text": "Pri vyhľadávacích problémoch s konzistentnou heuristikou",
+        "correct": false
+      },
+      {
+        "text": "Pri využití vhodne zvolených heuristík",
+        "correct": false
+      }
+    ],
+    "explanation": "Obojsmerné vyhľadávanie hľadá naraz od štartu aj od cieľa a končí, keď sa obe hľadania stretnú – namiesto b^d uzlov stačí asi 2·b^(d/2), čo pomáha najmä pri hlbokých stromoch. Podmienkou je poznať cieľový stav. Heuristiku nepotrebuje."
+  },
+  {
+    "id": "qz-27",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z týchto algoritmov sa s výhodou používajú pri identifikačných problémoch s ohraničeniami?",
+    "options": [
+      {
+        "text": "Hill Climbing",
+        "correct": true
+      },
+      {
+        "text": "Genetický algoritmus",
+        "correct": true
+      },
+      {
+        "text": "A* vyhľadávanie",
+        "correct": false
+      },
+      {
+        "text": "Simulované žíhanie",
+        "correct": true
+      }
+    ],
+    "explanation": "Hill climbing, genetický algoritmus a simulované žíhanie sú lokálne vyhľadávania: zlepšujú úplné priradenie, čo sa hodí pre identifikačné problémy, kde je dôležitý cieľový stav, nie cesta. A* hľadá cestu v stavovom priestore."
+  },
+  {
+    "id": "qz-28",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú základné charakteristiky simulovaného žíhania?",
+    "options": [
+      {
+        "text": "Vždy si vyberá najlepší bezprostredný ťah",
+        "correct": false
+      },
+      {
+        "text": "Môže vykonať akciu, ktorá vedie k zhoršeniu evaluačnej funkcie",
+        "correct": true
+      },
+      {
+        "text": "Používa parameter teploty na elimináciu možnosti zamrznutia v lokálnom optime",
+        "correct": true
+      },
+      {
+        "text": "Je založený na využití poznatkov biologickej evolúcie",
+        "correct": false
+      }
+    ],
+    "explanation": "Simulované žíhanie občas prijme aj horší stav – s pravdepodobnosťou, ktorá klesá s teplotou. Vďaka tomu môže uniknúť z lokálneho optima. Vždy najlepší ťah vyberá hill climbing, z biologickej evolúcie vychádzajú genetické algoritmy."
+  },
+  {
+    "id": "qz-29",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pre aký typ problémov je možné použiť algoritmus Min-conflicts?",
+    "options": [
+      {
+        "text": "Problémy triedenia",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie v rozsiahlych, neštruktúrovaných priestoroch",
+        "correct": false
+      },
+      {
+        "text": "Identifikačné problémy s ohraničeniami",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie najkratšej cesty v grafe",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts je lokálne vyhľadávanie pre problémy s ohraničeniami (CSP): opravuje úplné priradenie tak, aby klesal počet porušených ohraničení. Netriedi a nehľadá cesty v grafe."
+  },
+  {
+    "id": "qz-30",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z týchto tvrdení správne opisujú algoritmus prehľadávania do šírky (BFS)?",
+    "options": [
+      {
+        "text": "Expanduje prioritne najhlbšie uzly vo vyhľadávacom strome",
+        "correct": false
+      },
+      {
+        "text": "Nájde optimálne riešenie pre vyhľadávacie problémy s rozličnými váhami v grafe",
+        "correct": false
+      },
+      {
+        "text": "Kompletný a optimálny pre vyhľadávacie problémy s rovnakými váhami v grafe",
+        "correct": true
+      },
+      {
+        "text": "Expanduje všetky uzly vo vyhľadávacom strome pred prechodom na ďalšiu úroveň",
+        "correct": true
+      }
+    ],
+    "explanation": "BFS expanduje najplytšie uzly – celú úroveň pred prechodom na ďalšiu (fronta FIFO). Je úplný a pri rovnakých cenách akcií optimálny; pri rôznych cenách optimálny nie je (to rieši UCS). Najhlbšie uzly expanduje DFS."
+  },
+  {
+    "id": "qz-31",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pri SVM nastavenie voľného (slack) parametra príliš vysoko môže viesť k:",
+    "options": [
+      {
+        "text": "Podtrénovaniu",
+        "correct": false
+      },
+      {
+        "text": "Pretrénovaniu",
+        "correct": true
+      },
+      {
+        "text": "Zvýšeniu výpočtovej doby",
+        "correct": false
+      },
+      {
+        "text": "Zníženiu počtu podporných vektorov",
+        "correct": false
+      }
+    ],
+    "explanation": "Kartička myslí parameter C (v prednáške „slack parameter, regularizačný parameter“). Veľké C silno trestá nesprávne zaradenia → úzka hranica tesne prispôsobená trénovacím dátam → pretrénovanie. Malé C dáva širšiu hranicu a smeruje k podtrénovaniu."
+  },
+  {
+    "id": "qz-32",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je potenciálny nedostatok použitia kódovania značiek (label encoding) oproti one-hot kódovaniu (OHE) pri práci s kategorickými dátami?",
+    "options": [
+      {
+        "text": "Zvýšená výpočtová zložitosť",
+        "correct": false
+      },
+      {
+        "text": "Môže zaviesť vzťah, kde žiadny neexistuje",
+        "correct": true
+      },
+      {
+        "text": "Nepracuje s nečíselnými kategóriami",
+        "correct": false
+      },
+      {
+        "text": "Nedokáže zvládnuť nové kategórie v testovacej sade",
+        "correct": false
+      }
+    ],
+    "explanation": "Label encoding priradí kategóriám čísla 0, 1, 2…, čím im vnúti poradie a vzdialenosti, ktoré pri nominálnych kategóriách neexistujú (červená < zelená < modrá). One-hot kódovanie tento falošný vzťah nevytvára."
+  },
+  {
+    "id": "qz-33",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je hlavný účel škálovania dát v strojovom učení?",
+    "options": [
+      {
+        "text": "Zníženie časovej zložitosti algoritmov",
+        "correct": false
+      },
+      {
+        "text": "Zabezpečenie, aby boli rôzne vlastnosti na podobnej škále",
+        "correct": true
+      },
+      {
+        "text": "Prevod všetkých vlastností na binárne hodnoty",
+        "correct": false
+      },
+      {
+        "text": "Identifikácia a odstránenie odľahlých hodnôt",
+        "correct": false
+      }
+    ],
+    "explanation": "Škálovanie dostane príznaky na podobnú škálu, aby príznak s veľkými hodnotami nedominoval. Časovú zložitosť neznižuje, na binárne hodnoty nič neprevádza a odľahlé hodnoty neodstraňuje. (Tá istá otázka sa v kartičkách opakuje.)"
+  },
+  {
+    "id": "qz-34",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V scikit-learn, ktorá z nasledujúcich je metóda pre imputáciu?",
+    "options": [
+      {
+        "text": "PCA",
+        "correct": false
+      },
+      {
+        "text": "SimpleImputer",
+        "correct": true
+      },
+      {
+        "text": "MinMaxScaler",
+        "correct": false
+      },
+      {
+        "text": "LabelEncoder",
+        "correct": false
+      }
+    ],
+    "explanation": "`SimpleImputer` nahrádza chýbajúce hodnoty (priemerom, mediánom, najčastejšou hodnotou). PCA redukuje dimenziu, `MinMaxScaler` škáluje a `LabelEncoder` kóduje kategórie."
+  },
+  {
+    "id": "qz-35",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich algoritmov možno s výhodou použiť na vyhľadávanie cesty v grafovej štruktúre?",
+    "options": [
+      {
+        "text": "Vyhľadávanie do hĺbky (DFS algoritmus)",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie do šírky (BFS algoritmus)",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie s uniformnými váhami (UCS algoritmus)",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie pomocou horolezeckej metódy (hill climbing)",
+        "correct": false
+      }
+    ],
+    "explanation": "DFS, BFS a UCS prehľadávajú stavový priestor a vracajú cestu od štartu k cieľu. Hill climbing je lokálne vyhľadávanie – cestu si nepamätá a hľadá len dobrý stav."
+  },
+  {
+    "id": "qz-36",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré metódy znižujú počet nevyhnutných backtracking operácií pri identifikačných problémoch s ohraničeniami?",
+    "options": [
+      {
+        "text": "DFS algoritmus",
+        "correct": false
+      },
+      {
+        "text": "Algoritmus spätného vyhľadávania",
+        "correct": true
+      },
+      {
+        "text": "Dopredná kontrola (forward checking)",
+        "correct": true
+      },
+      {
+        "text": "Hranová konzistencia (Arc-Consistency)",
+        "correct": true
+      }
+    ],
+    "explanation": "Dopredná kontrola a hranová konzistencia filtrujú domény a odhalia slepú vetvu skôr, takže návratov je menej. Kľúč ráta aj samotné spätné vyhľadávanie – zrejme v porovnaní s naivným DFS, lebo priraďuje po jednej premennej a ohraničenia kontroluje priebežne. Podľa učebnice (AIMA) je však backtracking základný algoritmus a počet jeho návratov znižujú až filtrovanie (forward checking, arc consistency) a heuristiky MRV a LCV – učebnicová odpoveď je iba dopredná kontrola a hranová konzistencia.",
+    "disputed": true
+  },
+  {
+    "id": "qz-37",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktorý z nasledujúcich je cieľom použitia výberu premenných (tzv. feature selection)?",
+    "options": [
+      {
+        "text": "Zvýšenie presnosti modelu",
+        "correct": false
+      },
+      {
+        "text": "Zníženie výpočtovej náročnosti",
+        "correct": false
+      },
+      {
+        "text": "Predchádzanie pretrénovaniu",
+        "correct": true
+      },
+      {
+        "text": "Klasifikácia obrazov",
+        "correct": false
+      }
+    ],
+    "explanation": "Kľúč: výber premenných zjednoduší model, a tým obmedzuje pretrénovanie (prednáška: pretrénovanie – redukovať dimenzionalitu dát). Sporné: materiály cvičenia aj učebnice uvádzajú ako prínos menšieho počtu príznakov aj rýchlejší model, teda nižšiu výpočtovú náročnosť, a niekedy lepšiu presnosť – zvýšenie presnosti a zníženie výpočtovej náročnosti preto nie sú jednoznačne nesprávne odpovede. Klasifikácia obrazov cieľom nie je.",
+    "disputed": true
+  },
+  {
+    "id": "qz-38",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré algoritmy sú považované za greedy (hladové) algoritmy?",
+    "options": [
+      {
+        "text": "A* vyhľadávanie",
+        "correct": false
+      },
+      {
+        "text": "Greedy algoritmus",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie s uniformnými nákladmi (UCS algoritmus)",
+        "correct": false
+      },
+      {
+        "text": "Simulované žíhanie",
+        "correct": false
+      }
+    ],
+    "explanation": "Greedy (pažravý) algoritmus vyberá v každom kroku uzol, ktorý podľa h(n) vyzerá najbližšie k cieľu. A* berie do úvahy aj g(n), UCS iba g(n) a simulované žíhanie je stochastické lokálne vyhľadávanie."
+  },
+  {
+    "id": "qz-39",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Označte pravdivé tvrdenia o prehľadávaní grafu algoritmom DFS (Depth-First-Search):",
+    "options": [
+      {
+        "text": "DFS vždy nájde najkratšiu cestu v grafe bez váh",
+        "correct": false
+      },
+      {
+        "text": "DFS sa môže zaseknúť v slučke, ak má graf cykly",
+        "correct": true
+      },
+      {
+        "text": "DFS má nižšie pamäťové nároky ako BFS",
+        "correct": true
+      },
+      {
+        "text": "DFS zaručene nájde riešenie, ak existuje",
+        "correct": false
+      }
+    ],
+    "explanation": "DFS ide do hĺbky, takže si pamätá len aktuálnu cestu a súrodencov – O(b·m) oproti O(b^d) pri BFS. V grafe s cyklami sa bez kontroly navštívených stavov môže zacykliť, preto nie je úplný; a nevracia najkratšiu cestu, takže nie je ani optimálny."
+  },
+  {
+    "id": "qz-40",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Kedy je heuristika prípustná v kontexte vyhľadávania pomocou algoritmu A*?",
+    "options": [
+      {
+        "text": "Keď hodnota heuristiky nikdy neprekročí hodnotu kumulatívnej váhy k cieľu",
+        "correct": true
+      },
+      {
+        "text": "Keď vždy vyberie tú najkratšiu cestu",
+        "correct": false
+      },
+      {
+        "text": "Keď berie do úvahy váhy od počiatočného stavu",
+        "correct": false
+      },
+      {
+        "text": "Keď je konzistentná alebo monotónna",
+        "correct": false
+      }
+    ],
+    "explanation": "Heuristika je prípustná, ak nikdy nenadhodnotí skutočnú cenu najlacnejšej cesty do cieľa: h(n) ≤ h*(n). Konzistentná heuristika je síce vždy aj prípustná, ale definíciou prípustnosti je nenadhodnocovanie ceny do cieľa; ceny od štartu (g) s tým nesúvisia."
+  },
+  {
+    "id": "qz-41",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V SVM voľný (slack) parameter:",
+    "options": [
+      {
+        "text": "Neumožňuje žiadne nesprávne zaradenie",
+        "correct": false
+      },
+      {
+        "text": "Vytvára väčšiu medzeru/šírku hranicu medzi triedami",
+        "correct": false
+      },
+      {
+        "text": "Umožňuje nastavovať kompromis medzi šírkou hranice a nesprávnym zaradením",
+        "correct": true
+      },
+      {
+        "text": "Funguje iba s lineárnymi jadrami",
+        "correct": false
+      }
+    ],
+    "explanation": "Voľné (slack) premenné dovoľujú, aby niektoré vzorky ležali vnútri hranice alebo na nesprávnej strane; parameter C určuje, ako draho sa to trestá – kompromis medzi šírkou hranice (margin) a chybami zaradenia. Funguje s ľubovoľným jadrom."
+  },
+  {
+    "id": "qz-42",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú kľúčové vlastnosti genetických algoritmov?",
+    "options": [
+      {
+        "text": "Sú založené na princípoch biologickej evolúcie",
+        "correct": true
+      },
+      {
+        "text": "Stále konvergujú k globálnemu optimu",
+        "correct": false
+      },
+      {
+        "text": "Mutácia a kríženie sú ich kľúčovými súčasťami",
+        "correct": true
+      },
+      {
+        "text": "Sú nevhodné pre optimalizačné problémy",
+        "correct": false
+      }
+    ],
+    "explanation": "Genetické algoritmy napodobňujú evolúciu: populácia riešení, výber podľa fitness, kríženie a mutácia. Konvergenciu ku globálnemu optimu nezaručujú a používajú sa práve na optimalizačné problémy."
+  },
+  {
+    "id": "qz-43",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V rozhodovacích stromoch sa information gain používa na:",
+    "options": [
+      {
+        "text": "Vypočítanie entropie v každom uzle",
+        "correct": false
+      },
+      {
+        "text": "Rozhodovanie, ktorý atribút rozdeliť v každom uzle",
+        "correct": true
+      },
+      {
+        "text": "Určenie hĺbky stromu",
+        "correct": false
+      },
+      {
+        "text": "Vyhodnocovanie výkonnosti stromu",
+        "correct": false
+      }
+    ],
+    "explanation": "Rozhodovací strom v každom uzle vyberie atribút (a prah), ktorý dá najväčší informačný zisk – najväčšie zníženie nečistoty (entropie) po rozdelení. Entropia je vstupom výpočtu, nie jeho účelom."
+  },
+  {
+    "id": "qz-44",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo je úlohou mechanizmu zvaného backtracking pri riešení problémov s ohraničením (CSP)?",
+    "options": [
+      {
+        "text": "Redukovať vyhľadávací priestor odstránením nekonzistentných hodnôt",
+        "correct": false
+      },
+      {
+        "text": "Vrátiť sa na predchádzajúci krok s cieľom urobiť iné rozhodnutie, ak bol dosiahnutý tzv. dead end",
+        "correct": true
+      },
+      {
+        "text": "Nájsť optimálne riešenie problému",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávať cestu od cieľového stavu smerom k štartovaciemu",
+        "correct": false
+      }
+    ],
+    "explanation": "Backtracking je prehľadávanie do hĺbky, ktoré priraďuje po jednej premennej; keď sa dostane do slepej uličky (žiadna hodnota neporuší ohraničenia), vráti sa k predošlému rozhodnutiu a skúsi inú hodnotu. Odstraňovanie nekonzistentných hodnôt je filtrovanie (forward checking, arc consistency)."
+  },
+  {
+    "id": "qz-45",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo zvyčajne zahŕňa normalizácia pri predspracovaní dát?",
+    "options": [
+      {
+        "text": "Prevod celého textu na malé písmená",
+        "correct": false
+      },
+      {
+        "text": "Zmena rozsahu hodnôt premenných na určitý rozsah",
+        "correct": true
+      },
+      {
+        "text": "Odstránenie duplicitných záznamov",
+        "correct": false
+      },
+      {
+        "text": "Kódovanie kategorických premenných",
+        "correct": false
+      }
+    ],
+    "explanation": "Normalizácia (min-max škálovanie) prepočíta hodnoty príznaku na daný rozsah, typicky 0 až 1. Kódovanie kategórií a odstraňovanie duplicít sú iné kroky predspracovania."
+  },
+  {
+    "id": "qz-46",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich vlastností charakterizujú algoritmus Simulované žíhanie (Simulated Annealing)?",
+    "options": [
+      {
+        "text": "Zaručene nájde globálne optimum",
+        "correct": false
+      },
+      {
+        "text": "Aby sa vyhol zaseknutiu v lokálnom optime, má dovolené vykonať „zlé“ ťahy (také, ktoré ho vzdialia od lokálneho optima)",
+        "correct": true
+      },
+      {
+        "text": "Používa parameter teploty, ktorý riadi pravdepodobnosť výberu „zlého“ ťahu",
+        "correct": true
+      },
+      {
+        "text": "Funguje dobre v diskrétnych aj spojitých vyhľadávacích priestoroch",
+        "correct": false
+      }
+    ],
+    "explanation": "Simulované žíhanie prijíma aj zhoršujúce ťahy s pravdepodobnosťou riadenou teplotou – pri vysokej teplote často, pri nízkej takmer nikdy; tak uniká z lokálnych optím. Globálne optimum nezaručuje. Tvrdenie o diskrétnych aj spojitých priestoroch kľúč medzi charakteristiky algoritmu neráta."
+  },
+  {
+    "id": "qz-47",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktorá metóda sa bežne používa na škálovanie premenných?",
+    "options": [
+      {
+        "text": "PCA",
+        "correct": false
+      },
+      {
+        "text": "Min-Max",
+        "correct": true
+      },
+      {
+        "text": "One-Hot Encoding",
+        "correct": false
+      },
+      {
+        "text": "Imputácia",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-max škálovanie (`MinMaxScaler`) prepočíta príznak na rozsah 0 až 1. PCA redukuje dimenziu, one-hot kódovanie kóduje kategórie a imputácia dopĺňa chýbajúce hodnoty."
+  },
+  {
+    "id": "qz-48",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo je reflexný agent v doméne AI?",
+    "options": [
+      {
+        "text": "Agent, ktorý vopred plánuje akcie",
+        "correct": false
+      },
+      {
+        "text": "Agent, ktorý sa rozhoduje len na základe aktuálneho stavu prostredia",
+        "correct": true
+      },
+      {
+        "text": "Agent, ktorý si uchováva aktuálny stav prostredia",
+        "correct": false
+      },
+      {
+        "text": "Agent, ktorý sa učí z predchádzajúcich akcií s cieľom zlepšiť svoje budúce rozhodnutia",
+        "correct": false
+      }
+    ],
+    "explanation": "Reflexný agent vyberá akciu iba podľa toho, čo práve vníma – neplánuje a nezvažuje dôsledky. Akcie vopred plánuje plánujúci agent, zo skúseností sa zlepšuje učiaci sa agent."
+  },
+  {
+    "id": "qz-49",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú vlastnosti algoritmu Hill Climbing?",
+    "options": [
+      {
+        "text": "Zaručene nájde globálne maximum",
+        "correct": false
+      },
+      {
+        "text": "Je jednoduchý a ľahko implementovateľný",
+        "correct": true
+      },
+      {
+        "text": "Je efektívny pri hľadaní lokálneho maxima",
+        "correct": true
+      },
+      {
+        "text": "Nevyžaduje vedomosť o celom vyhľadávacom priestore",
+        "correct": true
+      }
+    ],
+    "explanation": "Hill climbing sa v každom kroku presunie do najlepšieho suseda – je jednoduchý, potrebuje poznať len aktuálny stav a jeho susedov a rýchlo nájde lokálne maximum. Globálne maximum nezaručuje (lokálne maximá, planiny)."
+  },
+  {
+    "id": "qz-50",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Krivka validácie sa používa na:",
+    "options": [
+      {
+        "text": "Určenie presnosti trénovania",
+        "correct": false
+      },
+      {
+        "text": "Vyhodnotenie výkonnosti rôznych algoritmov",
+        "correct": false
+      },
+      {
+        "text": "Posúdenie, ako je výkon modelu ovplyvnený hyperparametrom",
+        "correct": true
+      },
+      {
+        "text": "Vykreslenie rozhodovacej hranice klasifikátorov",
+        "correct": false
+      }
+    ],
+    "explanation": "Validačná krivka zobrazuje trénovaciu a validačnú presnosť ako funkciu hodnoty hyperparametra (napr. C alebo gamma) – ukáže, kde je model podtrénovaný a kde pretrénovaný. Závislosť od veľkosti dát ukazuje krivka učenia."
+  },
+  {
+    "id": "qz-51",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké vlastnosti má obojsmerné vyhľadávanie (Bidirectional search)?",
+    "options": [
+      {
+        "text": "Vždy nájde najkratšiu cestu",
+        "correct": false
+      },
+      {
+        "text": "Súčasne vyhľadáva smerom dopredu od počiatočného stavu a dozadu od cieľového stavu",
+        "correct": true
+      },
+      {
+        "text": "Má menšiu pamäťovú náročnosť ako jednosmerné vyhľadávanie",
+        "correct": false
+      },
+      {
+        "text": "Je často rýchlejšie ako tradičné jednosmerné vyhľadávanie",
+        "correct": true
+      }
+    ],
+    "explanation": "Obojsmerné vyhľadávanie hľadá naraz od štartu dopredu a od cieľa dozadu; dve hľadania do polovičnej hĺbky (2·b^(d/2)) sú spravidla oveľa rýchlejšie než jedno do plnej (b^d). Najkratšiu cestu nezaručuje vždy. Pamäťovo je úspornejšie než BFS, nie však než každé jednosmerné vyhľadávanie (DFS) – kľúč preto tvrdenie o menšej pamäťovej náročnosti neuznáva."
+  },
+  {
+    "id": "qz-52",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké vlastnosti má algoritmus UCS (Uniform Cost Search)?",
+    "options": [
+      {
+        "text": "Expanduje uzol s najmenšou kumulatívnou váhou bez ohľadu na hĺbku uzla",
+        "correct": true
+      },
+      {
+        "text": "Prehľadáva cesty od štartovacieho uzla uniformne",
+        "correct": false
+      },
+      {
+        "text": "Váhu každého kroku považuje za rovnakú",
+        "correct": false
+      },
+      {
+        "text": "Pri expandovaní uprednostňuje uzly na základe ich kumulatívnej váhy od počiatočného uzla",
+        "correct": true
+      }
+    ],
+    "explanation": "UCS expanduje uzol s najmenšou kumulatívnou cenou cesty g(n) od štartu (prioritný front), bez ohľadu na hĺbku. Ceny krokov nepovažuje za rovnaké – práve preto je optimálny aj pri rôznych cenách akcií."
+  },
+  {
+    "id": "qz-53",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich vlastností charakterizujú greedy algoritmy (pažravé)?",
+    "options": [
+      {
+        "text": "Stále nájdu globálne optimálne riešenie",
+        "correct": false
+      },
+      {
+        "text": "Robia rozhodnutia na základe lokálneho optima v každom kroku",
+        "correct": true
+      },
+      {
+        "text": "Sú často rýchlejšie ako algoritmy, ktoré pracujú s úplným stavovým priestorom",
+        "correct": true
+      },
+      {
+        "text": "Môžu byť použité v deterministických aj nedeterministických prostrediach",
+        "correct": false
+      }
+    ],
+    "explanation": "Pažravé algoritmy volia v každom kroku lokálne najlepšiu možnosť a k rozhodnutiam sa nevracajú – sú rýchle, ale globálne optimum nezaručujú."
+  },
+  {
+    "id": "qz-54",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo pri výbere premenných (feature selection) zahŕňa metóda balenia (wrapper)?",
+    "options": [
+      {
+        "text": "Aplikácia štatistických testov",
+        "correct": false
+      },
+      {
+        "text": "Použitie algoritmov strojového učenia",
+        "correct": true
+      },
+      {
+        "text": "Odstránenie premenných s malým rozptylom",
+        "correct": false
+      },
+      {
+        "text": "Manuálny výber premenných na základe znalostí domény",
+        "correct": false
+      }
+    ],
+    "explanation": "Wrapper (obalenie) hodnotí podmnožiny príznakov tak, že na nich trénuje model strojového učenia a porovnáva skóre (RFE, RFECV). Štatistické testy a odstránenie premenných s malým rozptylom sú filtrovacie metódy."
+  },
+  {
+    "id": "qz-55",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z nasledujúcich algoritmov možno použiť na vyhľadávanie cesty v grafovej štruktúre?",
+    "options": [
+      {
+        "text": "Vyhľadávanie do hĺbky (DFS algoritmus)",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie do šírky (BFS algoritmus)",
+        "correct": true
+      },
+      {
+        "text": "Genetické algoritmy",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie pomocou horolezeckej metódy (hill climbing)",
+        "correct": false
+      }
+    ],
+    "explanation": "DFS a BFS prehľadávajú graf a vracajú cestu. Genetické algoritmy a hill climbing sú lokálne vyhľadávania – hľadajú dobrý stav, nie cestu k nemu."
+  },
+  {
+    "id": "qz-56",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aké sú základné charakteristiky heuristických algoritmov typu greedy algoritmus vo vyhľadávacích problémoch?",
+    "options": [
+      {
+        "text": "Nájdu vždy optimálne riešenie",
+        "correct": false
+      },
+      {
+        "text": "Sú rýchlejšie v porovnaní s analytickými riešeniami typu UCS",
+        "correct": true
+      },
+      {
+        "text": "Ich pamäťová náročnosť je vždy väčšia ako náročnosť DFS algoritmu",
+        "correct": false
+      },
+      {
+        "text": "Greedy algoritmus je optimálny za predpokladu konzistencie heuristickej informácie",
+        "correct": false
+      }
+    ],
+    "explanation": "Pažravé vyhľadávanie ide priamo za heuristikou, takže riešenie obvykle nájde rýchlejšie než UCS, ktoré rovnomerne rozširuje všetky lacné cesty. Optimálne nie je ani s konzistentnou heuristikou – tá zaručuje optimalitu A*."
+  },
+  {
+    "id": "qz-57",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z týchto algoritmov využívajú heuristickú informáciu pri hľadaní cesty v grafovej štruktúre?",
+    "options": [
+      {
+        "text": "Vyhľadávanie do šírky (BFS algoritmus)",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie s uniformnými váhami (UCS algoritmus)",
+        "correct": false
+      },
+      {
+        "text": "A* vyhľadávanie",
+        "correct": true
+      },
+      {
+        "text": "Hladový algoritmus (greedy algoritmus)",
+        "correct": true
+      }
+    ],
+    "explanation": "Heuristiku h(n) používajú informované algoritmy: A* (f = g + h) a pažravé vyhľadávanie (iba h). BFS a UCS sú neinformované. (Tá istá otázka sa v kartičkách opakuje.)"
+  },
+  {
+    "id": "qz-58",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktoré z týchto algoritmov sa používajú pri identifikačných problémoch s ohraničeniami?",
+    "options": [
+      {
+        "text": "Hill Climbing",
+        "correct": true
+      },
+      {
+        "text": "Genetický algoritmus",
+        "correct": true
+      },
+      {
+        "text": "A* vyhľadávanie",
+        "correct": false
+      },
+      {
+        "text": "Simulované žíhanie",
+        "correct": true
+      }
+    ],
+    "explanation": "Hill climbing, genetický algoritmus a simulované žíhanie sú lokálne vyhľadávania nad úplnými priradeniami – vhodné pre identifikačné problémy s ohraničeniami. A* hľadá cestu. (Tá istá otázka sa v kartičkách opakuje.)"
+  },
+  {
+    "id": "qz-59",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pre aký typ problémov je možné použiť genetické algoritmy?",
+    "options": [
+      {
+        "text": "Problémy triedenia",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie v rozsiahlych, neštruktúrovaných priestoroch",
+        "correct": false
+      },
+      {
+        "text": "Identifikačné problémy s ohraničeniami",
+        "correct": true
+      },
+      {
+        "text": "Vyhľadávanie najkratšej cesty v grafe",
+        "correct": false
+      }
+    ],
+    "explanation": "V kurze sa genetické algoritmy používajú ako lokálne vyhľadávanie pre identifikačné problémy s ohraničeniami (napr. N dám): populácia úplných priradení sa zlepšuje výberom, krížením a mutáciou. Na triedenie ani na hľadanie najkratšej cesty určené nie sú; tvrdenie o rozsiahlych neštruktúrovaných priestoroch kľúč neráta."
+  },
+  {
+    "id": "qz-60",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Prečo je v modeloch strojového učenia dôležité predspracovanie kategorických hodnôt a ich kódovanie?",
+    "options": [
+      {
+        "text": "Zväčšiť veľkosť súboru údajov",
+        "correct": false
+      },
+      {
+        "text": "Zabezpečiť kompatibilitu s matematickými modelmi",
+        "correct": true
+      },
+      {
+        "text": "Znížiť dimenzionalitu dátovej sady",
+        "correct": false
+      },
+      {
+        "text": "Na zlepšenie vizualizácie dát",
+        "correct": false
+      }
+    ],
+    "explanation": "Modely počítajú s číslami – kategórie (text) treba previesť na čísla (label alebo one-hot kódovanie), aby s nimi matematický model vedel pracovať. One-hot kódovanie dimenziu skôr zvyšuje."
+  },
+  {
+    "id": "qz-61",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pri k-násobnej (k-fold) krížovej validácii, ak sa K rovná počtu dátových vzoriek, táto validácia je známa ako:",
+    "options": [
+      {
+        "text": "Stratifikovaná krížová validácia",
+        "correct": false
+      },
+      {
+        "text": "Leave-one-out metóda",
+        "correct": true
+      },
+      {
+        "text": "Hold-out metóda",
+        "correct": false
+      },
+      {
+        "text": "Bootstrap metóda",
+        "correct": false
+      }
+    ],
+    "explanation": "Ak sa k rovná počtu vzoriek N, každý fold obsahuje jednu vzorku: trénuje sa na N − 1 vzorkách a testuje na jednej – leave-one-out. Prednáška ho uvádza ako špeciálny prípad k-fold validácie."
+  },
+  {
+    "id": "qz-62",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "V DBSCAN, čo znamená pojem hustota (density)?",
+    "options": [
+      {
+        "text": "Počet dátových bodov v určenom polomere",
+        "correct": true
+      },
+      {
+        "text": "Vzdialenosť medzi dvoma najbližšími dátovými bodmi",
+        "correct": false
+      },
+      {
+        "text": "Variabilita dátových bodov v klastri",
+        "correct": false
+      },
+      {
+        "text": "Počet vytvorených zhlukov",
+        "correct": false
+      }
+    ],
+    "explanation": "V DBSCAN je hustota definovaná ako počet bodov vo vzdialenosti danej polomerom ε. Podľa nej sa body delia na hlavné, hraničné a šum."
+  },
+  {
+    "id": "qz-63",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo je pretrénovanie v strojovom učení?",
+    "options": [
+      {
+        "text": "Zlepšenie výkonnosti modelu na nevidených dátach",
+        "correct": false
+      },
+      {
+        "text": "Zníženie variability modelu",
+        "correct": false
+      },
+      {
+        "text": "Model zachytáva šum v trénovacích dátach",
+        "correct": true
+      },
+      {
+        "text": "Zníženie zložitosti modelu",
+        "correct": false
+      }
+    ],
+    "explanation": "Pretrénovaný model je príliš tesne naviazaný na trénovacie dáta – naučí sa aj ich šum, takže na nových dátach je horší (vysoký rozptyl). Výkon na nevidených dátach nezlepšuje a zložitosť ani variabilitu modelu neznižuje."
+  },
+  {
+    "id": "qz-64",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktorá z nasledujúcich možností je charakteristická pre zhlukovanie/klastrovanie K-means?",
+    "options": [
+      {
+        "text": "Vyžaduje, aby bol počet klastrov definovaný vopred",
+        "correct": true
+      },
+      {
+        "text": "Funguje dobre s nekonvexnými klastrami",
+        "correct": false
+      },
+      {
+        "text": "Automaticky určí počet zhlukov/klastrov",
+        "correct": false
+      },
+      {
+        "text": "Je to metóda hierarchického klastrovania",
+        "correct": false
+      }
+    ],
+    "explanation": "K-means potrebuje počet klastrov vopred (`n_clusters`). Predpokladá guľaté klastre (na nekonvexných zlyháva), počet klastrov sám neurčí a je založený na prototypoch, nie hierarchický."
+  },
+  {
+    "id": "qz-65",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo je kľúčovou charakteristikou algoritmu náhodných lesov (random forest)?",
+    "options": [
+      {
+        "text": "Na vytváranie predikcií používa jeden rozhodovací strom",
+        "correct": false
+      },
+      {
+        "text": "Kombinuje predikcie viacerých rozhodovacích stromov",
+        "correct": true
+      },
+      {
+        "text": "Zameriava sa na zvýšenie efektívnosti modelu",
+        "correct": false
+      },
+      {
+        "text": "Používa lineárnu kombináciu funkcií",
+        "correct": false
+      }
+    ],
+    "explanation": "Náhodný les je ansámbel mnohých rozhodovacích stromov trénovaných na bootstrap vzorkách s náhodným výberom príznakov; výsledná predikcia je väčšinové hlasovanie stromov."
+  },
+  {
+    "id": "qz-66",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pretrénovanie v rozhodovacích stromoch môže byť kontrolované:",
+    "options": [
+      {
+        "text": "Zväčšením hĺbky stromov",
+        "correct": false
+      },
+      {
+        "text": "Orezávaním (pruning) stromu",
+        "correct": true
+      },
+      {
+        "text": "Použitím menšieho množstva trénovacích dát",
+        "correct": false
+      },
+      {
+        "text": "Použitím jednoduchšej validácie, napríklad hold-out",
+        "correct": false
+      }
+    ],
+    "explanation": "Orezávanie (pruning) obmedzí hĺbku alebo počet listov stromu, čím zníži jeho zložitosť a pretrénovanie (napr. `max_depth`). Hlbší strom a menej trénovacích dát pretrénovanie zhoršujú."
+  },
+  {
+    "id": "qz-67",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Racionálny agent je agent, ktorý:",
+    "options": [
+      {
+        "text": "Je optimálny v prípade, že všetky jeho akcie v stavovom prostredí majú rovnaké váhy",
+        "correct": false
+      },
+      {
+        "text": "Maximalizuje svoj očakávaný úžitok",
+        "correct": true
+      },
+      {
+        "text": "Trénuje sa na základe interakcií s prostredím a získavania znalostí",
+        "correct": false
+      },
+      {
+        "text": "Má schopnosť logicky uvažovať, pričom interakciou s prostredím sa táto schopnosť zlepšuje",
+        "correct": false
+      }
+    ],
+    "explanation": "Racionálny agent volí akcie, ktoré maximalizujú jeho očakávaný úžitok vzhľadom na to, čo vie. Racionalita neznamená učenie ani logické uvažovanie."
+  },
+  {
+    "id": "qz-68",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo znamená podtrénovanie (under-fitting) pri strojovom učení?",
+    "options": [
+      {
+        "text": "Model funguje dobre na trénovacích údajoch",
+        "correct": false
+      },
+      {
+        "text": "Model je príliš jednoduchý na zachytenie vzorov v dátach",
+        "correct": true
+      },
+      {
+        "text": "Model zachytáva šum v trénovacích dátach",
+        "correct": false
+      },
+      {
+        "text": "Model má vysoký rozptyl",
+        "correct": false
+      }
+    ],
+    "explanation": "Podtrénovaný model je príliš jednoduchý (vysoká odchýlka) – nezachytí vzory ani v trénovacích dátach, takže je slabý na trénovacích aj testovacích dátach. Šum a vysoký rozptyl patria k pretrénovaniu."
+  },
+  {
+    "id": "qz-69",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Iteratívne hĺbkové vyhľadávanie (iterative deepening) kombinuje výhody DFS a BFS tým, že:",
+    "options": [
+      {
+        "text": "Použije heuristickú informáciu pre efektívnejšie prehľadávanie stavového priestoru",
+        "correct": false
+      },
+      {
+        "text": "Iteratívne zvyšuje hĺbku vyhľadávacieho stromu",
+        "correct": true
+      },
+      {
+        "text": "Prioritne expanduje najplytší uzol",
+        "correct": false
+      },
+      {
+        "text": "V každej iterácii strieda pravidelne BFS a DFS vyhľadávanie",
+        "correct": false
+      }
+    ],
+    "explanation": "Iteratívne prehlbovanie spúšťa DFS s limitom hĺbky 1, 2, 3… – má pamäťovú nenáročnosť DFS a úplnosť (pri rovnakých cenách aj optimalitu) BFS. Heuristiku nepoužíva."
+  },
+  {
+    "id": "qz-70",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Ktorá z nasledujúcich možností je metóda ladenia hyperparametrov?",
+    "options": [
+      {
+        "text": "Zmena mierky funkcií - škálovanie",
+        "correct": false
+      },
+      {
+        "text": "Augmentácia dát",
+        "correct": false
+      },
+      {
+        "text": "Vyhľadávanie v mriežke (grid search)",
+        "correct": true
+      },
+      {
+        "text": "Analýza hlavných komponentov (PCA)",
+        "correct": false
+      }
+    ],
+    "explanation": "Grid search vyskúša všetky kombinácie hodnôt hyperparametrov z mriežky a vyberie tú s najlepším validačným skóre. Škálovanie a PCA sú predspracovanie, augmentácia rozširuje dáta."
+  },
+  {
+    "id": "qz-71",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo je charakteristické pre UCS a BFS algoritmy?",
+    "options": [
+      {
+        "text": "UCS expanduje uzly v strome v poradí rastúcich váh vynaložených v procese plánovania. BFS expanduje prioritne všetky uzly v danej hĺbke vyhľadávacieho stromu",
+        "correct": true
+      },
+      {
+        "text": "UCS a BFS sú charakteristické nájdením optimálneho riešenia vo vyhľadávacích problémoch s rozdielnymi váhami akcií",
+        "correct": false
+      },
+      {
+        "text": "UCS a BFS sú slepé algoritmy",
+        "correct": false
+      },
+      {
+        "text": "UCS a BFS algoritmy expandujú uzly v abecednom poradí",
+        "correct": false
+      }
+    ],
+    "explanation": "Kľúč: UCS expanduje uzly v poradí rastúcej ceny cesty, BFS po úrovniach podľa hĺbky. Sporné je tvrdenie, že UCS a BFS sú slepé algoritmy: podľa učebnice (AIMA) sú oba neinformované (slepé) – nepoužívajú heuristiku – takže je pravdivé, hoci ho kľúč neoznačuje. Spoločná optimalita pri rozdielnych cenách akcií neplatí: vtedy je optimálny iba UCS.",
+    "disputed": true
+  },
+  {
+    "id": "qz-72",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo meria metrika PRECISION v kontexte hodnotenia modelu?",
+    "options": [
+      {
+        "text": "Celková miera správnych predpovedí",
+        "correct": false
+      },
+      {
+        "text": "Podiel skutočných pozitív medzi všetkými skutočnými pozitívami",
+        "correct": false
+      },
+      {
+        "text": "Podiel skutočných pozitívnych predpovedí medzi všetkými pozitívnymi predpoveďami",
+        "correct": true
+      },
+      {
+        "text": "Schopnosť modelu nájsť všetky relevantné prípady",
+        "correct": false
+      }
+    ],
+    "explanation": "Precision = TP / (TP + FP): aká časť pozitívnych predpovedí je naozaj pozitívna. Podiel nájdených skutočných pozitív TP / (TP + FN) je recall, celková miera správnych predpovedí je accuracy."
+  },
+  {
+    "id": "qz-73",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "DFS algoritmus v kombinácii s vyhľadávaním v strome je charakteristický tým, že:",
+    "options": [
+      {
+        "text": "Nájde vždy optimálne riešenie",
+        "correct": false
+      },
+      {
+        "text": "Nájde vždy riešenie s maximálnou hĺbkou v strome",
+        "correct": false
+      },
+      {
+        "text": "Negarantuje nájdenie optimálneho ani kompletného riešenia",
+        "correct": true
+      },
+      {
+        "text": "Efektívne potláča existenciu cyklov",
+        "correct": false
+      }
+    ],
+    "explanation": "DFS v stromovom vyhľadávaní si nepamätá navštívené stavy – v priestore s cyklami alebo nekonečnou hĺbkou môže bežať donekonečna (nie je úplný) a vráti prvé nájdené riešenie, nie najlacnejšie (nie je optimálny)."
+  },
+  {
+    "id": "qz-74",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Imputácia v kontexte strojového učenia sa používa na:",
+    "options": [
+      {
+        "text": "Zníženie pretrénovania",
+        "correct": false
+      },
+      {
+        "text": "Spracovanie chýbajúcich hodnôt v dátovej sade",
+        "correct": true
+      },
+      {
+        "text": "Kódovanie kategorických premenných",
+        "correct": false
+      },
+      {
+        "text": "Normalizácia dátových vzoriek vysokých hodnôt",
+        "correct": false
+      }
+    ],
+    "explanation": "Imputácia nahrádza chýbajúce hodnoty odhadom z ostatných hodnôt stĺpca (priemer, medián, najčastejšia hodnota) – v scikit-learn `SimpleImputer`."
+  },
+  {
+    "id": "qz-75",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "BFS vyhľadávanie s vyhľadávaním v strome je charakteristické tým, že:",
+    "options": [
+      {
+        "text": "Nájdením riešenia s najväčším počtom akcií, v prípade rozdielnych váh akcií v stavovom priestore",
+        "correct": false
+      },
+      {
+        "text": "Nájdením optimálneho riešenia v konečných stavových priestoroch",
+        "correct": true
+      },
+      {
+        "text": "Nájdením optimálneho riešenia v nekonečných stavových priestoroch",
+        "correct": false
+      },
+      {
+        "text": "Efektívnym prehľadávaním stavového priestoru, v prípade že faktor vetvenia je veľký",
+        "correct": false
+      }
+    ],
+    "explanation": "Kľúč: BFS nájde najplytšie riešenie, čo je optimum, ak majú akcie rovnakú cenu. Sporné je viazať to na konečnosť priestoru: podľa učebnice (AIMA) je BFS úplný aj v nekonečnom priestore (pri konečnom faktore vetvenia a riešení v konečnej hĺbke) a optimálny je práve pri rovnakých cenách akcií – bez ohľadu na konečnosť. Pri veľkom faktore vetvenia je BFS pamäťovo veľmi drahý.",
+    "disputed": true
+  },
+  {
+    "id": "qz-76",
+    "topicId": "t3-predspracovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Normalizácia je pri strojovom učení dôležitá, pretože:",
+    "options": [
+      {
+        "text": "Pomáha pri jednoduchšej interpretácii výsledkov",
+        "correct": false
+      },
+      {
+        "text": "Zabezpečuje, že rôzne premenné prispievajú do procesu učenia rovnako",
+        "correct": true
+      },
+      {
+        "text": "Zjednodušuje modelový tréningový proces",
+        "correct": false
+      },
+      {
+        "text": "Mnohonásobne zvyšuje výpočtovú efektivitu pri predikcii",
+        "correct": false
+      }
+    ],
+    "explanation": "Po normalizácii majú príznaky porovnateľný rozsah, takže žiadny nedominuje len pre veľké číselné hodnoty – všetky prispievajú k učeniu porovnateľne (dôležité pre KNN, SVM, gradientné metódy)."
+  },
+  {
+    "id": "qz-77",
+    "topicId": "t6-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Obojsmerné vyhľadávanie je najefektívnejšie, keď:",
+    "options": [
+      {
+        "text": "Stavový priestor je mimoriadne veľký a začiatočný a konečný stav sú známe",
+        "correct": true
+      },
+      {
+        "text": "Cieľový stav určený konštantnou vzdialenosťou od začiatočného stavu",
+        "correct": false
+      },
+      {
+        "text": "Faktor vetvenia vo vyhľadávacom strome je jednotkový",
+        "correct": false
+      },
+      {
+        "text": "Začiatočný stav je jednoznačne určený",
+        "correct": false
+      }
+    ],
+    "explanation": "Obojsmerné vyhľadávanie sa oplatí vo veľkom stavovom priestore, keď poznáme štart aj cieľ: dve hľadania do polovičnej hĺbky sú oveľa lacnejšie než jedno do plnej (2·b^(d/2) oproti b^d)."
+  },
+  {
+    "id": "qz-78",
+    "topicId": "t4-validacia-ladenie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Aký je hlavný cieľ ladenia hyperparametrov v strojovom učení?",
+    "options": [
+      {
+        "text": "Zvýšiť rýchlosť algoritmu",
+        "correct": false
+      },
+      {
+        "text": "Znížiť výpočtové nároky",
+        "correct": false
+      },
+      {
+        "text": "Optimalizovať výkon modelu",
+        "correct": true
+      },
+      {
+        "text": "Zjednodušiť architektúru modelu",
+        "correct": false
+      }
+    ],
+    "explanation": "Hyperparametre (C, gamma, hĺbka stromu, k…) sa neučia z dát; ladíme ich, aby mal model čo najlepší výkon na validačných dátach. Rýchlosť ani jednoduchosť nie sú hlavným cieľom."
+  },
+  {
+    "id": "qz-79",
+    "topicId": "t7-csp",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Algoritmus Min-conflicts je charakteristický tým, že:",
+    "options": [
+      {
+        "text": "Je inicializovaný úplným náhodným stavom s minimálnym počtom konfliktov medzi premennými",
+        "correct": false
+      },
+      {
+        "text": "V každej iterácii vyberá ľubovoľnú premennú, ktorá vytvára konflikt a mení jej hodnotu z domény",
+        "correct": true
+      },
+      {
+        "text": "Vyberá prioritne úplne stavy s najväčším počtom konfliktov",
+        "correct": false
+      },
+      {
+        "text": "V každej iterácii porovnáva všetky konzistentné stavy s cieľom nájsť stav s maximálnym počtom konfliktov",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts v každej iterácii vyberie náhodnú premennú, ktorá porušuje nejaké ohraničenie, a priradí jej hodnotu s najmenším počtom konfliktov. Začína z ľubovoľného úplného priradenia (nie nutne s minimom konfliktov) a nikdy nehľadá maximum konfliktov."
+  },
+  {
+    "id": "qz-80",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Čo v K-means znamená centroid?",
+    "options": [
+      {
+        "text": "Najvzdialenejší bod v každom zhluku",
+        "correct": false
+      },
+      {
+        "text": "Priemerná vzdialenosť medzi dátovými bodmi v klastri",
+        "correct": false
+      },
+      {
+        "text": "Stredový bod každého zhluku",
+        "correct": true
+      },
+      {
+        "text": "Najčastejšia hodnota v každom klastri",
+        "correct": false
+      }
+    ],
+    "explanation": "Centroid je stred klastra – priemer vzoriek, ktoré doň patria; K-means doň centroid presúva v každej iterácii. Najčastejšia hodnota je modus (pri kategorických dátach medoid)."
+  },
+  {
+    "id": "qz-81",
+    "topicId": "t8-lokalne-vyhladavanie",
+    "week": null,
+    "type": "theory",
+    "source": "quizlet",
+    "text": "Pre hill climbing v rámci riešenia identifikačných problémov s ohraničením platí:",
+    "options": [
+      {
+        "text": "V rámci každého cyklu sa posúva v smere gradientu evaluačnej funkcie a tým zlepšuje hodnotu evaluačnej funkcie",
+        "correct": true
+      },
+      {
+        "text": "V rámci iterácií sa môže s určitou pravdepodobnosťou presúvať do stavov s horšou hodnotou eval funkcie",
+        "correct": false
+      },
+      {
+        "text": "Vykonáva len akcie, ktoré ho dovedú do cieľového stavu",
+        "correct": false
+      },
+      {
+        "text": "Využíva genetické algoritmy na nájdenie najlepšieho riešenia",
+        "correct": false
+      }
+    ],
+    "explanation": "Hill climbing sa v každom kroku presunie do suseda s lepšou hodnotou evaluačnej funkcie (v smere jej najväčšieho rastu) a skončí, keď lepší sused neexistuje. Presun do horšieho stavu s istou pravdepodobnosťou pripúšťa simulované žíhanie."
+  }
+]

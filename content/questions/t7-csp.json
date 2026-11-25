@@ -1,0 +1,1099 @@
+[
+  {
+    "id": "t7-q01",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktorými zložkami je definovaný problém splnenia ohraničení (CSP)?",
+    "options": [
+      {
+        "text": "Cenou každého prechodu medzi stavmi.",
+        "correct": false
+      },
+      {
+        "text": "Heuristickou funkciou `h(n)`, ktorá odhaduje vzdialenosť do cieľa.",
+        "correct": false
+      },
+      {
+        "text": "Množinou premenných.",
+        "correct": true
+      },
+      {
+        "text": "Množinou ohraničení, ktoré určujú povolené kombinácie hodnôt.",
+        "correct": true
+      },
+      {
+        "text": "Doménou hodnôt pre každú premennú.",
+        "correct": true
+      }
+    ],
+    "explanation": "CSP tvorí trojica premenné – domény – ohraničenia. Heuristická funkcia a ceny prechodov patria k hľadaniu cesty (Greedy, A*, UCS); v CSP na ceste ani jej cene nezáleží."
+  },
+  {
+    "id": "t7-q02",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Sudoku z cvičenia chápané ako CSP. Ktoré tvrdenia platia?",
+    "options": [
+      {
+        "text": "Každá bunka môže nadobudnúť hodnotu 1 až 9.",
+        "correct": true
+      },
+      {
+        "text": "Premennými je 81 buniek dosky.",
+        "correct": true
+      },
+      {
+        "text": "Hodnota `0` patrí do domény každej bunky.",
+        "correct": false
+      },
+      {
+        "text": "Riešením je ľubovoľné úplné vyplnenie dosky číslami 1 až 9.",
+        "correct": false
+      },
+      {
+        "text": "Ohraničenia hovoria, že v riadku, stĺpci a bloku 3×3 sa žiadna hodnota neopakuje.",
+        "correct": true
+      }
+    ],
+    "explanation": "Premenné sú bunky, doména je 1–9 a ohraničení je 27 (9 riadkov, 9 stĺpcov, 9 blokov, v každom všetky hodnoty rôzne). `0` v `grid` nie je hodnota z domény, ale značka nepriradenej bunky. Riešenie musí byť úplné a zároveň konzistentné – úplné vyplnenie, ktoré porušuje ohraničenia, riešením nie je."
+  },
+  {
+    "id": "t7-q03",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čím sa identifikačný problém (napríklad CSP) líši od plánovacieho problému (hľadanie cesty)?",
+    "options": [
+      {
+        "text": "Riešením je samotný cieľový stav (priradenie), nie cesta k nemu.",
+        "correct": true
+      },
+      {
+        "text": "Na poradí, v akom sa premenné priradili, nezáleží.",
+        "correct": true
+      },
+      {
+        "text": "Dá sa riešiť iba algoritmom A*.",
+        "correct": false
+      },
+      {
+        "text": "Hľadá sa postupnosť akcií s najnižšou cenou.",
+        "correct": false
+      },
+      {
+        "text": "Sudoku je plánovací problém, lebo sa bunky vypĺňajú postupne.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pri identifikačnom probléme je dôležitý cieľ – priradenie, ktoré spĺňa ohraničenia. Cesta a jej cena sú nepodstatné a poradie priraďovania výsledok nemení. Postupnosť akcií s najnižšou cenou hľadajú plánovacie problémy (UCS, A*). Sudoku je identifikačný problém: zaujíma nás vyplnená doska, nie poradie vypĺňania."
+  },
+  {
+    "id": "t7-q04",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo je riešením CSP?",
+    "options": [
+      {
+        "text": "Priradenie s najmenším počtom porušených ohraničení.",
+        "correct": false
+      },
+      {
+        "text": "Ľubovoľné úplné priradenie.",
+        "correct": false
+      },
+      {
+        "text": "Čiastočné priradenie, ktoré neporušuje žiadne ohraničenie.",
+        "correct": false
+      },
+      {
+        "text": "Úplné priradenie, ktoré neporušuje žiadne ohraničenie.",
+        "correct": true
+      }
+    ],
+    "explanation": "Riešenie musí byť **úplné** (každá premenná má hodnotu) a **konzistentné** (žiadne ohraničenie nie je porušené). Úplné priradenie s konfliktmi je len východiskový stav lokálneho vyhľadávania, čiastočné konzistentné priradenie je medzistav backtrackingu."
+  },
+  {
+    "id": "t7-q05",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ohraničenie „všetky hodnoty v jednom riadku Sudoku sú navzájom rôzne“ je:",
+    "options": [
+      {
+        "text": "unárne ohraničenie, lebo sa týka jedného riadku.",
+        "correct": false
+      },
+      {
+        "text": "globálne (n-árne) ohraničenie typu `alldiff` nad 9 premennými.",
+        "correct": true
+      },
+      {
+        "text": "ohraničenie medzi premennou a jej doménou.",
+        "correct": false
+      },
+      {
+        "text": "vyjadriteľné aj ako množina binárnych ohraničení `≠` medzi dvojicami buniek riadku.",
+        "correct": true
+      }
+    ],
+    "explanation": "Ohraničenie sa týka všetkých 9 buniek riadku naraz, je teda globálne (`alldiff`). Dá sa rozložiť na binárne ohraničenia „tieto dve bunky majú rôzne hodnoty“ – presne tak ho kontroluje `is_valid`. Unárne ohraničenie sa týka jedinej premennej (napr. predvyplnená bunka)."
+  },
+  {
+    "id": "t7-q06",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše kód pre dosku *easy* z `initial_states.json`?",
+    "code": "grid = [\n    [0, 0, 0, 2, 6, 0, 7, 0, 1],\n    [6, 8, 0, 0, 7, 0, 0, 9, 0],\n    [1, 9, 0, 0, 0, 4, 5, 0, 0],\n    [8, 2, 0, 1, 0, 0, 0, 4, 0],\n    [0, 0, 4, 6, 0, 2, 9, 0, 0],\n    [0, 5, 0, 0, 0, 3, 0, 2, 8],\n    [0, 0, 9, 3, 0, 0, 0, 7, 4],\n    [0, 4, 0, 0, 5, 0, 0, 3, 6],\n    [7, 0, 3, 0, 1, 8, 0, 0, 0],\n]\nboard = SudokuBoard(grid)\nprint(board.get_domain(0, 0))",
+    "options": [
+      {
+        "text": "`[3, 4, 5, 9]`",
+        "correct": false
+      },
+      {
+        "text": "`[]`",
+        "correct": false
+      },
+      {
+        "text": "`[1, 2, 6, 7, 8, 9]`",
+        "correct": false
+      },
+      {
+        "text": "`[3, 4, 5]`",
+        "correct": true
+      },
+      {
+        "text": "`[4]`",
+        "correct": false
+      }
+    ],
+    "explanation": "Bunka `(0, 0)` je prázdna. V riadku 0 sú 2, 6, 7, 1; v stĺpci 0 sú 6, 1, 8, 7; v ľavom hornom bloku sú 6, 8, 1, 9. Vylúčené sú teda 1, 2, 6, 7, 8, 9 a zostáva `[3, 4, 5]`. Hodnota 9 je v bloku (bunka `(2, 1)`). `[4]` je hodnota z riešenia, nie doména; `[]` by `get_domain` vrátil len pre vyplnenú bunku."
+  },
+  {
+    "id": "t7-q07",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Pre dosku *easy* z kódu: ktoré volania vrátia `True`?",
+    "code": "grid = [\n    [0, 0, 0, 2, 6, 0, 7, 0, 1],\n    [6, 8, 0, 0, 7, 0, 0, 9, 0],\n    [1, 9, 0, 0, 0, 4, 5, 0, 0],\n    [8, 2, 0, 1, 0, 0, 0, 4, 0],\n    [0, 0, 4, 6, 0, 2, 9, 0, 0],\n    [0, 5, 0, 0, 0, 3, 0, 2, 8],\n    [0, 0, 9, 3, 0, 0, 0, 7, 4],\n    [0, 4, 0, 0, 5, 0, 0, 3, 6],\n    [7, 0, 3, 0, 1, 8, 0, 0, 0],\n]\nboard = SudokuBoard(grid)",
+    "options": [
+      {
+        "text": "`board.is_valid(0, 0, 3)`",
+        "correct": true
+      },
+      {
+        "text": "`board.is_valid(4, 4, 7)`",
+        "correct": false
+      },
+      {
+        "text": "`board.is_valid(8, 8, 9)`",
+        "correct": true
+      },
+      {
+        "text": "`board.is_valid(4, 4, 8)`",
+        "correct": true
+      },
+      {
+        "text": "`board.is_valid(0, 0, 6)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`is_valid` vráti `False`, ak je hodnota už v riadku, stĺpci alebo bloku. 3 sa v riadku 0, stĺpci 0 ani v ľavom hornom bloku nenachádza → `True`. 6 je v stĺpci 0 (bunka `(1, 0)`) → `False`. 8 nie je v riadku 4, stĺpci 4 ani v strednom bloku → `True`. 7 je v stĺpci 4 (bunka `(1, 4)`) → `False`. 9 nie je v riadku 8, stĺpci 8 ani v pravom dolnom bloku → `True`."
+  },
+  {
+    "id": "t7-q08",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše kód (výpočet ľavého horného rohu bloku 3×3 v `is_valid`)?",
+    "code": "r, c = 4, 8\nblock_row = (r // 3) * 3\nblock_col = (c // 3) * 3\nprint((block_row, block_col))",
+    "options": [
+      {
+        "text": "`(1, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(4, 8)`",
+        "correct": false
+      },
+      {
+        "text": "`(3, 6)`",
+        "correct": true
+      },
+      {
+        "text": "`(6, 6)`",
+        "correct": false
+      },
+      {
+        "text": "`(3, 8)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`4 // 3 = 1`, `1 * 3 = 3`; `8 // 3 = 2`, `2 * 3 = 6`. Bunka `(4, 8)` patrí do bloku s rohom `(3, 6)`. `(1, 2)` je výsledok bez násobenia tromi – to je poradie bloku, nie súradnica rohu."
+  },
+  {
+    "id": "t7-q09",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše kód?",
+    "code": "grid = [[5, 3, 4, 6, 7, 8, 9, 1, 2],\n        [6, 7, 0, 1, 9, 5, 0, 4, 8]] + [[0] * 9 for _ in range(7)]\nboard = SudokuBoard(grid)\nprint(board.find_empty())\nprint(board.get_domain(0, 0))",
+    "options": [
+      {
+        "text": "`(1, 2)` a `[]`",
+        "correct": true
+      },
+      {
+        "text": "`(1, 2)` a `[5]`",
+        "correct": false
+      },
+      {
+        "text": "`(2, 1)` a `[]`",
+        "correct": false
+      },
+      {
+        "text": "`(0, 0)` a `[5]`",
+        "correct": false
+      },
+      {
+        "text": "`(1, 6)` a `[]`",
+        "correct": false
+      }
+    ],
+    "explanation": "`find_empty` prechádza dosku po riadkoch zľava doprava a vráti dvojicu `(riadok, stĺpec)` prvej nuly – riadok 0 je plný, v riadku 1 je prvá nula na indexe 2 → `(1, 2)`. `get_domain` pre **vyplnenú** bunku vracia prázdny zoznam, nie zoznam s jej hodnotou."
+  },
+  {
+    "id": "t7-q10",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čím sa backtracking líši od hrubej sily (`solve_bruteforce_dfs`)?",
+    "options": [
+      {
+        "text": "Prehľadáva stavy do šírky namiesto do hĺbky.",
+        "correct": false
+      },
+      {
+        "text": "Slepú uličku odhalí skôr, preto prehľadá menej uzlov.",
+        "correct": true
+      },
+      {
+        "text": "Ohraničenia kontroluje priebežne, nie až na úplne vyplnenej doske.",
+        "correct": true
+      },
+      {
+        "text": "V každom kroku priraďuje jednu premennú a skúša iba hodnoty konzistentné s doterajším priradením.",
+        "correct": true
+      },
+      {
+        "text": "V najhoršom prípade má polynomiálnu časovú zložitosť.",
+        "correct": false
+      }
+    ],
+    "explanation": "Backtracking je DFS s dvoma zlepšeniami: jedna premenná na úroveň a kontrola ohraničení pri každom priradení. Chybnú hodnotu tak zahodí hneď, kým hrubá sila ju zistí až po vyplnení celej dosky. Stále je to prehľadávanie do hĺbky a v najhoršom prípade exponenciálne."
+  },
+  {
+    "id": "t7-q11",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo urobí backtracking, keď pre vybranú premennú nezostane žiadna konzistentná hodnota (slepá ulička)?",
+    "options": [
+      {
+        "text": "Priradí hodnotu, ktorá porušuje najmenej ohraničení, a pokračuje.",
+        "correct": false
+      },
+      {
+        "text": "Začne odznova z náhodného úplného priradenia.",
+        "correct": false
+      },
+      {
+        "text": "Ukončí hľadanie s výsledkom, že riešenie neexistuje.",
+        "correct": false
+      },
+      {
+        "text": "Zruší priradenie, ktoré do slepej uličky viedlo.",
+        "correct": true
+      },
+      {
+        "text": "Vráti sa k predchádzajúcemu rozhodnutiu a skúsi pre tú premennú inú hodnotu.",
+        "correct": true
+      }
+    ],
+    "explanation": "Návrat (backtrack) znamená vrátiť sa o krok späť, zrušiť posledné priradenie (`grid[r][c] = 0`) a skúsiť ďalšiu hodnotu. Neúspech celého hľadania sa hlási až vtedy, keď sa vyčerpajú hodnoty prvej premennej. Náhodný reštart a hodnota s najmenej konfliktmi patria k lokálnemu vyhľadávaniu (random restart, min-conflicts)."
+  },
+  {
+    "id": "t7-q12",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorý riadok patrí na miesto `# ???`, aby backtracking fungoval správne?",
+    "code": "def _dfs(self, use_mrv, use_lcv):\n    cell = self.board.find_empty()\n    if cell is None:\n        return True\n    r, c = cell\n    for val in self.board.get_domain(r, c):\n        self.board.grid[r][c] = val\n        self.expanded += 1\n        if self._dfs(use_mrv, use_lcv):\n            return True\n        # ???\n    return False",
+    "options": [
+      {
+        "text": "`self.board.grid[r][c] = val`",
+        "correct": false
+      },
+      {
+        "text": "`return False`",
+        "correct": false
+      },
+      {
+        "text": "`continue`",
+        "correct": false
+      },
+      {
+        "text": "`self.board.grid[r][c] = 0`",
+        "correct": true
+      },
+      {
+        "text": "`self.expanded -= 1`",
+        "correct": false
+      }
+    ],
+    "explanation": "Po neúspešnej rekurzii treba priradenie zrušiť – bunku vynulovať. `return False` by skončil už po prvej hodnote. `continue` nič nevynuluje: keď zlyhajú všetky hodnoty, na doske zostane posledná z nich a volajúci by s touto chybnou hodnotou počítal ďalej. `expanded` počíta pokusy, neznižuje sa."
+  },
+  {
+    "id": "t7-q13",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tejto funkcii platia?",
+    "code": "def _dfs(self, use_mrv, use_lcv):\n    cell = self.board.find_empty()\n    if cell is None:\n        return True\n    r, c = cell\n    for val in self.board.get_domain(r, c):\n        self.board.grid[r][c] = val\n        self.expanded += 1\n        if self._dfs(use_mrv, use_lcv):\n            return True\n        self.board.grid[r][c] = 0\n    return False",
+    "options": [
+      {
+        "text": "`expanded` počíta iba priradenia, ktoré zostali v konečnom riešení.",
+        "correct": false
+      },
+      {
+        "text": "`expanded` sa zvýši pri každom pokuse o priradenie, aj keď neskôr zlyhá.",
+        "correct": true
+      },
+      {
+        "text": "Ak má vybraná bunka prázdnu doménu, cyklus neprebehne ani raz a funkcia vráti `False`.",
+        "correct": true
+      },
+      {
+        "text": "Hodnoty, ktoré porušujú ohraničenia, sa na dosku zapíšu a odhalia až na plnej doske.",
+        "correct": false
+      },
+      {
+        "text": "Ak `find_empty()` vráti `None`, funkcia vráti `True`.",
+        "correct": true
+      }
+    ],
+    "explanation": "`None` z `find_empty` znamená plnú dosku – všetky priradenia boli konzistentné, teda riešenie. Prázdna doména = slepá ulička: `for` nemá cez čo iterovať a vykoná sa `return False`. `expanded += 1` je pred rekurziou, takže sa ráta každý pokus. Na dosku sa zapisujú iba hodnoty z `get_domain`, teda konzistentné – kontrola až na plnej doske je hrubá sila."
+  },
+  {
+    "id": "t7-q14",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Vyriešenej doske vynulujeme bunky `(0, 0)` a `(0, 1)`; ich správne hodnoty sú 4 a 3. Koľko priradení (`expanded`) urobí hrubá sila?",
+    "code": "for val in range(1, 10):\n    self.board.grid[r][c] = val\n    self.expanded += 1\n    if self._bruteforce_dfs(next_r, next_c):\n        return True\nself.board.grid[r][c] = 0\nreturn False",
+    "options": [
+      {
+        "text": "81",
+        "correct": false
+      },
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "34",
+        "correct": true
+      },
+      {
+        "text": "90",
+        "correct": false
+      },
+      {
+        "text": "7",
+        "correct": false
+      }
+    ],
+    "explanation": "Pre `(0, 0)` skúša 1, 2, 3: každé je 1 priradenie + 9 neúspešných priradení bunky `(0, 1)` = 10, spolu 30. Potom `(0, 0) = 4` (1 priradenie) a `(0, 1)` = 1, 2, 3 (3 priradenia) – pri trojke `_check_full_board` vráti `True`. Spolu 30 + 1 + 3 = 34. Backtracking by potreboval 2 priradenia; 90 (= 9 + 81) by bolo pri doske bez riešenia."
+  },
+  {
+    "id": "t7-q15",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré tvrdenia o zložitosti riešenia Sudoku platia?",
+    "options": [
+      {
+        "text": "Pamäťová náročnosť backtrackingu je lineárna – hĺbka rekurzie je najviac počet premenných.",
+        "correct": true
+      },
+      {
+        "text": "Hrubá sila potrebuje viac pamäte než BFS, lebo si pamätá všetky dosky.",
+        "correct": false
+      },
+      {
+        "text": "Backtracking má v najhoršom prípade stále exponenciálnu časovú zložitosť.",
+        "correct": true
+      },
+      {
+        "text": "Backtracking s heuristikou MRV má zaručene polynomiálnu časovú zložitosť.",
+        "correct": false
+      },
+      {
+        "text": "Hrubá sila môže pre `k` prázdnych buniek vygenerovať až `9^k` úplných dosiek.",
+        "correct": true
+      }
+    ],
+    "explanation": "Každá prázdna bunka má pri hrubej sile 9 možností → `9^k`. Backtracking vetvy orezáva, ale v najhoršom prípade je stále `O(d^n)`; heuristiky zlepšujú prax, nie najhorší prípad. Oba prístupy sú DFS: pamätajú si iba aktuálnu vetvu, pamäť je lineárna."
+  },
+  {
+    "id": "t7-q16",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo platí o heuristike MRV (Minimum Remaining Values)?",
+    "options": [
+      {
+        "text": "Riadi sa princípom *fail-first*: ak má vetva zlyhať, nech zlyhá čo najskôr.",
+        "correct": true
+      },
+      {
+        "text": "Odstraňuje nekonzistentné hodnoty z domén susedných premenných.",
+        "correct": false
+      },
+      {
+        "text": "Určuje poradie, v akom sa skúšajú hodnoty vybranej premennej.",
+        "correct": false
+      },
+      {
+        "text": "Vyberá premennú s najväčšou doménou, aby mala čo najviac možností.",
+        "correct": false
+      },
+      {
+        "text": "Vyberá nepriradenú premennú s najmenším počtom zostávajúcich legálnych hodnôt.",
+        "correct": true
+      }
+    ],
+    "explanation": "MRV odpovedá na otázku „ktorú premennú ďalej“ – tú s najmenšou doménou (najviac obmedzenú). Poradie hodnôt rieši LCV, odstraňovanie hodnôt z domén je filtrovanie (forward checking, hranová konzistencia)."
+  },
+  {
+    "id": "t7-q17",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "generated",
+    "text": "Backtracking s heuristikou MRV má štyri nepriradené premenné s doménami A = {1, 2, 3}, B = {4, 7}, C = {5}, D = {2, 9}. Ktorú premennú vyberie ako ďalšiu?",
+    "options": [
+      {
+        "text": "A",
+        "correct": false
+      },
+      {
+        "text": "B",
+        "correct": false
+      },
+      {
+        "text": "C",
+        "correct": true
+      },
+      {
+        "text": "D",
+        "correct": false
+      },
+      {
+        "text": "B alebo D – majú rovnako veľké domény",
+        "correct": false
+      }
+    ],
+    "explanation": "MRV vyberá premennú s najmenším počtom zostávajúcich hodnôt. C má jedinú hodnotu, takže ide prvá. A má 3 hodnoty, B a D po 2."
+  },
+  {
+    "id": "t7-q18",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Prázdne bunky dosky majú domény `(0, 0)` → `[3, 4, 5]`, `(0, 1)` → `[3]`, `(0, 2)` → `[5]`, `(4, 4)` → `[8]` a žiadna prázdna bunka nemá prázdnu doménu. Čo vráti `select_unassigned_mrv()`?",
+    "code": "def select_unassigned_mrv(self):\n    best_cell = None\n    best_domain = None\n    for r in range(9):\n        for c in range(9):\n            if self.board.grid[r][c] == 0:\n                domain = self.board.get_domain(r, c)\n                if best_cell is None or len(domain) < len(best_domain):\n                    best_cell = (r, c)\n                    best_domain = domain\n    return best_cell, best_domain",
+    "options": [
+      {
+        "text": "`((0, 0), [3, 4, 5])`",
+        "correct": false
+      },
+      {
+        "text": "`((0, 1), [3])`",
+        "correct": true
+      },
+      {
+        "text": "`((0, 2), [5])`",
+        "correct": false
+      },
+      {
+        "text": "`((4, 4), [8])`",
+        "correct": false
+      },
+      {
+        "text": "`(0, 1)`",
+        "correct": false
+      }
+    ],
+    "explanation": "Funkcia prechádza dosku po riadkoch a bunku vymení iba pri **ostro** menšej doméne (`<`). Prvá bunka s doménou dĺžky 1 je `(0, 1)`; `(0, 2)` a `(4, 4)` majú rovnako dlhú doménu, takže ju už nenahradia. Vracia sa dvojica (bunka, doména), nie iba súradnice."
+  },
+  {
+    "id": "t7-q19",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo platí o heuristike LCV (Least Constraining Value)?",
+    "options": [
+      {
+        "text": "Vyberá premennú, ktorá sa priradí ako ďalšia.",
+        "correct": false
+      },
+      {
+        "text": "Uprednostňuje hodnotu, ktorá susedným premenným vylúči čo najmenej možností.",
+        "correct": true
+      },
+      {
+        "text": "Skúša najprv hodnotu, ktorá susedov obmedzí najviac, aby sa zlyhanie našlo skôr.",
+        "correct": false
+      },
+      {
+        "text": "Bez LCV backtracking nemusí nájsť existujúce riešenie.",
+        "correct": false
+      },
+      {
+        "text": "Určuje poradie, v akom sa skúšajú hodnoty už vybranej premennej.",
+        "correct": true
+      }
+    ],
+    "explanation": "LCV radí **hodnoty**: najprv tá, ktorá necháva susedom najviac voľnosti (*fail-last* – hľadáme jedno riešenie, tak skúšame najnádejnejšiu hodnotu). Výber premennej je úloha MRV. Heuristiky menia iba poradie prehľadávania; backtracking je úplný aj bez nich."
+  },
+  {
+    "id": "t7-q20",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše kód (posledný krok funkcie `sort_values_lcv`)?",
+    "code": "domain = [2, 5, 9]\nvalue_scores = {2: 3, 5: 1, 9: 1}\nprint(sorted(domain, key=lambda v: value_scores[v]))",
+    "options": [
+      {
+        "text": "`[5, 9, 2]`",
+        "correct": true
+      },
+      {
+        "text": "`[2, 9, 5]`",
+        "correct": false
+      },
+      {
+        "text": "`[1, 1, 3]`",
+        "correct": false
+      },
+      {
+        "text": "`[2, 5, 9]`",
+        "correct": false
+      },
+      {
+        "text": "`[9, 5, 2]`",
+        "correct": false
+      }
+    ],
+    "explanation": "`sorted` zoradí hodnoty domény vzostupne podľa skóre: 5 a 9 majú skóre 1, 2 má skóre 3. `sorted` je stabilné – pri rovnakom skóre zostáva pôvodné poradie (5 pred 9). Výsledkom sú hodnoty domény, nie skóre."
+  },
+  {
+    "id": "t7-q21",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Koľko prvkov má množina `peers` po vykonaní tohto kódu pre ľubovoľnú bunku `(r, c)`?",
+    "code": "peers = set()\nfor i in range(9):\n    if i != c:\n        peers.add((r, i))\n    if i != r:\n        peers.add((i, c))\nblock_r = (r // 3) * 3\nblock_c = (c // 3) * 3\nfor rr in range(block_r, block_r + 3):\n    for cc in range(block_c, block_c + 3):\n        if (rr, cc) != (r, c):\n            peers.add((rr, cc))",
+    "options": [
+      {
+        "text": "20",
+        "correct": true
+      },
+      {
+        "text": "16",
+        "correct": false
+      },
+      {
+        "text": "27",
+        "correct": false
+      },
+      {
+        "text": "24",
+        "correct": false
+      },
+      {
+        "text": "8",
+        "correct": false
+      }
+    ],
+    "explanation": "V riadku je 8 ďalších buniek, v stĺpci 8 a v bloku 8, ale 4 bunky bloku ležia v tom istom riadku alebo stĺpci a `set` ich nepridá druhýkrát: 8 + 8 + 4 = 20. Číslo 24 by vyšlo bez odstránenia duplicít."
+  },
+  {
+    "id": "t7-q22",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ako heuristiky MRV a LCV ovplyvňujú backtracking?",
+    "options": [
+      {
+        "text": "S heuristikou MRV prestáva byť backtracking úplný.",
+        "correct": false
+      },
+      {
+        "text": "Menia iba poradie prehľadávania, nie to, či sa riešenie nájde.",
+        "correct": true
+      },
+      {
+        "text": "LCV natrvalo odstraňuje hodnoty z domén susedných buniek.",
+        "correct": false
+      },
+      {
+        "text": "Zaručujú, že sa algoritmus nikdy nebude vracať.",
+        "correct": false
+      },
+      {
+        "text": "Dajú sa kombinovať navzájom aj s forward checkingom.",
+        "correct": true
+      }
+    ],
+    "explanation": "MRV určuje poradie premenných, LCV poradie hodnôt – strom sa prehľadá v inom poradí, typicky s menším počtom uzlov, ale úplnosť zostáva. V GUI z cvičenia sú všetky kombinácie (DFS/FC × MRV × LCV). Domény nemenia (to robí filtrovanie) a návraty nevylučujú."
+  },
+  {
+    "id": "t7-q23",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo platí o forward checkingu (doprednej kontrole)?",
+    "options": [
+      {
+        "text": "Ak niektorej nepriradenej premennej nezostane žiadna hodnota, vetva sa ukončí hneď.",
+        "correct": true
+      },
+      {
+        "text": "Po priradení hodnoty odstráni z domén nepriradených susedov hodnoty, ktoré sú s ňou v konflikte.",
+        "correct": true
+      },
+      {
+        "text": "Nahrádza backtracking – po jeho zavedení sa algoritmus už nikdy nevracia.",
+        "correct": false
+      },
+      {
+        "text": "Dá sa kombinovať s heuristikami MRV a LCV.",
+        "correct": true
+      },
+      {
+        "text": "Zaručuje, že každé dve nepriradené premenné sú navzájom konzistentné.",
+        "correct": false
+      }
+    ],
+    "explanation": "Forward checking je filtrovanie domén počas backtrackingu: pozerá sa o krok dopredu a prázdna doména znamená okamžitý návrat. Kontroluje však iba vzťah priradená premenná → jej susedia; konzistenciu medzi dvoma nepriradenými premennými rieši až hranová konzistencia. Návraty obmedzuje, neodstraňuje."
+  },
+  {
+    "id": "t7-q24",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo platí, keď je po priradení hodnoty `val` premenná `ok` rovná `False`?",
+    "code": "for val in domain:\n    self.board.grid[r][c] = val\n    self.expanded += 1\n    ok = all(self.board.get_domain(rr, cc)\n             for rr in range(9) for cc in range(9)\n             if self.board.grid[rr][cc] == 0)\n    if ok and self._fc(use_mrv, use_lcv):\n        return True\n    self.board.grid[r][c] = 0\nreturn False",
+    "options": [
+      {
+        "text": "Niektorá prázdna bunka nemá žiadnu legálnu hodnotu.",
+        "correct": true
+      },
+      {
+        "text": "Rekurzívne volanie `_fc` sa pre túto hodnotu vôbec nevykoná.",
+        "correct": true
+      },
+      {
+        "text": "Funkcia okamžite vráti `False` bez skúšania ďalších hodnôt.",
+        "correct": false
+      },
+      {
+        "text": "Toto priradenie sa do `expanded` nezapočíta.",
+        "correct": false
+      },
+      {
+        "text": "Bunka sa vynuluje a cyklus pokračuje ďalšou hodnotou z domény.",
+        "correct": true
+      }
+    ],
+    "explanation": "`all(...)` je `False`, ak `get_domain` niektorej prázdnej bunky vráti prázdny zoznam. Výraz `ok and self._fc(...)` sa vyhodnocuje skrátene, takže sa rekurzia nezavolá. Nasleduje vynulovanie bunky a ďalšia iterácia cyklu; `return False` príde až po vyčerpaní všetkých hodnôt. `expanded` sa zvýšilo ešte pred testom."
+  },
+  {
+    "id": "t7-q25",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "generated",
+    "text": "Farbenie mapy: územia WA, NT a SA navzájom susedia, Q susedí s NT a SA. Všetky domény sú {červená, zelená, modrá}. Backtracking s forward checkingom priradí WA = červená a potom Q = zelená. Čo platí?",
+    "options": [
+      {
+        "text": "Forward checking v tomto okamihu zlyhanie nehlási, lebo žiadna doména nie je prázdna.",
+        "correct": true
+      },
+      {
+        "text": "Po oboch priradeniach je doména NT = {modrá} a doména SA = {modrá}.",
+        "correct": true
+      },
+      {
+        "text": "Po oboch priradeniach je doména NT = {červená, modrá}.",
+        "correct": false
+      },
+      {
+        "text": "Forward checking hneď po priradení Q = zelená vráti zlyhanie.",
+        "correct": false
+      },
+      {
+        "text": "Hranová konzistencia by zlyhanie odhalila, lebo NT a SA susedia a obom zostala iba modrá.",
+        "correct": true
+      }
+    ],
+    "explanation": "WA = červená odstráni červenú z NT a SA; Q = zelená odstráni zelenú z NT a SA. Obom zostane {modrá}. Forward checking kontroluje len susedov práve priradenej premennej, takže konflikt medzi dvoma nepriradenými územiami NT a SA nevidí. Hranová konzistencia by pri hrane NT → SA zistila, že modrá nemá podporu, a doména by sa vyprázdnila."
+  },
+  {
+    "id": "t7-q26",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Kedy je hrana `X → Y` konzistentná (arc consistent)?",
+    "options": [
+      {
+        "text": "Keď majú X a Y rovnako veľké domény.",
+        "correct": false
+      },
+      {
+        "text": "Keď pre každú hodnotu z domény Y existuje aspoň jedna vyhovujúca hodnota v doméne X.",
+        "correct": false
+      },
+      {
+        "text": "Keď domény X a Y nemajú žiadnu spoločnú hodnotu.",
+        "correct": false
+      },
+      {
+        "text": "Keď je aspoň jedna z premenných X, Y už priradená.",
+        "correct": false
+      },
+      {
+        "text": "Keď pre každú hodnotu z domény X existuje aspoň jedna hodnota v doméne Y, s ktorou je ohraničenie splnené.",
+        "correct": true
+      }
+    ],
+    "explanation": "Konzistencia hrany je smerová: `X → Y` vyžaduje podporu v Y pre **každú** hodnotu X. Opačné tvrdenie opisuje hranu `Y → X`. Hodnoty bez podpory sa odstraňujú z domény X."
+  },
+  {
+    "id": "t7-q27",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "generated",
+    "text": "Premenné X a Y majú domény {1, 2, 3} a platí ohraničenie X < Y. Aké budú domény po dosiahnutí hranovej konzistencie v oboch smeroch?",
+    "options": [
+      {
+        "text": "X = {1, 2}, Y = {2, 3}",
+        "correct": true
+      },
+      {
+        "text": "X = {1, 2}, Y = {1, 2, 3}",
+        "correct": false
+      },
+      {
+        "text": "X = {1, 2, 3}, Y = {2, 3}",
+        "correct": false
+      },
+      {
+        "text": "X = {1}, Y = {3}",
+        "correct": false
+      },
+      {
+        "text": "X = {1, 2}, Y = {3}",
+        "correct": false
+      }
+    ],
+    "explanation": "Hrana X → Y: hodnota X = 3 nemá v Y žiadnu väčšiu hodnotu → odstráni sa, X = {1, 2}. Hrana Y → X: hodnota Y = 1 nemá v X žiadnu menšiu hodnotu → odstráni sa, Y = {2, 3}. Ostatné hodnoty podporu majú (napr. X = 2 s Y = 3, Y = 2 s X = 1), takže sa neodstraňujú – hranová konzistencia nevyberá riešenie, iba škrtá nemožné hodnoty."
+  },
+  {
+    "id": "t7-q28",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo platí o algoritme AC-3?",
+    "options": [
+      {
+        "text": "Po jeho skončení má každá premenná v doméne práve jednu hodnotu.",
+        "correct": false
+      },
+      {
+        "text": "Ak sa doména X zmenší, vrátia sa do frontu hrany smerujúce do X.",
+        "correct": true
+      },
+      {
+        "text": "Pracuje s frontom hrán, ktoré treba skontrolovať.",
+        "correct": true
+      },
+      {
+        "text": "Pri hrane `X → Y` odstraňuje hodnoty z domény Y.",
+        "correct": false
+      },
+      {
+        "text": "Prázdna doména znamená, že riešenie (v danej vetve) neexistuje.",
+        "correct": true
+      }
+    ],
+    "explanation": "AC-3 vyberá hrany z frontu a z domény X odstraňuje hodnoty bez podpory v Y. Zmenšenie domény X môže vziať podporu susedom, preto sa hrany `Z → X` kontrolujú znova. Prázdna doména = zlyhanie. Po skončení môžu doménam zostať viaceré hodnoty – na riešenie potom treba ešte prehľadávanie."
+  },
+  {
+    "id": "t7-q29",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo charakterizuje hranovú konzistenciu ako techniku riešenia CSP?",
+    "options": [
+      {
+        "text": "Zaručuje nájdenie optimálneho riešenia.",
+        "correct": false
+      },
+      {
+        "text": "Sama vždy nájde riešenie bez ďalšieho prehľadávania.",
+        "correct": false
+      },
+      {
+        "text": "Zmenšuje prehľadávaný priestor tým, že z domén odstraňuje hodnoty, ktoré nemôžu byť súčasťou riešenia.",
+        "correct": true
+      },
+      {
+        "text": "Dá sa použiť ako predspracovanie aj po každom priradení počas backtrackingu.",
+        "correct": true
+      },
+      {
+        "text": "Na jeden uzol je lacnejšia než forward checking.",
+        "correct": false
+      }
+    ],
+    "explanation": "Hranová konzistencia je filtrovanie: orezáva domény, a tým priestor pre backtracking. Riešenie sama nehľadá a o optimalite nehovorí nič. Oproti forward checkingu odhalí zlyhanie skôr, ale stojí viac výpočtu na uzol."
+  },
+  {
+    "id": "t7-q30",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré techniky znižujú počet návratov (backtrackov) pri riešení CSP?",
+    "options": [
+      {
+        "text": "Priebežná kontrola ohraničení pri každom priradení namiesto kontroly až na úplnom priradení.",
+        "correct": true
+      },
+      {
+        "text": "Forward checking.",
+        "correct": true
+      },
+      {
+        "text": "Slepé DFS, ktoré ohraničenia kontroluje až na úplne vyplnenej doske.",
+        "correct": false
+      },
+      {
+        "text": "Výber premennej podľa MRV.",
+        "correct": true
+      },
+      {
+        "text": "Hranová konzistencia.",
+        "correct": true
+      },
+      {
+        "text": "Skúšanie hodnôt v náhodnom poradí.",
+        "correct": false
+      }
+    ],
+    "explanation": "Návraty obmedzuje všetko, čo slepú uličku odhalí skôr: priebežná kontrola ohraničení (podstata algoritmu spätného vyhľadávania), filtrovanie domén (forward checking, hranová konzistencia) a dobré poradie premenných (MRV). Naivné DFS chybu zistí až na konci a náhodné poradie hodnôt nedáva žiadnu informáciu."
+  },
+  {
+    "id": "t7-q31",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ako pracuje algoritmus min-conflicts?",
+    "options": [
+      {
+        "text": "Vybranej premennej priradí hodnotu, ktorá porušuje najmenej ohraničení.",
+        "correct": true
+      },
+      {
+        "text": "V každej iterácii vyberie niektorú premennú, ktorá je v konflikte.",
+        "correct": true
+      },
+      {
+        "text": "Začína z úplného priradenia, v ktorom môžu byť ohraničenia porušené.",
+        "correct": true
+      },
+      {
+        "text": "V každej iterácii vyberie premennú s najväčším počtom konfliktov.",
+        "correct": false
+      },
+      {
+        "text": "Priraďuje premenné postupne a pri slepej uličke sa vracia.",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts opravuje úplné priradenie: zvolí **ľubovoľnú** (náhodnú) konfliktnú premennú a dá jej hodnotu s minimom konfliktov. Nevyberá premennú s najviac konfliktmi. Postupné priraďovanie s návratom je backtracking."
+  },
+  {
+    "id": "t7-q32",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "generated",
+    "text": "Min-conflicts na 4 dámach: `queens = (1, 3, 0, 3)` (index = stĺpec, hodnota = riadok). V konflikte sú dámy v stĺpcoch 1 a 3. Algoritmus vybral dámu v stĺpci 3; v riadkoch 0, 1, 2, 3 by ju ohrozovalo `[1, 3, 0, 1]` dám. Čo urobí?",
+    "options": [
+      {
+        "text": "Presunie namiesto nej dámu zo stĺpca 0.",
+        "correct": false
+      },
+      {
+        "text": "Nechá ju v riadku 3, lebo má iba jeden konflikt.",
+        "correct": false
+      },
+      {
+        "text": "Presunie ju do riadku 2 – vznikne `(1, 3, 0, 2)`, čo je riešenie.",
+        "correct": true
+      },
+      {
+        "text": "Presunie ju do riadku 0, lebo je to prvý riadok v poradí.",
+        "correct": false
+      },
+      {
+        "text": "Presunie ju do riadku 1, lebo tam je konfliktov najviac.",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts dá vybranej premennej hodnotu s **najmenším** počtom konfliktov – riadok 2 má 0. Výsledná doska `(1, 3, 0, 2)` nemá žiadny konflikt. Dáma v stĺpci 0 nie je v konflikte, takže ju algoritmus nevyberá."
+  },
+  {
+    "id": "t7-q33",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré vlastnosti má algoritmus min-conflicts?",
+    "options": [
+      {
+        "text": "Môže uviaznuť, takže nájdenie riešenia nezaručuje.",
+        "correct": true
+      },
+      {
+        "text": "Uchováva frontier a zoznam navštívených stavov.",
+        "correct": false
+      },
+      {
+        "text": "Patrí medzi algoritmy lokálneho vyhľadávania.",
+        "correct": true
+      },
+      {
+        "text": "Je efektívny aj pre veľmi veľké úlohy, napríklad milión dám.",
+        "correct": true
+      },
+      {
+        "text": "Je použiteľný len pre malé stavové priestory.",
+        "correct": false
+      },
+      {
+        "text": "Hľadá najkratšiu cestu zo štartu do cieľa.",
+        "correct": false
+      }
+    ],
+    "explanation": "Min-conflicts je lokálne vyhľadávanie pre identifikačné CSP: drží jediné úplné priradenie a opravuje ho. Nie je úplný (planina, lokálne minimum), ale v praxi je mimoriadne rýchly – milión dám vyrieši priemerne asi za 50 krokov. Cestu nehľadá a strom ani navštívené stavy si nepamätá."
+  },
+  {
+    "id": "t7-q34",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "theory",
+    "source": "generated",
+    "text": "Ktoré algoritmy sa s výhodou používajú na identifikačné problémy s ohraničeniami (Sudoku, N dám, rozvrh)?",
+    "options": [
+      {
+        "text": "Uniform Cost Search (UCS).",
+        "correct": false
+      },
+      {
+        "text": "Simulované žíhanie.",
+        "correct": true
+      },
+      {
+        "text": "A* vyhľadávanie.",
+        "correct": false
+      },
+      {
+        "text": "Min-conflicts.",
+        "correct": true
+      },
+      {
+        "text": "Backtracking s forward checkingom.",
+        "correct": true
+      }
+    ],
+    "explanation": "Na identifikačné problémy sa hodí backtracking s filtrovaním a lokálne vyhľadávanie (min-conflicts, hill climbing, simulované žíhanie, genetický algoritmus). UCS a A* sú určené na hľadanie najlacnejšej cesty – v CSP na ceste nezáleží, takže ich prednosti sa nevyužijú."
+  },
+  {
+    "id": "t7-q35",
+    "topicId": "t7-csp",
+    "week": 9,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo platí po vykonaní tohto kódu?",
+    "code": "board = SudokuBoard(grid)\nsolver = SudokuSolver(board)\nresult, expanded, t = solver.solve_dfs(True, False)",
+    "options": [
+      {
+        "text": "`result` je `True`, ak sa dosku podarilo vyriešiť.",
+        "correct": true
+      },
+      {
+        "text": "`expanded` je počet prázdnych buniek pôvodnej dosky.",
+        "correct": false
+      },
+      {
+        "text": "Vyriešená doska je v `board.grid`.",
+        "correct": true
+      },
+      {
+        "text": "Metóda vráti vyriešenú mriežku ako zoznam zoznamov.",
+        "correct": false
+      },
+      {
+        "text": "Prvý argument `True` zapína heuristiku MRV, LCV zostáva vypnutá.",
+        "correct": true
+      }
+    ],
+    "explanation": "`solve_dfs(use_mrv, use_lcv)` vracia trojicu `(result, expanded, time)`: úspech, počet pokusov o priradenie a čas v sekundách. Solver mení priamo objekt `board`, ktorý dostal, takže riešenie je v `board.grid`. `expanded` sa rovná počtu prázdnych buniek iba vtedy, keď sa algoritmus nevracal ani raz."
+  }
+]

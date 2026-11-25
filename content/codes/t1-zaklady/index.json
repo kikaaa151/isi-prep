@@ -1,0 +1,170 @@
+[
+  {
+    "id": "w01-numpy-test",
+    "title": "NumPy test: pole 3 × 5, tvar a súčty po osiach",
+    "week": 1,
+    "file": "w01-numpy-test.py",
+    "source": "moodle/w01/numpy_test.py",
+    "task": "Importuj numpy ako `np` a vypíš hlavičku `Inteligentne systemy v informatike`. Vytvor pole `a` s číslami 0 až 14 usporiadanými do matice s 3 riadkami a 5 stĺpcami. Cez f-string vypíš `Shape: ...` a `Size: ...`, potom samotné pole, súčet všetkých prvkov, súčet po riadkoch (`a.sum(1)`) a súčet po stĺpcoch (`a.sum(0)`).",
+    "explanation": "- `np.arange(15)` vytvorí čísla 0 až 14 (15 sa nezahŕňa), `.reshape(3, 5)` ich preskladá do matice 3 riadky × 5 stĺpcov – počet prvkov musí sedieť (3 · 5 = 15).\n- `a.shape` je n-tica `(3, 5)` = (riadky, stĺpce); `a.size` je počet všetkých prvkov (15).\n- `a.sum()` bez argumentu sčíta všetko (105).\n- `a.sum(1)` je to isté ako `a.sum(axis=1)`: sčíta hodnoty **v každom riadku**, výsledok má tvar `(3,)`.\n- `a.sum(0)` = `a.sum(axis=0)`: sčíta hodnoty **v každom stĺpci**, výsledok má tvar `(5,)`.\n- Pomôcka: os, ktorú zadáš, po sčítaní zmizne.",
+    "expectedOutput": "Inteligentne systemy v informatike\nShape: (3, 5)\nSize: 15\n[[ 0  1  2  3  4]\n [ 5  6  7  8  9]\n [10 11 12 13 14]]\n105\n[10 35 60]\n[15 18 21 24 27]",
+    "tags": [
+      "numpy",
+      "arange",
+      "reshape",
+      "shape",
+      "sum",
+      "axis"
+    ]
+  },
+  {
+    "id": "w01-matplotlib-digits",
+    "title": "Matplotlib test: dataset číslic a imshow",
+    "week": 1,
+    "file": "w01-matplotlib-digits.py",
+    "source": "moodle/w01/matplotlib_test.py",
+    "task": "Z `sklearn` importuj `datasets` a `matplotlib.pyplot` ako `plt`. Načítaj dataset číslic do `digits`, do `X` ulož dáta a do `y` cieľové hodnoty, vypíš ich tvary. Zobraz číslicu s indexom `idx = 5`: obrázok č. 1 veľkosti 3 × 3 palce, `imshow` s farebnou mapou `plt.cm.gray_r`, titulok `label = <hodnota y>`. Potom vykresli mriežku 2 × 5 grafov (`figsize=(8, 3.5)`) s prvými desiatimi číslicami: v cykle cez `zip(axes.ravel(), digits.images, y)` zobraz obrázok, nastav titulok na označenie a vypni osi. Na konci `tight_layout` a `show`.",
+    "explanation": "- `datasets.load_digits()` vráti objekt: `digits.data` (1797 × 64 – každý pixel je príznak), `digits.target` (číslice 0–9) a `digits.images` (tie isté dáta ako obrázky 8 × 8).\n- `plt.figure(1, figsize=(3, 3))` – obrázok číslo 1, veľkosť v palcoch.\n- `plt.imshow(matica, cmap=plt.cm.gray_r)` vykreslí 2D maticu ako obrázok; `gray_r` je obrátená sivá (vysoká hodnota = tmavá).\n- `plt.subplots(2, 5)` vráti obrázok a pole osí tvaru (2, 5); `axes.ravel()` ho sploští na 10 osí, takže sa dá prejsť jedným cyklom.\n- `zip` skončí po najkratšom zozname – preto sa vykreslí len prvých 10 číslic.\n- V notebooku je výhoda, že dáta sa načítajú raz a bunku s grafom možno spúšťať opakovane s iným `idx`.",
+    "expectedOutput": "(1797, 64) (1797,)\n+ obrázok číslice 5 a mriežka 2 × 5 číslic",
+    "tags": [
+      "matplotlib",
+      "load_digits",
+      "imshow",
+      "subplots"
+    ]
+  },
+  {
+    "id": "w01-lecture-pizza-regression",
+    "title": "Lineárna regresia: cena pizze – dáta, fit a predikcia",
+    "week": 1,
+    "file": "w01-lecture-pizza-regression.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_02.py, isi_01_03.py",
+    "task": "Trénovacie dáta: priemery pizze `X = [[6], [8], [10], [14], [18]]` a ceny `y = [[7], [9], [13], [17.5], [18]]`. Vykresli ich: titulok `Pizza price plotted against diameter`, popisy osí `Diameter in inches` a `Price in dollars`, čierne body (`'k.'`, `markersize=15`), rozsah osí `[0, 25, 0, 25]`, mriežka. Potom vytvor model `LinearRegression`, natrénuj ho a do `predikovana_cena` predikuj cenu 12-palcovej pizze (vstup `np.array([12]).reshape(-1, 1)`). Vypíš `A 12\" pizza should cost: $<cena na 2 desatinné miesta>`.",
+    "explanation": "- `X` musí byť **2D** (zoznam vzoriek, každá so zoznamom príznakov) – preto `[[6], [8], …]`: 5 vzoriek, 1 príznak.\n- `plt.plot(X, y, 'k.', markersize=15)` – formátovací reťazec `'k.'` = čierne (`k`) body (`.`).\n- `plt.axis([xmin, xmax, ymin, ymax])` nastaví rozsah oboch osí.\n- `model.fit(X, y)` – **učenie**: nájde priamku y = A + B·x.\n- `model.predict(...)` – **využitie naučeného modelu**. Vstup musí byť znova 2D: `np.array([12]).reshape(-1, 1)` spraví `[[12]]` (−1 = počet riadkov dopočítaj, 1 = jeden stĺpec).\n- Výsledok `predict` je pole tvaru (1, 1), preto `[0][0]` pri formátovaní cez `%.2f` (v prednáškovom kóde je priamo `% predikovana_cena`, čo v novom NumPy už nefunguje).",
+    "expectedOutput": "A 12\" pizza should cost: $13.68",
+    "tags": [
+      "LinearRegression",
+      "fit",
+      "predict",
+      "reshape",
+      "regresia"
+    ]
+  },
+  {
+    "id": "w01-lecture-pizza-model-line",
+    "title": "Lineárna regresia: koeficienty a vykreslenie naučenej priamky",
+    "week": 1,
+    "file": "w01-lecture-pizza-model-line.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_04.py",
+    "task": "Na dátach pizze (`X = [[6], [8], [10], [14], [18]]`, `y = [[7], [9], [13], [17.5], [18]]`) natrénuj `LinearRegression`. Vytvor `X_model` ako 21 rovnomerných bodov od 0 do 20 (`np.linspace`) a `y_model` vypočítaj ručne z koeficientu a posunu modelu. Vypíš `model coefficent ` + koeficient a `model intercept ` + posun. Vykresli: priamku modelu čiernou čiarou (`'k-'`, `np.ravel(y_model)`), trénovacie body červeno (`'r.'`, `markersize=15`), predikciu pre 12 palcov ako modrý krížik v bode (12, 13.68) (`'b+'`), titulok, popisy osí, rozsah `[0, 25, 0, 25]`, mriežku.",
+    "explanation": "- Po `fit` má model naučené **parametre**: `model.coef_` (sklon B) a `model.intercept_` (posun A) – model je y = A + B·x.\n- `y_model = X_model * model.coef_ + model.intercept_` je ručný výpočet toho, čo by vrátil `predict`.\n- Keďže `y` bolo 2D, `coef_` má tvar (1, 1) a `y_model` vyjde ako (1, 21) – preto `np.ravel(y_model)` pred kreslením.\n- `np.linspace(0, 20, 21)` = 21 bodov vrátane oboch koncov, teda 0, 1, …, 20.\n- Formáty: `'k-'` čierna čiara, `'r.'` červené body, `'b+'` modrý krížik.\n- Kontrola: 1.9655 + 0.9763 · 12 = 13.68.",
+    "expectedOutput": "model coefficent [[0.9762931]]\nmodel intercept [1.96551724]\n+ graf priamky a bodov",
+    "tags": [
+      "LinearRegression",
+      "coef_",
+      "intercept_",
+      "linspace",
+      "plot"
+    ]
+  },
+  {
+    "id": "w01-lecture-iris-split",
+    "title": "Iris: načítanie, výber dvoch príznakov a rozdelenie train/test",
+    "week": 1,
+    "file": "w01-lecture-iris-split.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_01.py, isi_01_05.py",
+    "task": "Načítaj dataset Iris (`datasets.load_iris()`), do `X_iris, y_iris` ulož dáta a cieľ a vypíš ich tvary. Do `X, y` vyber iba prvé dva príznaky. Rozdeľ dáta cez `train_test_split` tak, aby 25 % tvorila testovacia časť, `random_state=33`. Vypíš `Rozmer X a y` a tvary trénovacej aj testovacej časti.",
+    "explanation": "- `iris.data` má tvar (150, 4), `iris.target` (150,) – 150 kvetov, 4 príznaky, 3 druhy.\n- `X_iris[:, :2]` = všetky riadky, stĺpce 0 a 1 (sepal length, sepal width).\n- `train_test_split(X, y, test_size=0.25, random_state=33)` dáta zamieša a rozdelí; vracia štyri polia **v poradí `X_train, X_test, y_train, y_test`**.\n- `test_size=0.25` → 38 testovacích (zaokrúhľuje sa nahor z 37.5) a 112 trénovacích vzoriek.\n- `random_state` zafixuje náhodné miešanie, aby bol výsledok opakovateľný.",
+    "expectedOutput": "(150, 4) (150,)\nRozmer X a y\n(112, 2) (112,)\n(38, 2) (38,)",
+    "tags": [
+      "load_iris",
+      "train_test_split",
+      "slicing"
+    ]
+  },
+  {
+    "id": "w01-lecture-iris-scatter",
+    "title": "Iris: bodový graf tried v priestore dvoch príznakov",
+    "week": 1,
+    "file": "w01-lecture-iris-scatter.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_06.py",
+    "task": "Načítaj Iris, vyber prvé dva príznaky a rozdeľ dáta (`test_size=0.25`, `random_state=33`), vypíš tvar trénovacej časti. Vykresli trénovacie vzorky: pre každú z troch tried (farby `['red', 'greenyellow', 'blue']`) vyber booleovskou maskou `y_train == i` hodnoty prvého príznaku do `xs` a druhého do `ys` a vykresli ich cez `plt.scatter`. Pridaj legendu s názvami tried a popisy osí `Sepal length`, `Sepal width`.",
+    "explanation": "- `y_train == i` je booleovské pole – `True` tam, kde vzorka patrí do triedy `i`.\n- `X_train[:, 0]` je prvý stĺpec (sepal length); `X_train[:, 0][y_train == i]` z neho vyberie iba vzorky triedy `i` (**booleovská maska**).\n- Každé volanie `plt.scatter(xs, ys, c=colors[i])` nakreslí jednu triedu jednou farbou.\n- `plt.legend(iris.target_names)` priradí názvy (setosa, versicolor, virginica) v poradí kreslenia.\n- Na grafe vidno, že setosa je dobre oddelená, versicolor a virginica sa v týchto dvoch príznakoch prekrývajú – preto má neskôr klasifikátor na teste len 68 %.",
+    "expectedOutput": "(112, 2) (112,)\n+ bodový graf troch tried",
+    "tags": [
+      "scatter",
+      "boolean mask",
+      "iris",
+      "matplotlib"
+    ]
+  },
+  {
+    "id": "w01-lecture-iris-logreg",
+    "title": "Iris: logistická regresia, predikcia a accuracy",
+    "week": 1,
+    "file": "w01-lecture-iris-logreg.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_08.py, isi_01_09.py",
+    "task": "Načítaj Iris, vyber prvé dva príznaky, rozdeľ (`test_size=0.25`, `random_state=33`). Vytvor klasifikátor `clf = LogisticRegression()` a natrénuj ho. Vypíš predikciu pre jednotlivé vzorky `[5.3, 4.1]` a `[7.3, 2.1]` (každú preveď cez `np.array(...).reshape(1, -1)`), vždy s nadpisom `predikcia [...]`. Potom vypíš `accuracy on train` a presnosť na trénovacích dátach (`y_train_predicted`) a `accuracy on test` a presnosť na testovacích (`y_test_predicted`) pomocou `metrics.accuracy_score`.",
+    "explanation": "- `LogisticRegression` má v názve regresiu, ale je to **klasifikátor** – regresia je iba názov algoritmu.\n- `clf.fit(X_train, y_train)` – učenie; `clf.predict(...)` – použitie naučeného modelu.\n- `predict` chce 2D pole: `np.array([5.3, 4.1]).reshape(1, -1)` = jedna vzorka s dvoma príznakmi, tvar (1, 2).\n- `metrics.accuracy_score(y_true, y_pred)` = podiel správnych predikcií.\n- Meria sa **na tréningu aj na teste**: 0.82 vs. 0.68. Rozhodujúca je testovacia presnosť – tú model pri učení nevidel.",
+    "expectedOutput": "predikcia [5.3,4.1]\n[0]\npredikcia [7.3,2.1]\n[2]\naccuracy on train\n0.8214285714285714\naccuracy on test\n0.6842105263157895",
+    "tags": [
+      "LogisticRegression",
+      "fit",
+      "predict",
+      "accuracy_score",
+      "klasifikácia"
+    ]
+  },
+  {
+    "id": "w01-lecture-xor-svm-rbf",
+    "title": "XOR dáta a SVM s RBF jadrom",
+    "week": 1,
+    "file": "w01-lecture-xor-svm-rbf.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_12.py, isi_01_13.py",
+    "task": "Vygeneruj XOR dáta: `np.random.seed(0)`, `X_xor` = 200 náhodných bodov v 2D z normálneho rozdelenia, `y_xor` = logický XOR podmienok „prvá súradnica > 0\" a „druhá súradnica > 0\", prevedený cez `np.where` na 1 / −1. Vykresli triedu 1 modrými krížikmi (`c='b'`, `marker='x'`, `label='1'`) a triedu −1 červenými štvorcami (`c='r'`, `marker='s'`, `label='-1'`), osi od −3 do 3, legenda `loc='best'`. Potom natrénuj `SVC` s RBF jadrom (`random_state=0`, `gamma=2`, `C=0.10`) a vykresli rozhodovacie regióny funkciou `plot_decision_regions(X_xor, y_xor, classifier=svm)` z `isi_utils`, legenda `loc='upper left'`.",
+    "explanation": "- XOR: trieda 1 sú body, kde je kladná **práve jedna** súradnica (2. a 4. kvadrant), trieda −1 zvyšok. Také dáta **nie sú lineárne separovateľné** – žiadna priamka ich neoddelí.\n- `np.logical_xor(a, b)` vráti True/False, `np.where(y_xor, 1, -1)` to prevedie na 1 / −1.\n- `X_xor[y_xor == 1, 0]` = prvá súradnica bodov triedy 1 (maska na riadky, index stĺpca).\n- `SVC(kernel='rbf', gamma=2, C=0.10)` – **kernelizácia**: RBF jadro premietne dáta do viacrozmerného priestoru, kde sa dajú oddeliť rovinou; v pôvodnom priestore je hranica nelineárna.\n- `gamma` je parameter jadra (väčšia = členitejšia hranica), `C` je regularizačný (slack) parameter.\n- `plot_decision_regions` je pomocná funkcia kurzu: predikuje triedu pre hustú mriežku bodov a vyfarbí oblasti. Lineárny SVM má na týchto dátach presnosť len asi 0.67, RBF asi 0.99.",
+    "expectedOutput": "dva grafy: XOR dáta a rozhodovacie regióny RBF SVM",
+    "tags": [
+      "SVC",
+      "rbf",
+      "kernel",
+      "XOR",
+      "logical_xor",
+      "gamma"
+    ]
+  },
+  {
+    "id": "w01-lecture-iris-svm-scaled",
+    "title": "Iris: štandardizácia a SVM (lineárne a RBF jadro)",
+    "week": 1,
+    "file": "w01-lecture-iris-svm-scaled.py",
+    "source": "moodle/w01/prednasky_kod/isi_01_14.py, isi_01_15.py",
+    "task": "Načítaj Iris a vyber príznaky so stĺpcovými indexmi 2 a 3 (petal length, petal width); vypíš `Class labels:` a rôzne hodnoty `y`. Rozdeľ dáta (`test_size=0.3`, `random_state=0`). Štandardizuj: vytvor `sc = StandardScaler()`, nauč ho **iba na trénovacej časti** a transformuj trénovaciu aj testovaciu do `X_train_std`, `X_test_std`. Spoj ich do `X_combined_std` (`np.vstack`) a `y_combined` (`np.hstack`). Natrénuj lineárny `SVC` (`C=1`, `random_state=0`) a vykresli `plot_decision_regions`. Potom to isté pre RBF `SVC` (`random_state=0`, `gamma=2`, `C=10`).",
+    "explanation": "- `iris.data[:, [2, 3]]` – výber stĺpcov zoznamom indexov.\n- `test_size=0.3` → 105 trénovacích a 45 testovacích vzoriek.\n- **Štandardizácia**: `sc.fit(X_train)` spočíta priemer a smerodajnú odchýlku **len z trénovacích dát**; `sc.transform` ich použije na obe časti. Škálovač sa na testovacích dátach nikdy neučí.\n- `np.vstack` spája polia pod seba (riadky X), `np.hstack` za seba (vektory y) – kvôli vykresleniu všetkých bodov naraz.\n- Lineárne jadro dá hranice z priamok; RBF jadro zakrivené. Poznámka z prednášky: **zvýš `gamma` na 200** – regióny sa stiahnu tesne okolo trénovacích bodov (tréning 0.99, test 0.76 = pretrénovanie).\n- V prednáškovom kóde sa volá `plot_decision_regions(..., test_idx=range(105, 150))` na zvýraznenie testovacích bodov; s novým matplotlib táto vetva pomocnej funkcie padá, preto je tu bez `test_idx`.",
+    "expectedOutput": "Class labels: [0 1 2]\n+ dva grafy rozhodovacích regiónov",
+    "tags": [
+      "SVC",
+      "StandardScaler",
+      "linear",
+      "rbf",
+      "gamma",
+      "C"
+    ]
+  },
+  {
+    "id": "w01-homework-dataframe",
+    "title": "Domáca úloha: spojenie DataFrame a train_test_split",
+    "week": 1,
+    "file": "w01-homework-dataframe.py",
+    "source": "teams/cv_01/Domáca úloha/Dataframe.py",
+    "task": "Stĺpce `column_values = ['number', 'squares', 'cubes']`. Vytvor DataFrame `A_df` z poľa `A_array` (riadky [1, 1, 1], [2, 4, 8], [3, 9, 27], [4, 16, 64]) s indexom `['first', 'second', 'third', 'fourth']` a `B_df` z `B_array` ([5, 25, 125], [6, 36, 216], [7, 49, 343]) s indexom `['fifth', 'sixth', 'seventh']`. 1) Spoj A a B do jedného DataFrame `df` a vypíš ho. 2) Do premennej `cubes` ulož stĺpec `cubes`. 3) Rozdeľ `df` a `cubes` cez `train_test_split` (`test_size=0.25`, `random_state=0`) a vypíš `X_train`, `y_train`, `X_test`, `y_test`.",
+    "explanation": "- `pd.DataFrame(data=pole, index=mena_riadkov, columns=mena_stlpcov)` vytvorí tabuľku z NumPy poľa.\n- `pd.concat([A_df, B_df])` spojí tabuľky **pod seba** (riadky), stĺpce sa zarovnajú podľa mien.\n- `df['cubes']` vyberie jeden stĺpec ako `Series`.\n- `train_test_split(df, cubes, ...)` rozdelí obe štruktúry **rovnakým náhodným výberom riadkov** – riadok v `X_train` a hodnota v `y_train` s rovnakým indexom (napr. `second`) k sebe patria. To je zmysel úlohy: pozrieť si korešpondujúce dvojice X_train ↔ y_train a X_test ↔ y_test.\n- 7 riadkov a `test_size=0.25` → 2 testovacie (zaokrúhlenie nahor) a 5 trénovacích.\n- Zadanie nemá oficiálne riešenie; `test_size` a `random_state` sú zvolené podľa vzoru z cvičení.",
+    "expectedOutput": "df so 7 riadkami; X_train má 5 riadkov, X_test 2 riadky (seventh, third)",
+    "tags": [
+      "pandas",
+      "DataFrame",
+      "concat",
+      "train_test_split"
+    ]
+  }
+]

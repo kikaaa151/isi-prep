@@ -1,0 +1,166 @@
+[
+  {
+    "id": "w06-filter-variance-threshold",
+    "title": "Filter: VarianceThreshold – odstránenie príznakov s nízkym rozptylom",
+    "week": 6,
+    "file": "w06-filter-variance-threshold.py",
+    "source": "moodle/w06/tasks/feature_selection/filter_method/ex_03_showcase.py",
+    "task": "Načítaj `employees_research.csv` cez pandas a hneď zahoď stĺpec `ID` (`.drop(columns=['ID'])`) – je to identifikátor, nie príznak. Vytvor generátor `rng = np.random.default_rng(5)` a pridaj stĺpec `spam` s rovnomerne náhodnými hodnotami z intervalu 0.9 až 1.1 (`rng.uniform(low=0.9, high=1.1, size=len(data))`). Vypíš `data.shape` a rozptyly stĺpcov `data.var()`. Vytvor `selector = VarianceThreshold(threshold=0.05)`, cez `fit_transform(data)` získaj `new_selection` a vypíš jeho tvar, zoznam ponechaných príznakov (`selector.get_feature_names_out()`) a zoznam odstránených (`data.columns[~selector.get_support()]`).",
+    "explanation": "**Filter** hodnotí príznak iba jeho štatistikou – bez modelu a bez cieľa.\n\n1. `drop(columns=['ID'])` – `ID` má obrovský rozptyl, prahom by prešlo, hoci nenesie žiadnu informáciu.\n2. `spam` je umelý, takmer konštantný stĺpec (rozptyl ≈ 0.0035) – na ňom vidno, čo filter odstráni.\n3. `VarianceThreshold(threshold=0.05)` ponechá stĺpce s rozptylom väčším ako 0.05. Predvolený prah je 0 (odstráni len konštantné stĺpce).\n4. `fit_transform(data)` dostane **iba dáta, žiadne `y`** – je to metóda bez učiteľa. Vráti NumPy pole bez názvov stĺpcov.\n5. `get_support()` je maska ponechaných stĺpcov; `~` ju obráti na odstránené. `get_feature_names_out()` vráti názvy ponechaných.\n\nPozor: rozptyl závisí od mierky – `salary` prejde len vďaka tomu, že je v eurách (pozri nasledujúcu úlohu).",
+    "expectedOutput": "(100, 4)\nsalary        45781.675152\nexperience        1.918788\ngraduated         0.082727\nspam              0.003512\ndtype: float64\n(100, 3)\nKept features:    ['salary', 'experience', 'graduated']\nRemoved features: ['spam']",
+    "tags": [
+      "feature selection",
+      "filter",
+      "VarianceThreshold",
+      "pandas"
+    ]
+  },
+  {
+    "id": "w06-filter-variance-scaling",
+    "title": "Filter: rozptyl závisí od mierky (MinMaxScaler + VarianceThreshold)",
+    "week": 6,
+    "file": "w06-filter-variance-scaling.py",
+    "source": "moodle/w06/tasks_notebooks/cv_06_ex_03_filter_method.ipynb",
+    "task": "Priprav dáta ako v predošlej úlohe: `employees_research.csv` bez stĺpca `ID`, `rng = np.random.default_rng(5)` a stĺpec `spam` z `rng.uniform(low=0.9, high=1.1, size=len(data))`. Vypíš pôvodné rozptyly `data.var().round(4)`. Potom všetky príznaky preškáluj do intervalu 0 až 1: `scaled = pd.DataFrame(MinMaxScaler().fit_transform(data), columns=data.columns)` a vypíš `scaled.var().round(4)`. Na škálované dáta natrénuj `selector_scaled = VarianceThreshold(threshold=0.05).fit(scaled)` a vypíš ponechané príznaky (`get_feature_names_out()`).",
+    "explanation": "Ukážka pasce filtra podľa rozptylu.\n\n- Pred škálovaním má `salary` rozptyl ≈ 45 782 (eurá) a `spam` 0.0035 → prah 0.05 vyhodí `spam`.\n- `MinMaxScaler().fit_transform(data)` vráti NumPy pole, preto sa balí späť do `DataFrame` s pôvodnými názvami stĺpcov.\n- Po škálovaní: `salary` 0.0246, `experience` 0.1199, `graduated` 0.0827, `spam` 0.0881 → ten istý prah teraz vyhodí **`salary`** a nechá `spam`.\n- `spam` je rovnomerne rozložený, takže po roztiahnutí na ⟨0, 1⟩ má veľký rozptyl (≈ 1/12); `salary` má jednu odľahlú nízku hodnotu (33), ktorá roztiahne rozsah, takže ostatné platy sa natlačia k sebe.\n\nZáver: škálovanie umožní porovnávať príznaky férovo, ale **prah treba zvoliť nanovo** – a nízky rozptyl sám osebe nehovorí, či je príznak užitočný.",
+    "expectedOutput": "salary        45781.6752\nexperience        1.9188\ngraduated         0.0827\nspam              0.0035\ndtype: float64\nsalary        0.0246\nexperience    0.1199\ngraduated     0.0827\nspam          0.0881\ndtype: float64\nKept after scaling: ['experience', 'graduated', 'spam']",
+    "tags": [
+      "feature selection",
+      "filter",
+      "VarianceThreshold",
+      "MinMaxScaler"
+    ]
+  },
+  {
+    "id": "w06-filter-selectkbest",
+    "title": "Filter s cieľom: SelectKBest (ANOVA F-test)",
+    "week": 6,
+    "file": "w06-filter-selectkbest.py",
+    "source": "moodle/w06/tasks_notebooks/cv_06_ex_03_filter_method.ipynb",
+    "task": "Načítaj dáta o srdcových chorobách `X_data.npy` a `y_data.npy` (`np.load`) a definuj názvy príznakov: `feature_names = np.array(['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'])`. Natrénuj univariačný filter `kbest = SelectKBest(f_classif, k=5).fit(X, y)`. Zoraď príznaky zostupne podľa skóre (`order = np.argsort(kbest.scores_)[::-1]`) a v cykle vypíš názov a skóre každého príznaku formátom `'%-10s %.1f'`. Potom dáta transformuj (`X_selected = kbest.transform(X)`), vypíš tvar a názvy vybraných príznakov cez `kbest.get_support()`.",
+    "explanation": "`SelectKBest` je **filter, ktorý používa cieľ**: každému príznaku dá skóre a nechá `k` najlepších.\n\n- `f_classif` je ANOVA F-test – meria, ako veľmi sa priemery príznaku líšia medzi triedami. Iné skórovacie funkcie: `chi2` (len nezáporné dáta – v domácej úlohe sa preto najprv škáluje `MinMaxScaler`-om), vzájomná informácia.\n- `.fit(X, y)` potrebuje aj `y` (na rozdiel od `VarianceThreshold`).\n- `kbest.scores_` – skóre všetkých 13 príznakov; `np.argsort(...)[::-1]` dá indexy od najväčšieho.\n- `kbest.get_support()` – booleovská maska vybraných, ktorou sa indexuje pole názvov.\n\nObmedzenie: každý príznak sa hodnotí **samostatne**, takže filter nevidí redundantné príznaky ani príznaky užitočné iba spolu.",
+    "expectedOutput": "exang      71.0\ncp         69.8\noldpeak    68.6\nthalach    65.1\nca         54.6\nslope      40.9\n...\nfbs        0.2\n(303, 5)\nSelected features: ['cp', 'thalach', 'exang', 'oldpeak', 'ca']",
+    "tags": [
+      "feature selection",
+      "filter",
+      "SelectKBest",
+      "f_classif"
+    ]
+  },
+  {
+    "id": "w06-wrapper-rfecv",
+    "title": "Wrapper: RFECV s lineárnym SVC v pipeline",
+    "week": 6,
+    "file": "w06-wrapper-rfecv.py",
+    "source": "moodle/w06/tasks/feature_selection/wrapper_method/ex_04_showcase.py",
+    "task": "Načítaj `X_data.npy` a `y_data.npy` (srdcové choroby), definuj `feature_names = np.array(['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'])` a vypíš `X.shape`. Vytvor pipeline `clf` s krokmi `('scl', StandardScaler())` a `('clf', SVC(C=1, kernel='linear'))`. Vytvor `selector = RFECV(clf, step=1, cv=5, scoring='accuracy', importance_getter='named_steps.clf.coef_')` a cez `fit_transform(X, y)` získaj `X_selected`. Vypíš tvar `X_selected`, optimálny počet príznakov (`selector.n_features_`), názvy vybraných príznakov (`selector.support_`) a slovník názov → poradie (`dict(zip(feature_names.tolist(), selector.ranking_.tolist()))`).",
+    "explanation": "**Wrapper** hodnotí podmnožiny príznakov trénovaním modelu.\n\n1. Pipeline so `StandardScaler` – váhy lineárneho modelu (`coef_`) sú porovnateľné, len keď majú príznaky rovnakú mierku. Bez škálovania by `chol` (~250) dostal malú váhu iba pre veľké hodnoty.\n2. `SVC(kernel='linear')` – len lineárne jadro má `coef_`.\n3. `RFECV`: natrénuje model, vyhodí príznak s najmenšou `|váhou|` (`step=1` = jeden za kolo) a každý počet príznakov ohodnotí 5-násobnou CV (`cv=5`, `scoring='accuracy'`). Spolu asi 13 × 5 = 65 trénovaní.\n4. `importance_getter='named_steps.clf.coef_'` – cesta k váham vnútri pipeline. Samotná `Pipeline` atribút `coef_` nemá, bez tohto parametra skončí `fit` chybou.\n5. `fit_transform(X, y)` – wrapper potrebuje aj `y`.\n6. `n_features_` = víťazný počet, `support_` = maska vybraných, `ranking_` = 1 pre vybrané; čím vyššie číslo, tým skôr príznak vypadol (`age` 3, `restecg` 2).",
+    "expectedOutput": "(303, 13)\n(303, 11)\nOptimal number of features: 11\nSelected features: ['sex', 'cp', 'trestbps', 'chol', 'fbs', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']\nRanking (1 = selected): {'age': 3, 'sex': 1, 'cp': 1, 'trestbps': 1, 'chol': 1, 'fbs': 1, 'restecg': 2, 'thalach': 1, 'exang': 1, 'oldpeak': 1, 'slope': 1, 'ca': 1, 'thal': 1}",
+    "tags": [
+      "feature selection",
+      "wrapper",
+      "RFECV",
+      "Pipeline",
+      "SVC"
+    ]
+  },
+  {
+    "id": "w06-embedded-rf-importances",
+    "title": "Embedded: dôležitosti náhodného lesa a SelectFromModel",
+    "week": 6,
+    "file": "w06-embedded-rf-importances.py",
+    "source": "moodle/w06/tasks/feature_selection/embedded_method/ex_05_showcase.py",
+    "task": "Načítaj `X_data.npy` a `y_data.npy`, definuj `feature_names = np.array(['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'])` a vypíš `X.shape`. Natrénuj `rf = RandomForestClassifier(n_estimators=200, random_state=5)` na všetkých dátach. Zoraď príznaky zostupne podľa `rf.feature_importances_` (`order = np.argsort(...)[::-1]`) a v cykle ich vypíš formátom `'%-10s %.3f'`. Potom vyber príznaky s nadpriemernou dôležitosťou: `selector = SelectFromModel(rf, threshold='mean', prefit=True)`, `X_selected = selector.transform(X)`. Vypíš tvar `X_selected` a názvy vybraných príznakov cez `selector.get_support()`.",
+    "explanation": "**Embedded** metóda: dôležitosť príznakov je vedľajší produkt trénovania jedného modelu.\n\n1. Náhodný les po `fit` ponúka `feature_importances_` – o koľko príznak znížil nečistotu (Gini) vo všetkých rozdeleniach všetkých stromov; súčet je 1.\n2. Škálovač tu nie je: stromom na mierke príznakov nezáleží.\n3. `np.argsort(...)[::-1]` – indexy príznakov od najdôležitejšieho.\n4. `SelectFromModel(rf, threshold='mean', prefit=True)` – selektor nad **už natrénovaným** modelom (`prefit=True`), preto stačí `transform(X)` bez `fit`. Ponechá príznaky s dôležitosťou nad priemerom (1/13 ≈ 0.077).\n5. Iné prahy: číslo, `'1.5*mean'`, `'median'`, alebo pevný počet cez `max_features`.\n\nVerzia z Teams robí to isté s lineárnym modelom: `SelectFromModel(SVC(C=1, kernel='linear')).fit_transform(X, y)` – dôležitosť je `|coef_|`.",
+    "expectedOutput": "(303, 13)\ncp         0.147\nthalach    0.117\noldpeak    0.110\nthal       0.108\nca         0.108\nage        0.089\nchol       0.079\ntrestbps   0.073\n...\nfbs        0.010\n(303, 7)\nSelected features: ['age', 'cp', 'chol', 'thalach', 'oldpeak', 'ca', 'thal']",
+    "tags": [
+      "feature selection",
+      "embedded",
+      "RandomForestClassifier",
+      "SelectFromModel"
+    ]
+  },
+  {
+    "id": "w06-embedded-selection-pipeline",
+    "title": "Embedded: výber príznakov vnútri pipeline a poctivé porovnanie cez CV",
+    "week": 6,
+    "file": "w06-embedded-selection-pipeline.py",
+    "source": "moodle/w06/tasks/feature_selection/embedded_method/ex_05_showcase.py",
+    "task": "Načítaj `X_data.npy` a `y_data.npy`. Vytvor dva modely: `pipe_all = RandomForestClassifier(n_estimators=200, random_state=5)` (všetky príznaky) a `pipe_sel` – pipeline s krokmi `('sel', SelectFromModel(RandomForestClassifier(n_estimators=200, random_state=5), threshold='mean'))` a `('clf', RandomForestClassifier(n_estimators=200, random_state=5))`. V cykle cez dvojice `('all features', pipe_all)` a `('selected features', pipe_sel)` spočítaj `cross_val_score(model, X, y, cv=5, n_jobs=-1)` a vypíš meno, priemer a smerodajnú odchýlku formátom `'%-18s CV accuracy: %.3f +/- %.3f'`.",
+    "explanation": "Otázka: pomáha výber príznakov? Odpoveď musí byť **poctivá**.\n\n- Výber je **krok pipeline** (`'sel'`), takže `cross_val_score` ho v každom folde natrénuje nanovo iba na trénovacích foldoch.\n- Keby sme príznaky vybrali na všetkých dátach a až potom validovali, validačné foldy by už ovplyvnili výber – **únik informácie** a príliš optimistické skóre.\n- V pipeline je `SelectFromModel` **bez** `prefit=True` – les vnútri sa trénuje pri `fit` pipeline.\n- `cv=5` je pri klasifikátore stratifikovaný 5-fold; `n_jobs=-1` použije všetky jadrá.\n\nVýsledok: všetky príznaky 0.815, vybrané 0.775 – výber presnosť nezlepšil, ale model má 7 príznakov namiesto 13.",
+    "expectedOutput": "all features       CV accuracy: 0.815 +/- 0.039\nselected features  CV accuracy: 0.775 +/- 0.050",
+    "tags": [
+      "feature selection",
+      "embedded",
+      "Pipeline",
+      "cross_val_score",
+      "data leakage"
+    ]
+  },
+  {
+    "id": "w06-kmeans-elbow",
+    "title": "K-means a lakťová metóda na dátach zákazníkov",
+    "week": 6,
+    "file": "w06-kmeans-elbow.py",
+    "source": "moodle/w06/tasks/dimensionality_reduction/ex_06_showcase.py",
+    "task": "Načítaj `market_research.csv` cez pandas (2212 zákazníkov, 23 štandardizovaných príznakov) a vypíš `data.shape`. Lakťová metóda: do zoznamu `distortions` ulož pre `i` od 1 do 10 skreslenie `km.inertia_` modelu `KMeans(n_clusters=i, random_state=5)` natrénovaného na `data`. Vykresli krivku `plt.plot(range(1, 11), distortions, marker='o')` s popismi osí `'# of clusters'` a `'Distortion'`, nadpisom `\"Distortion to # of clusters without dim. reduction\"`, `plt.tight_layout()` a `plt.show()`. Nakoniec zhlukuj do 3 klastrov: `km = KMeans(n_clusters=3, random_state=5)`, `y_km = km.fit_predict(data)` a vypíš veľkosti klastrov `np.bincount(y_km)`.",
+    "explanation": "Klastrovanie je učenie **bez učiteľa** – žiadne `y`, K-means dostane len dáta.\n\n1. **Skreslenie** (`inertia_`) = suma štvorcov vzdialeností vzoriek od ich najbližšieho centroidu – presne to, čo K-means minimalizuje.\n2. Cyklus `range(1, 11)` skúša K = 1…10; pre každé K nový model, `fit` a uloženie `inertia_`.\n3. Krivka vždy klesá (pri K = N by bola 0). Hľadá sa **lakeť** – K, za ktorým už pokles nie je výrazný. Tu sa zvolilo K = 3.\n4. `fit_predict(data)` natrénuje model a vráti číslo klastra (0, 1, 2) pre každého zákazníka.\n5. `random_state=5` – počiatočné centroidy sú náhodné, bez neho by výsledok nebol opakovateľný.\n\nDáta sú už štandardizované – K-means pracuje so vzdialenosťami, takže bez škálovania by dominovali príznaky s veľkými hodnotami.",
+    "expectedOutput": "(2212, 23)\n[ 509 1075  628]",
+    "tags": [
+      "clustering",
+      "KMeans",
+      "elbow method",
+      "inertia_"
+    ]
+  },
+  {
+    "id": "w06-pca-kmeans",
+    "title": "PCA na 3 komponenty a K-means na redukovaných dátach",
+    "week": 6,
+    "file": "w06-pca-kmeans.py",
+    "source": "moodle/w06/tasks/dimensionality_reduction/ex_06_showcase.py",
+    "task": "Načítaj `market_research.csv`. Najprv zisti, koľko komponentov treba na 80 % rozptylu: `pca_full = PCA().fit(data)`, `cumulative = np.cumsum(pca_full.explained_variance_ratio_)` a vypíš `np.argmax(cumulative >= 0.8) + 1` formátom `'Components needed for 80 %% of the variance: %d'`. Potom zníž dimenziu na 3: `pca = PCA(n_components=3)`, `pca.fit(data)` a z `pca.transform(data)` vytvor `DataFrame` `data_reduced` so stĺpcami `col1`, `col2`, `col3`. Vypíš `pca.explained_variance_ratio_.round(3)` a ich súčet (`'Total: %.3f'`). Nakoniec zhlukuj redukované dáta: `KMeans(n_clusters=3, random_state=5)`, `y_km = km.fit_predict(data_reduced)` a vypíš `np.bincount(y_km)`.",
+    "explanation": "**PCA** vytvorí nové príznaky (hlavné komponenty) – lineárne kombinácie pôvodných, zoradené podľa zachyteného rozptylu.\n\n1. `PCA()` bez `n_components` ponechá všetkých 23 komponentov; `explained_variance_ratio_` je podiel rozptylu každého z nich a `np.cumsum` z toho kumulatívna krivka.\n2. `np.argmax(cumulative >= 0.8) + 1` – index prvej hodnoty ≥ 0.8, plus 1, lebo indexy idú od nuly → 9 komponentov.\n3. `PCA(n_components=3)`, `fit(data)` – **bez `y`**, PCA je učenie bez učiteľa. `transform(data)` vráti pole `(2212, 3)`.\n4. Tri komponenty zachytia 0.385 + 0.129 + 0.061 = 57.5 % rozptylu.\n5. K-means na `data_reduced` dá takmer rovnaké klastre ako na všetkých 23 príznakoch (ARI 0.965), ale dajú sa celé vykresliť v 3D.\n\nDáta sú vopred štandardizované – PCA hľadá smery najväčšieho rozptylu, takže bez škálovania by vyhrali príznaky s najväčšou mierkou. Nové stĺpce `col1`–`col3` už nemajú pôvodný význam.",
+    "expectedOutput": "Components needed for 80 % of the variance: 9\nExplained variance ratio: [0.385 0.129 0.061]\nTotal: 0.575\n[ 511 1077  624]",
+    "tags": [
+      "PCA",
+      "dimensionality reduction",
+      "KMeans",
+      "explained_variance_ratio_"
+    ]
+  },
+  {
+    "id": "w06-lecture-kmeans-blobs",
+    "title": "Prednáška: K-means na make_blobs, skreslenie a lakťová metóda",
+    "week": 6,
+    "file": "w06-lecture-kmeans-blobs.py",
+    "source": "lecture/isi04_02.py + isi04_03.py",
+    "task": "Vygeneruj dáta `X, y = make_blobs(n_samples=150, n_features=2, centers=3, cluster_std=0.5, shuffle=True, random_state=0)`. Zhlukuj ich modelom `KMeans(n_clusters=3, init='random', n_init=10, max_iter=300, tol=1e-04, random_state=0)`: `y_km = km.fit_predict(X)`, vypíš `km.cluster_centers_` a skreslenie formátom `'Distortion: %.2f'` (`km.inertia_`). Potom lakťová metóda: pre `i` od 1 do 10 natrénuj `KMeans(n_clusters=i, init='k-means++', n_init=10, max_iter=300, random_state=0)`, ukladaj `km.inertia_` do `distortions` a vykresli krivku (`marker='o'`, osi `'Number of clusters'` a `'Distortion'`, `plt.tight_layout()`, `plt.show()`).",
+    "explanation": "Kódy z prednášky 4 (`isi04_02`, `isi04_03`).\n\n- `make_blobs` vyrobí 150 bodov v 3 guľatých zhlukoch – ideálne dáta pre K-means. `y` sa nepoužije (učenie bez učiteľa).\n- `init='random'` – počiatočné centroidy sú náhodné; `n_init=10` – algoritmus beží 10× s rôznymi počiatočnými centroidmi a ostane beh s najmenším SSE.\n- `max_iter=300` – najviac 300 iterácií jedného behu; `tol=1e-04` – tolerancia, pri ktorej sa beh vyhlási za skonvergovaný.\n- `cluster_centers_` – súradnice 3 centroidov; `inertia_` – suma štvorcov chýb v rámci klastrov (72.48).\n- V lakťovej slučke je `init='k-means++'` – centroidy sa na začiatku rozmiestnia ďaleko od seba, čo dáva lepšie a stabilnejšie výsledky.\n\nSkreslenia pre K = 1…5: 713.7, 283.5, 72.5, 62.9, 54.3 – zlom (lakeť) je pri K = 3.",
+    "expectedOutput": "[[-1.5947298   2.92236966]\n [ 0.9329651   4.35420712]\n [ 2.06521743  0.96137409]]\nDistortion: 72.48",
+    "tags": [
+      "clustering",
+      "KMeans",
+      "make_blobs",
+      "elbow method",
+      "lecture"
+    ]
+  },
+  {
+    "id": "w06-lecture-kmeans-vs-dbscan",
+    "title": "Prednáška: K-means verzus DBSCAN na polmesiacoch",
+    "week": 6,
+    "file": "w06-lecture-kmeans-vs-dbscan.py",
+    "source": "lecture/isi04_06.py",
+    "task": "Vygeneruj dáta `X, y = make_moons(n_samples=200, noise=0.05, random_state=0)` a priprav dva grafy vedľa seba: `f, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3))`. Zhlukuj cez `KMeans(n_clusters=2, random_state=0)` (`y_km = km.fit_predict(X)`) a do `ax1` vykresli body klastra 0 (`c='lightblue', marker='o', s=40`) a klastra 1 (`c='red', marker='s', s=40`), nadpis `'K-means clustering'`. To isté sprav s `DBSCAN(eps=0.2, min_samples=5, metric='euclidean')` (`y_db = db.fit_predict(X)`) do `ax2` s nadpisom `'DBSCAN'`. Zavolaj `plt.tight_layout()`, `plt.show()` a vypíš `np.unique(y_db, return_counts=True)`.",
+    "explanation": "Kód z prednášky 4 (`isi04_06`) – prečo nestačí K-means.\n\n- `make_moons` vyrobí dva do seba zapadajúce polmesiace – klastre **nie sú guľaté**.\n- K-means delí priestor podľa vzdialenosti od centroidov, takže polmesiace pretne priamkou a časť bodov každého z nich zaradí zle.\n- `DBSCAN(eps=0.2, min_samples=5)`: bod je **hlavný**, ak má v polomere `eps` aspoň `min_samples` bodov; husté oblasti sa spájajú do klastrov. Počet klastrov sa nezadáva.\n- `X[y_db == 0, 0]` – booleovská maska vyberie riadky klastra 0, druhý index stĺpec (súradnicu x).\n- Výpis `(array([0, 1]), array([100, 100]))` – DBSCAN našiel presne dva polmesiace po 100 bodov; značka `-1` (šum) sa neobjavila.\n\nNa `eps` záleží: s `eps=0.05` by bol všetko šum, s `eps=0.5` jeden veľký klaster.",
+    "expectedOutput": "(array([0, 1]), array([100, 100]))",
+    "tags": [
+      "clustering",
+      "DBSCAN",
+      "KMeans",
+      "make_moons",
+      "lecture"
+    ]
+  }
+]

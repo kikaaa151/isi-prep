@@ -1,0 +1,33 @@
+[
+  {
+    "id": "t2-q01",
+    "topicId": "t2-slovniky",
+    "week": 2,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo vráti `d.get(\"x\", 0)`, ak kľúč `\"x\"` v slovníku `d` nie je?",
+    "options": [
+      { "text": "`0`", "correct": true },
+      { "text": "`None`", "correct": false },
+      { "text": "Vyvolá `KeyError`.", "correct": false },
+      { "text": "Prázdny reťazec.", "correct": false }
+    ],
+    "explanation": "Druhý argument `get` je predvolená hodnota; `d[\"x\"]` by vyvolalo `KeyError`."
+  },
+  {
+    "id": "t2-q02",
+    "topicId": "t2-slovniky",
+    "week": 2,
+    "type": "practical",
+    "source": "archive",
+    "text": "Čo vypíše tento kód?",
+    "code": "counts = {}\nfor word in \"a b a\".split():\n    counts[word] = counts.get(word, 0) + 1\nprint(counts[\"a\"], len(counts))",
+    "options": [
+      { "text": "`2 2`", "correct": true },
+      { "text": "`2 3`", "correct": false },
+      { "text": "`1 2`", "correct": false },
+      { "text": "`3 2`", "correct": false }
+    ],
+    "explanation": "Slovo `a` je vo vete dvakrát a slovník má dva kľúče."
+  }
+]

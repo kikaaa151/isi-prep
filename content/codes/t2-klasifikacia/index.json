@@ -1,0 +1,168 @@
+[
+  {
+    "id": "w02-olivetti-svm",
+    "title": "Rozpoznávanie tvárí (Olivetti faces) lineárnym SVM",
+    "week": 2,
+    "file": "w02-olivetti-svm.py",
+    "source": "moodle/w02/cv_02_ex_01.py",
+    "task": "Načítaj dataset Olivetti faces do `faces` a vypíš jeho kľúče a tvary `images`, `data`, `target`. Funkciou `print_faces` z `isi_utils` zobraz prvých 80 tvárí. Vytvor `svc = SVC(kernel='linear')`, rozdeľ `faces.data` a `faces.target` (`test_size=0.25`, `random_state=0`, stratifikovane podľa `faces.target`), natrénuj, predikuj do `y_predict` a vypíš `Classification accuracy:`. Testovacie vektory preveď späť na obrázky 64 × 64 do `test_faces` a zobraz prvých 10 s predikovanými a potom so skutočnými označeniami. Nakoniec nájdi indexy zle zaradených testovacích obrázkov do `wrong` a vypíš `Misclassified: <počet> of <počet testovacích>`.",
+    "explanation": "- `fetch_olivetti_faces()` stiahne 400 fotografií 40 osôb (10 na osobu). `faces.images` má tvar (400, 64, 64), `faces.data` (400, 4096) – obrázok rozvinutý do vektora, **každý pixel je príznak**; `faces.target` je číslo osoby 0–39.\n- `SVC(kernel='linear')` – lineárny SVM; SVM je dobrý pri veľa atribútoch.\n- `stratify=faces.target` zachová pomer tried: pri 10 fotkách na osobu by sa bez neho mohla niektorá osoba dostať celá do testu. Testovacích je 100, trénovacích 300.\n- `fit` → `predict` → `accuracy_score(y_test, y_predict)` je štandardný vzor.\n- `np.reshape(a, (64, 64))` vráti vektor 4096 hodnôt späť na obrázok, aby sa dal vykresliť.\n- `np.where(y_test != y_predict)[0]` – `np.where` s jednou podmienkou vráti n-ticu polí indexov, `[0]` z nej vyberie pole indexov, kde sa predikcia líši od skutočnosti.\n- V origináli nasleduje ešte dlhšie vykreslenie zle zaradených tvárí (testovací obrázok | skutočná osoba | predikovaná osoba) – je to len dekorácia.",
+    "expectedOutput": "dict_keys(['data', 'images', 'target', 'DESCR'])\n(400, 64, 64)\n(400, 4096)\n(400,)\nClassification accuracy: 0.95\nMisclassified: 5 of 100",
+    "tags": [
+      "SVC",
+      "linear",
+      "fetch_olivetti_faces",
+      "stratify",
+      "accuracy_score"
+    ]
+  },
+  {
+    "id": "w02-tree-vs-svm",
+    "title": "Rozhodovací strom vs. SVM na generovaných dátach",
+    "week": 2,
+    "file": "w02-tree-vs-svm.py",
+    "source": "moodle/w02/cv_02_ex_02_task.py, teams/cv_02/úlohy/isi_cv_02_sol.py",
+    "task": "Vygeneruj dáta `X, y = datasets.make_classification(n_samples=1000, n_features=3, n_redundant=0, random_state=1)`. Rozdeľ ich (`test_size=0.25`, `random_state=0`). 1. Urob klasifikáciu rozhodovacím stromom `dtc = DecisionTreeClassifier()` – natrénuj, predikuj do `y_predict` a vypíš `Presnost klasifikacie dtc:` s accuracy. 2. To isté pre `svc = SVC(kernel='linear')` s výpisom `Presnost klasifikacie svc:`.",
+    "explanation": "- `make_classification` vygeneruje umelý klasifikačný problém: 1000 vzoriek, 3 príznaky, žiadny redundantný, dve triedy.\n- Oba modely sa učia a hodnotia **na rovnakom rozdelení** – inak by porovnanie nebolo férové.\n- Vzor je pre každý klasifikátor rovnaký: konštruktor → `fit(X_train, y_train)` → `predict(X_test)` → `accuracy_score(y_test, y_predict)`.\n- `accuracy_score` je symetrická – v riešení z Teams sú argumenty v poradí `(y_predict, y_test)`, výsledok je rovnaký; zvyk je `(y_true, y_pred)`.\n- `DecisionTreeClassifier()` bez `random_state` môže dať pri každom behu trochu iný výsledok (asi 0.83–0.86); lineárny SVM dáva 0.88 – na týchto dátach je o niečo presnejší.",
+    "expectedOutput": "Presnost klasifikacie dtc: 0.844 (mení sa, cca 0.83–0.86)\nPresnost klasifikacie svc: 0.88",
+    "tags": [
+      "DecisionTreeClassifier",
+      "SVC",
+      "make_classification",
+      "accuracy_score"
+    ]
+  },
+  {
+    "id": "w02-tree-hyperparams",
+    "title": "Ladenie hyperparametrov rozhodovacieho stromu (max_depth a ďalšie)",
+    "week": 2,
+    "file": "w02-tree-hyperparams.py",
+    "source": "moodle/w02/cv_02_ex_03_task.py, teams/cv_02/úlohy/isi_cv_03_sol.py",
+    "task": "Dáta: `make_classification(n_samples=750, n_features=200, n_informative=5, random_state=29)`, rozdelenie `test_size=0.25`, `random_state=0`. Východisko: `dt = DecisionTreeClassifier(random_state=0)`, natrénuj, predikuj do `preds` a vypíš `Prediction accuracy:` ako `(y_test == preds).mean()`. 1. V cykle pre `max_depth` 1 až 20 natrénuj strom (`random_state=0`) a vypíš hĺbku a presnosť. 2.–3. Cez `itertools.product` prejdi kombinácie `criterion` (`'gini'`, `'entropy'`), `max_depth` 1–10, `min_samples_leaf` (1, 5, 10) a `min_samples_split` (2, 10, 20), pamätaj si najlepšiu presnosť `best_acc` a parametre `best_params` a na konci vypíš `Best accuracy:`.",
+    "explanation": "- 200 príznakov, ale iba 5 informatívnych → veľa šumu, ideálne na ukážku pretrénovania.\n- Predvolený strom nemá obmedzenú hĺbku, rastie až po čisté listy: na tréningu 100 %, na teste len 0.70.\n- `(y_test == preds).mean()` – porovnanie dá pole True/False, priemer z neho je podiel správnych = accuracy.\n- Cyklus cez `max_depth`: plytký strom (hĺbka 3) dá 0.81; od hĺbky 9 je strom rovnaký ako východiskový (0.70). **Hlbší strom nie je lepší** – učí sa šum.\n- `product(...)` vygeneruje všetky kombinácie hodnôt (ručný „grid search\"); `max_depth`, `min_samples_leaf`, `min_samples_split` obmedzujú zložitosť stromu, `criterion` volí mieru nečistoty.\n- `if acc > best_acc` – zapamätanie doteraz najlepšej kombinácie.\n- Pozor: tu sa ladí podľa testovacej množiny, ako sa to robilo na cvičení; správne sa hyperparametre ladia na validačnej množine alebo krížovou validáciou (neskoršie týždne).",
+    "expectedOutput": "Prediction accuracy: 0.7021276595744681\n1 0.7978…\n2 0.7978…\n3 0.8085…\n…\n20 0.7021…\nBest accuracy: 0.8085106382978723 ('gini', 3, 1, 2)",
+    "tags": [
+      "DecisionTreeClassifier",
+      "max_depth",
+      "hyperparametre",
+      "overfitting",
+      "product"
+    ]
+  },
+  {
+    "id": "w02-svm-decision-boundary",
+    "title": "Vizualizácia rozhodovacej hranice SVM",
+    "week": 2,
+    "file": "w02-svm-decision-boundary.py",
+    "source": "moodle/w02/cv_02_ex_04.py",
+    "task": "Vygeneruj dva 2D zhluky `X, y = datasets.make_blobs(n_features=2, centers=2, random_state=1)` a natrénuj na nich `svm = SVC(kernel='linear')`. Definuj `Point = namedtuple('Point', ['x', 'y', 'outcome'])` a prázdny zoznam `decision_boundery`. Zisti `xmin, xmax` a `ymin, ymax` cez `np.percentile(..., [0, 100])`. Pre každý bod mriežky 20 × 20 (`product` dvoch `np.linspace` od min − 2.5 po max + 2.5) predikuj triedu a ulož `Point` do zoznamu. Vykresli (`figsize=(7, 5)`, `colors = np.array(['r', 'b'])`): body mriežky farbou podľa predikcie s `alpha=.15`, potom dáta farbou podľa `y` s `s=30`; nastav limity osí na min/max.",
+    "explanation": "- `make_blobs` vytvorí 100 bodov v dvoch zhlukoch (triedy 0 a 1) – lineárne separovateľné dáta.\n- `np.percentile(X[:, 0], [0, 100])` vráti minimum a maximum stĺpca (0. a 100. percentil).\n- `product(linspace_x, linspace_y)` = všetky dvojice súradníc, spolu 20 · 20 = 400 bodov mriežky.\n- `svm.predict(np.array([xpt, ypt]).reshape(1, -1))` – predikcia pre **jeden bod**; `reshape(1, -1)` spraví z dvoch čísel jednu vzorku (1, 2). Výsledok je pole s jednou triedou.\n- `colors[pt[0]]` – trieda 0 → `'r'`, trieda 1 → `'b'`; `colors[y]` zafarbí naraz všetky dáta (indexovanie poľa poľom).\n- Tak vzniknú **rozhodovacie regióny**: priestor rozdelený na dve oblasti, hranica lineárneho SVM je priamka. V origináli je zakomentovaná alternatíva `svm = LinearSVC()`.",
+    "expectedOutput": "graf: dva zhluky bodov a mriežka vyfarbená podľa predikovanej triedy",
+    "tags": [
+      "SVC",
+      "make_blobs",
+      "decision boundary",
+      "product",
+      "namedtuple"
+    ]
+  },
+  {
+    "id": "w03-random-forest",
+    "title": "Náhodný les: klasifikácia a accuracy",
+    "week": 3,
+    "file": "w03-random-forest.py",
+    "source": "moodle/w03/cv_03_ex_01_task.py, teams/cv_03/isi_cv_07sol.py",
+    "task": "Vygeneruj dáta `X, y = datasets.make_classification(1000, random_state=500)`. Rozdeľ ich na trénovaciu a testovaciu množinu (`test_size=0.25`, `random_state=7`). Natrénuj `rf = RandomForestClassifier()` na trénovacej množine, predikuj označenia testovacej do `y_predict`. Vypíš `Accuracy:\\t` s presnosťou a `Total Correct:\\t` s počtom správne zaradených vzoriek.",
+    "explanation": "- `make_classification(1000, random_state=500)` – 1000 vzoriek, predvolene 20 príznakov a 2 triedy.\n- `RandomForestClassifier` sa importuje zo `sklearn.ensemble` (ensemble = skupinový klasifikátor); predvolene trénuje 100 stromov, každý na bootstrap vzorke s náhodným výberom príznakov.\n- Rozhranie je rovnaké ako pri strome: `fit` → `predict` → `accuracy_score(y_test, y_predict)`.\n- `(y_test == y_predict).sum()` – súčet True hodnôt = počet správnych predikcií z 250 testovacích.\n- Bez `random_state` v konštruktore sa výsledok medzi behmi mierne líši (asi 0.98–0.99).",
+    "expectedOutput": "Accuracy:\t 0.984\nTotal Correct:\t 246\n(mení sa mierne medzi behmi)",
+    "tags": [
+      "RandomForestClassifier",
+      "ensemble",
+      "accuracy_score",
+      "make_classification"
+    ]
+  },
+  {
+    "id": "w03-rf-confidence",
+    "title": "Istota náhodného lesa: predict_proba a presnosť podľa pravdepodobnosti",
+    "week": 3,
+    "file": "w03-rf-confidence.py",
+    "source": "moodle/w03/cv_03_ex_02.py",
+    "task": "Dáta `make_classification(1000, random_state=1)`, rozdelenie `test_size=0.25`, `random_state=14`. Natrénuj `rf = RandomForestClassifier(random_state=500)`, predikuj `y_predict`, vypíš `Accuracy:\\t` a `Total Correct:\\t`. Do `probs` ulož pravdepodobnosti tried pre testovacie vzorky, zaokrúhli ich na 1 desatinné miesto a vytvor `probs_df` so stĺpcami `'0'` a `'1'`; pridaj stĺpec `was_correct` (či bola predikcia správna). Do `bins` spočítaj pre každú pravdepodobnosť triedy 0 priemer a počet `was_correct` (`groupby` + `agg(['mean', 'count'])`) a vypíš. Vykresli stĺpcový graf `bins['mean']` s titulkom `Accuracy at 0 class probability`.",
+    "explanation": "- `rf.predict_proba(X_test)` vráti pole (250, 2): pre každú vzorku **podiel stromov hlasujúcich za triedu 0 a za triedu 1** (riadok dáva súčet 1).\n- `np.around(probs, 1)` zaokrúhli na desatiny → vzniknú „priehradky\" 0.0, 0.1, …, 1.0.\n- `pd.DataFrame(probs, columns=['0', '1'])` – tabuľka, v ktorej sa dá zoskupovať; `probs_df['was_correct'] = y_predict == y_test` pridá True/False.\n- `probs_df.groupby('0').was_correct.agg(['mean', 'count'])` – zoskupí vzorky podľa pravdepodobnosti triedy 0; `mean` z True/False je **presnosť v skupine**, `count` počet vzoriek.\n- Záver: les je presný, keď sa stromy zhodnú (blízko 0 alebo 1), a nespoľahlivý pri hlasovaní okolo 0.5 (presnosť 0.22). Celková accuracy 0.872 nehovorí, ktorým predikciám možno veriť.\n- V origináli je ešte druhý graf s počtom vzoriek (`bins['count']`).",
+    "expectedOutput": "Accuracy:\t 0.872\nTotal Correct:\t 218\n         mean  count\n0\n0.0  1.000000      3\n0.1  0.939394     33\n…\n0.5  0.222222      9\n…\n1.0  1.000000     10",
+    "tags": [
+      "RandomForestClassifier",
+      "predict_proba",
+      "pandas",
+      "groupby"
+    ]
+  },
+  {
+    "id": "w03-classifier-challenge",
+    "title": "Súťaž klasifikátorov na pripravených dátach (.npy)",
+    "week": 3,
+    "file": "w03-classifier-challenge.py",
+    "source": "moodle/w03/cv_03_ex_03_task.py",
+    "task": "Načítaj cez `np.load` súbory `'../data/X_train.npy'`, `'../data/X_test.npy'`, `'../data/y_train.npy'`, `'../data/y_test.npy'` (binárna klasifikácia, 3750 / 1250 vzoriek, 30 príznakov). Vytvor slovník `classifiers` so štyrmi modelmi: `'Decision tree'` – `DecisionTreeClassifier(random_state=0)`, `'Random forest'` – `RandomForestClassifier(random_state=0)`, `'KNN'` – `KNeighborsClassifier(n_neighbors=15)`, `'SVM rbf'` – `SVC(kernel='rbf')`. V cykle každý natrénuj, predikuj do `y_predict` a vypíš názov a accuracy.",
+    "explanation": "- `np.load('súbor.npy')` načíta uložené NumPy pole; dáta sú už rozdelené, `train_test_split` netreba.\n- Všetky klasifikátory scikit-learn majú rovnaké rozhranie (`fit`, `predict`), preto ich možno dať do slovníka a spracovať jedným cyklom `for name, clf in classifiers.items()`.\n- Importy: strom zo `sklearn.tree`, les zo `sklearn.ensemble`, KNN zo `sklearn.neighbors`, SVC zo `sklearn.svm`.\n- Výsledky: samotný strom je najslabší (0.70, pretrénovaný), les ho výrazne zlepší (0.82), KNN s k = 15 dá 0.85 a SVM s RBF jadrom 0.86 (najlepší z vyskúšaných).\n- Zadanie je otvorené („get the best possible classification\") – toto je jedno z možných riešení; ďalej sa dá ladiť `n_neighbors`, `C`, `gamma`, `n_estimators`.\n- Cesta `../data/` je z pôvodného zadania; skript sa spúšťa z priečinka vedľa `data`.",
+    "expectedOutput": "Decision tree 0.7024\nRandom forest 0.8224\nKNN 0.8496\nSVM rbf 0.8624",
+    "tags": [
+      "np.load",
+      "KNeighborsClassifier",
+      "SVC",
+      "RandomForestClassifier",
+      "porovnanie modelov"
+    ]
+  },
+  {
+    "id": "w03-boston-features",
+    "title": "Regresia: Boston housing – načítanie a grafy príznakov",
+    "week": 3,
+    "file": "w03-boston-features.py",
+    "source": "moodle/w03/cv_03_ex_04.py",
+    "task": "Načítaj dataset cez `fetch_openml(name=\"boston\", version=1, as_frame=True)` do `boston`. Do `X` preveď `boston.data` na float a NumPy pole, do `y` cieľ ako NumPy pole typu float. Vypíš tvar `X`, názvy príznakov a prvú vzorku. Rozdeľ dáta (`test_size=0.25`, `random_state=33`). Vytvor 1 × 5 grafov (`figsize=(16, 4)`, `sharey=True`) a v cykle pre prvých päť príznakov vykresli bodový graf príznaku voči cieľu na trénovacích dátach s titulkom `Feature <i>` a popisom osi x podľa názvu príznaku; prvému grafu nastav popis osi y `Median house value`.",
+    "explanation": "- `load_boston` bolo zo scikit-learn odstránené, dáta sa sťahujú z OpenML cez `fetch_openml`; `as_frame=True` vráti pandas DataFrame.\n- Stĺpce CHAS a RAD sú kategorické → `boston.data.astype(float).to_numpy()` ich pretypuje a prevedie na NumPy pole; cieľ `boston.target.to_numpy(dtype=float)`.\n- 506 vzoriek (oblastí), 13 príznakov; cieľ = medián ceny domu → **regresia** (cieľ je číslo, nie trieda).\n- Z výpisu prvej vzorky vidno, že príznaky majú veľmi rozdielne rozsahy (0.006 až 396.9) – dôvod na škálovanie v ďalšej úlohe.\n- `plt.subplots(1, 5, sharey=True)` – päť grafov vedľa seba so spoločnou osou y; `axes[i].scatter(X_train[:, i], y_train)` kreslí i-ty príznak voči cieľu.\n- Poznámka: s kombináciou pandas 3 + scikit-learn 1.9 predvolený parser `fetch_openml` na tomto datasete padá; pomôže doplniť `parser=\"liac-arff\"`.",
+    "expectedOutput": "(506, 13)\n['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']\n[6.320e-03 1.800e+01 2.310e+00 … 4.980e+00]\n+ päť bodových grafov",
+    "tags": [
+      "fetch_openml",
+      "regresia",
+      "subplots",
+      "scatter"
+    ]
+  },
+  {
+    "id": "w03-svr-kernels",
+    "title": "SVR s tromi jadrami po štandardizácii",
+    "week": 3,
+    "file": "w03-svr-kernels.py",
+    "source": "moodle/w03/cv_03_ex_04_b.py",
+    "task": "Načítaj Boston (`fetch_openml(name=\"boston\", version=1, as_frame=True)`, `X` ako float NumPy pole, `y` ako float), vypíš tvar `X` a rozdeľ (`test_size=0.25`, `random_state=33`). Štandardizuj príznaky: `scaler = StandardScaler()`, na trénovacej množine `fit_transform`, na testovacej iba `transform` (výsledky ulož späť do `X_train`, `X_test`). Natrénuj tri modely `svm.SVR` – `clf_svr` s jadrom `'linear'`, `clf_svr_poly` s `'poly'`, `clf_svr_rbf` s `'rbf'` – a pre každý vypíš `Score on train (<jadro>)\\t` a `score` na trénovacej množine.",
+    "explanation": "- `from sklearn import svm` → `svm.SVR` je **support vector regression** (SVM pre regresiu).\n- SVR pracuje so vzdialenosťami medzi vzorkami, preto majú mať všetky príznaky podobný rozsah → `StandardScaler` (priemer 0, smerodajná odchýlka 1).\n- `scaler.fit_transform(X_train)` – naučí priemer a odchýlku **na trénovacej množine** a hneď ju transformuje; `scaler.transform(X_test)` použije tie isté hodnoty na test. `fit` na teste by bol únik informácie.\n- Jadrá: `'linear'`, `'poly'` (polynomiálne, predvolene 3. stupeň), `'rbf'`.\n- `score` regresora vracia **koeficient determinácie R²** (1.0 = dokonalá zhoda), nie accuracy.\n- Skóre je tu merané na trénovacej množine, je teda optimistické; poctivé vyhodnotenie je v ďalšej úlohe.",
+    "expectedOutput": "(506, 13)\nScore on train (linear)\t 0.7135…\nScore on train (poly)\t 0.7122…\nScore on train (rbf)\t 0.6857…",
+    "tags": [
+      "SVR",
+      "StandardScaler",
+      "kernel",
+      "R2",
+      "regresia"
+    ]
+  },
+  {
+    "id": "w03-svr-evaluation",
+    "title": "Vyhodnotenie regresie: R² a stredná absolútna chyba",
+    "week": 3,
+    "file": "w03-svr-evaluation.py",
+    "source": "moodle/w03/cv_03_ex_04_v.py",
+    "task": "Načítaj Boston (`fetch_openml`, `X` a `y` ako float NumPy polia), rozdeľ (`test_size=0.25`, `random_state=33`) a štandardizuj (`fit_transform` na tréningu, `transform` na teste). Natrénuj `clf_svr = svm.SVR(kernel='linear')` a vypíš `Score on train (linear)\\t`. Predikuj testovaciu množinu do `y_pred`. Vypíš `Regression report`, potom `Coefficient of determination:\\t` s `metrics.r2_score` a `Mean absolute error:\\t` s `metrics.mean_absolute_error`, oboje na 3 desatinné miesta (`\"{0:.3f}\".format(...)`).",
+    "explanation": "- Skóre na trénovacej množine (R² 0.714) je optimistické, preto sa predikujú **nevidené testovacie vzorky**: `y_pred = clf_svr.predict(X_test)`.\n- `metrics.r2_score(y_test, y_pred)` – koeficient determinácie = podiel rozptylu cieľa vysvetlený modelom (0.651 na teste).\n- `metrics.mean_absolute_error(y_test, y_pred)` – priemerná absolútna odchýlka v jednotkách cieľa: 3.413 = model sa mýli priemerne o 3 413 dolárov (cieľ je v tisícoch).\n- Poradie argumentov metrík je `(y_true, y_pred)`.\n- `\"{0:.3f}\".format(x)` – formátovanie čísla na tri desatinné miesta.\n- Pri regresii sa nepoužíva accuracy – cieľ je spojitý, presná zhoda nedáva zmysel.",
+    "expectedOutput": "Score on train (linear)\t 0.7135…\nRegression report\nCoefficient of determination:\t0.651\nMean absolute error:\t3.413",
+    "tags": [
+      "SVR",
+      "r2_score",
+      "mean_absolute_error",
+      "StandardScaler",
+      "regresia"
+    ]
+  }
+]

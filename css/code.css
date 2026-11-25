@@ -1,0 +1,108 @@
+/* Code listings, syntax colours, fill-in inputs, editor, diff. */
+
+.tk-kw { color: var(--tk-kw); font-weight: 600; }
+.tk-const { color: var(--tk-kw); }
+.tk-str { color: var(--tk-str); }
+.tk-com { color: var(--tk-com); font-style: italic; }
+.tk-num { color: var(--tk-num); }
+.tk-builtin { color: var(--tk-builtin); }
+.tk-def { color: var(--tk-def); font-weight: 600; }
+.tk-dec { color: var(--tk-dec); }
+.tk-self { color: var(--tk-self); font-style: italic; }
+
+.code {
+  margin: 0 0 0.9em; padding: 12px 0; background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-small); overflow-x: auto; font: 0.9rem/1.6 var(--mono); tab-size: 4;
+  white-space: pre; counter-reset: line;
+}
+.code code { background: none; padding: 0; border-radius: 0; font-size: inherit; overflow-wrap: normal; display: block; min-width: max-content; }
+/* Fenced blocks of the Markdown pages have no line elements. */
+.prose pre.code, .output { padding: 12px 14px; }
+.code .line { display: block; padding: 0 14px; min-height: 1.6em; border-left: 3px solid transparent; }
+.code-numbered .line { counter-increment: line; padding-left: 0; }
+.code-numbered .line::before {
+  content: counter(line); display: inline-block; width: 2.6em; margin-right: 12px; text-align: right;
+  color: var(--tk-com); user-select: none; font-style: normal;
+}
+.code .line-key { background: var(--key-line); border-left-color: var(--warn); }
+.key-swatch { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; background: var(--key-line); border-left: 3px solid var(--warn); }
+.output { color: var(--text); }
+.task .prose { font-size: 1.03rem; }
+
+/* ---------- fill-in mode ---------- */
+
+.fill { min-width: 0; }
+.fill .line { white-space: pre; }
+.fill .line-blank { display: flex; align-items: center; padding-right: 10px; margin: 2px 0; white-space: normal; }
+.fill .line-blank::before { flex: none; }
+.fill-indent { white-space: pre; flex: none; }
+.fill-input {
+  flex: 1 1 200px; min-width: 120px; font: inherit !important; min-height: 30px !important; padding: 2px 8px !important;
+  border-radius: 6px !important; background: var(--surface) !important; margin-left: -9px;
+}
+.fill-mark { flex: none; width: 1.6em; text-align: center; font-weight: 800; }
+.is-right .fill-input { border-color: var(--ok); background: var(--ok-soft) !important; }
+.is-right .fill-mark::after { content: "✓"; color: var(--ok); }
+.is-wrong .fill-input { border-color: var(--bad); background: var(--bad-soft) !important; }
+.is-wrong .fill-mark::after { content: "✗"; color: var(--bad); }
+.is-revealed .fill-input { border-style: dashed; color: var(--muted); }
+.is-revealed .fill-mark::after { content: "👁"; font-size: 0.8em; }
+
+/* ---------- editor ---------- */
+
+.editor {
+  display: flex; align-items: stretch; background: var(--code-bg); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small); overflow: hidden; font: 0.92rem/1.6 var(--mono);
+}
+.editor:focus-within { outline: 3px solid var(--accent); outline-offset: 2px; }
+.editor-gutter {
+  margin: 0; padding: 12px 10px 12px 12px; min-width: 3.2em; text-align: right; color: var(--tk-com);
+  background: var(--surface-2); border-right: 1px solid var(--border); user-select: none; font: inherit; white-space: pre;
+}
+.editor-input {
+  flex: 1; min-width: 0; margin: 0; padding: 12px 14px; border: 0; outline: none; resize: none; background: transparent;
+  color: var(--text); font: inherit; tab-size: 4; white-space: pre; overflow-x: auto; overflow-y: hidden;
+}
+
+/* ---------- comparison ---------- */
+
+.memory-result { display: flex; flex-direction: column; gap: 18px; }
+.memory-result.is-stale .diff { opacity: 0.55; }
+.score { display: flex; align-items: center; gap: 20px; margin-bottom: 8px; }
+.score-value { font-size: 2.6rem; font-weight: 800; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.score-detail { flex: 1; min-width: 0; }
+.score-detail .bar { height: 10px; }
+.score-detail .verdict { margin: 8px 0 0; }
+.verdict-neutral { color: var(--muted); font-weight: 600; }
+
+.diff {
+  list-style: none; margin: 12px 0 0; padding: 6px 0; background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-small); overflow-x: auto;
+}
+.diff-row { display: flex; align-items: flex-start; gap: 10px; padding: 3px 12px 3px 0; border-left: 4px solid transparent; min-width: max-content; }
+.diff-marker { flex: none; width: 2em; text-align: center; font: 800 0.95rem/1.6 var(--mono); }
+.diff-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.diff-code { display: block; white-space: pre; background: none; padding: 0; font: 0.9rem/1.6 var(--mono); overflow-wrap: normal; }
+.diff-note { font-size: 0.8rem; font-weight: 600; font-family: var(--font); }
+.diff-ok .diff-marker { color: var(--ok); }
+.diff-moved { background: var(--accent-soft); border-left-color: var(--accent); }
+.diff-moved .diff-marker, .diff-moved .diff-note { color: var(--accent); }
+.diff-near { background: var(--warn-soft); border-left-color: var(--warn); }
+.diff-near .diff-marker, .diff-near .diff-note { color: var(--warn); }
+.diff-missing { background: var(--bad-soft); border-left-color: var(--bad); }
+.diff-missing .diff-marker, .diff-missing .diff-note { color: var(--bad); }
+.diff-extra { border-left-color: var(--border-strong); }
+.diff-extra .diff-code { text-decoration: line-through; text-decoration-color: var(--bad); color: var(--muted); }
+.diff-extra .diff-marker, .diff-extra .diff-note { color: var(--muted); }
+.diff-placeholder { color: var(--bad); font-style: italic; }
+.diff-reference { border-top: 1px dashed var(--border-strong); margin-top: 2px; }
+.diff-key .diff-placeholder { font-weight: 700; }
+.tok-diff { background: var(--bad-soft); color: var(--bad); outline: 1px solid var(--bad); border-radius: 3px; font-weight: 700; }
+.tok-ref { background: var(--ok-soft); color: var(--ok); outline: 1px solid var(--ok); border-radius: 3px; font-weight: 700; }
+.tok-gap { color: var(--bad); font-weight: 800; }
+.side-by-side h3 { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+@media (max-width: 760px) {
+  .score { flex-direction: column; align-items: stretch; gap: 10px; }
+  .code, .editor { font-size: 0.84rem; }
+}

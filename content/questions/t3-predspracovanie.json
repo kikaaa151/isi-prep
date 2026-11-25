@@ -1,0 +1,526 @@
+[
+  {
+    "id": "t3-q01",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Predspracovanie začína oboznámením sa s dátami. Čo do tohto kroku patrí?",
+    "options": [
+      { "text": "Zistiť formát dát.", "correct": true },
+      { "text": "Zistiť, či dáta obsahujú chýbajúce hodnoty.", "correct": true },
+      { "text": "Rozlíšiť diskrétne a spojité hodnoty atribútov.", "correct": true },
+      { "text": "Vizualizovať dáta.", "correct": true },
+      { "text": "Natrénovať model na testovacích dátach a podľa výsledku upraviť atribúty.", "correct": false }
+    ],
+    "explanation": "Prednáška uvádza: oboznámiť sa s dátami znamená zistiť formát, chýbajúce hodnoty, či sú hodnoty diskrétne alebo spojité, a dáta si vizualizovať. Na cvičení to robili `head()`, `info()`, `describe()`, `isna().sum()` a grafy. Trénovanie na testovacích dátach sem nepatrí – testovacie dáta sa vo fáze trénovania nesmú použiť nijako."
+  },
+  {
+    "id": "t3-q02",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "`titanic_data` má stĺpce v poradí `row.names`, `pclass`, `survived`, `name`, `age`, `embarked`, `home.dest`, `room`, `ticket`, `boat`, `sex`. Ktoré tvrdenia o kóde sú pravdivé?",
+    "code": "titanic_reduced = titanic_data.drop(columns=['row.names', 'survived', 'name', 'embarked',\n                                             'home.dest', 'room', 'ticket', 'boat'])\nages = titanic_reduced.iloc[:, 1]\nprint(titanic_reduced.loc[12])",
+    "options": [
+      { "text": "`titanic_reduced` má stĺpce `pclass`, `age`, `sex`.", "correct": true },
+      { "text": "`ages` obsahuje stĺpec `age`.", "correct": true },
+      { "text": "`titanic_data` má aj po volaní `drop` všetkých 11 stĺpcov.", "correct": true },
+      { "text": "`loc[12]` vypíše stĺpec s poradovým číslom 12.", "correct": false },
+      { "text": "`iloc[:, 1]` vyberie prvý riadok tabuľky.", "correct": false }
+    ],
+    "explanation": "`drop(columns=[...])` vráti nový DataFrame bez ôsmich uvedených stĺpcov – ostanú `pclass`, `age`, `sex` – a pôvodný `titanic_data` nemení. `iloc[:, 1]` vyberá podľa pozície: všetky riadky, stĺpec na pozícii 1, teda `age`. `loc[12]` vyberá podľa menovky indexu **riadok** 12 (cestujúceho, na ktorom sa na cvičení sledoval každý krok), nie stĺpec."
+  },
+  {
+    "id": "t3-q03",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré stĺpce datasetu Titanic ostali na cvičení po výbere atribútov ako vstup modelu?",
+    "options": [
+      { "text": "`pclass`", "correct": true },
+      { "text": "`age`", "correct": true },
+      { "text": "`sex`", "correct": true },
+      { "text": "`survived`", "correct": false },
+      { "text": "`name`", "correct": false },
+      { "text": "`embarked`", "correct": false }
+    ],
+    "explanation": "Ponechali sa iba `pclass`, `age` a `sex`. `survived` je cieľový atribút – uloží sa zvlášť do `titanic_y` a medzi vstupmi ostať nesmie. `name` je identifikátor a `embarked` sa odstránil spolu s ďalšími stĺpcami, ktoré sa zdali irelevantné alebo mali veľa chýbajúcich hodnôt (`row.names`, `home.dest`, `room`, `ticket`, `boat`)."
+  },
+  {
+    "id": "t3-q04",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dataset obsahuje chýbajúce hodnoty (NaN). Ktoré tvrdenia o ich **eliminácii** sú pravdivé?",
+    "options": [
+      { "text": "Odstrániť možno vzorky (riadky) aj atribúty (stĺpce) s chýbajúcimi hodnotami.", "correct": true },
+      { "text": "Pri eliminácii dochádza k nenávratnej strate dát, resp. informácií.", "correct": true },
+      { "text": "Eliminácia nahradí chýbajúcu hodnotu priemerom stĺpca.", "correct": false },
+      { "text": "Eliminácia je vždy lepšia voľba než imputácia, lebo dáta nijako neskresľuje.", "correct": false }
+    ],
+    "explanation": "Eliminácia znamená zahodiť vzorky alebo atribúty s chýbajúcimi dátami (`dropna`); jej cenou je nenávratná strata dát. Nahradenie priemerom je imputácia, nie eliminácia. Eliminácia nie je vždy lepšia – keď chýba veľa hodnôt (vek v Titanicu pri viac než polovici cestujúcich), prišli by sme o príliš veľa dát."
+  },
+  {
+    "id": "t3-q05",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o DataFrame `df` z kódu sú pravdivé?",
+    "code": "import pandas as pd\nfrom io import StringIO\n\ncsv_data = '''A,B,C,D\n1.0,2.0,3.0,4.0\n5.0,6.0,,8.0\n10.0,11.0,12.0,'''\ndf = pd.read_csv(StringIO(csv_data))",
+    "options": [
+      { "text": "`df.isnull().sum()` vypíše pre stĺpce C a D hodnotu 1, pre A a B hodnotu 0.", "correct": true },
+      { "text": "`df.dropna()` vráti tabuľku iba s prvým riadkom.", "correct": true },
+      { "text": "`df.dropna(axis=1)` vráti tabuľku iba so stĺpcami A a B.", "correct": true },
+      { "text": "`df.dropna(thresh=4)` vráti všetky tri riadky.", "correct": false },
+      { "text": "Po volaní `df.dropna()` má samotný `df` už iba jeden riadok.", "correct": false }
+    ],
+    "explanation": "V druhom riadku chýba hodnota C, v treťom D – `isnull().sum()` preto dá A 0, B 0, C 1, D 1. `dropna()` zahodí každý riadok s aspoň jednou chýbajúcou hodnotou, ostane iba prvý. `dropna(axis=1)` zahodí stĺpce s chýbajúcou hodnotou, ostanú A a B. `thresh=4` ponechá riadky s aspoň 4 nechýbajúcimi hodnotami – to spĺňa len prvý riadok. `dropna` vracia novú tabuľku, `df` sa nemení."
+  },
+  {
+    "id": "t3-q06",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "moodle",
+    "text": "V datasete Titanic chýba vek pri 680 z 1313 cestujúcich. Prečo sa na cvičení chýbajúci vek doplnil a riadky sa neodstránili?",
+    "options": [
+      { "text": "Odstránením riadkov s chýbajúcim vekom by sa stratila viac než polovica cestujúcich.", "correct": true },
+      { "text": "Metóda `dropna` vie odstraňovať iba stĺpce, nie riadky.", "correct": false },
+      { "text": "Vek je cieľový atribút, preto sa jeho riadky nesmú odstraňovať.", "correct": false },
+      { "text": "Imputácia je bezstratová – doplnené hodnoty sú rovnako spoľahlivé ako skutočne zistené.", "correct": false }
+    ],
+    "explanation": "680 z 1313 je viac než polovica – eliminácia by znamenala obrovskú stratu dát, preto sa použila imputácia priemerom. `dropna()` predvolene odstraňuje práve riadky. Cieľovým atribútom je `survived`, nie vek. Doplnené hodnoty sú iba odhad (všetkých 680 cestujúcich dostalo ten istý priemerný vek), takže imputácia dáta skresľuje – len menej bolestivo než strata polovice vzoriek."
+  },
+  {
+    "id": "t3-q07",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o imputácii priemerom (stratégia `mean`) sú pravdivé?",
+    "options": [
+      { "text": "Chýbajúca hodnota sa nahradí priemerom známych hodnôt toho istého atribútu (stĺpca).", "correct": true },
+      { "text": "Chýbajúca hodnota sa nahradí priemerom ostatných hodnôt toho istého riadku (vzorky).", "correct": false },
+      { "text": "Všetky doplnené hodnoty jedného stĺpca sú rovnaké.", "correct": true },
+      { "text": "Priemer je na odľahlé hodnoty citlivejší než medián.", "correct": true },
+      { "text": "Imputácia zmenší počet vzoriek v datasete.", "correct": false }
+    ],
+    "explanation": "Imputácia dopočíta chýbajúcu hodnotu na základe ostatných hodnôt daného atribútu, teda stĺpca – nie riadku, kde sú hodnoty rôznych atribútov. Pri stratégii `mean` je to jedno číslo na stĺpec, takže všetky doplnené hodnoty stĺpca sú rovnaké (na histograme z cvičenia tvoria jeden vysoký stĺpec). Priemer ťahajú odľahlé hodnoty viac než medián. Počet vzoriek sa nemení – to je výhoda oproti eliminácii."
+  },
+  {
+    "id": "t3-q08",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o triede `SimpleImputer` zo scikit-learn?",
+    "options": [
+      { "text": "Importuje sa z modulu `sklearn.impute`.", "correct": true },
+      { "text": "Bez zadanej stratégie dopĺňa priemer stĺpca.", "correct": true },
+      { "text": "Bez zadanej stratégie dopĺňa medián stĺpca.", "correct": false },
+      { "text": "Stratégia `most_frequent` sa dá použiť iba na číselné atribúty.", "correct": false },
+      { "text": "Volanie `fit` doplní chýbajúce hodnoty priamo v pôvodnom poli.", "correct": false }
+    ],
+    "explanation": "`from sklearn.impute import SimpleImputer`; predvolená stratégia je `mean`, medián treba vyžiadať cez `strategy='median'`. `most_frequent` dopĺňa najčastejšiu hodnotu, takže funguje aj pre kategorické atribúty. `fit` sa iba naučí štatistiku každého stĺpca; doplnené dáta vráti až `transform` (alebo `fit_transform`) ako nové pole."
+  },
+  {
+    "id": "t3-q09",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód (ručná imputácia z cvičenia s Titanicom na malom poli)?",
+    "code": "import numpy as np\n\nages = np.array([22., np.nan, 30., np.nan, 38.])\nmean_age = np.mean(ages[~np.isnan(ages)])\nages[np.isnan(ages)] = mean_age\nprint(ages)",
+    "options": [
+      { "text": "`[22. 30. 30. 30. 38.]`", "correct": true },
+      { "text": "`[22. 18. 30. 18. 38.]`", "correct": false },
+      { "text": "`[22. nan 30. nan 38.]`", "correct": false },
+      { "text": "`[22. 30. 38.]`", "correct": false }
+    ],
+    "explanation": "`~np.isnan(ages)` vyberie iba známe hodnoty 22, 30, 38, ich priemer je 30. Priradenie cez masku `ages[np.isnan(ages)] = mean_age` prepíše obe hodnoty NaN na 30, dĺžka poľa sa nemení. Hodnota 18 by vyšla, keby sa súčet 90 delil piatimi – chýbajúce hodnoty sa však do priemeru nepočítajú."
+  },
+  {
+    "id": "t3-q10",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Pole `ages` obsahuje aj hodnoty NaN. Ktoré výrazy vrátia priemer **známych** vekov?",
+    "code": "import numpy as np\n\nages = np.array([22., np.nan, 30., np.nan, 38.])",
+    "options": [
+      { "text": "`np.mean(ages[~np.isnan(ages)])`", "correct": true },
+      { "text": "`np.nanmean(ages)`", "correct": true },
+      { "text": "`np.mean(ages)`", "correct": false },
+      { "text": "`np.mean(ages[np.isnan(ages)])`", "correct": false },
+      { "text": "`np.mean(ages[ages != np.nan])`", "correct": false }
+    ],
+    "explanation": "Maska `~np.isnan(ages)` (ako na cvičení) aj funkcia `np.nanmean` NaN vynechajú a vrátia 30.0. `np.mean(ages)` vráti `nan`, lebo jediná hodnota NaN pokazí celý súčet. `ages[np.isnan(ages)]` vyberie naopak iba chýbajúce hodnoty. Porovnanie `ages != np.nan` je vždy True (NaN sa nerovná ničomu, ani sebe), takže nič neodfiltruje a výsledok je znova `nan`."
+  },
+  {
+    "id": "t3-q11",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Aké tri čísla vypíše tento kód (v poradí výpisov)?",
+    "code": "import numpy as np\nfrom sklearn.impute import SimpleImputer\n\nX = np.array([[1., 10.],\n              [np.nan, 20.],\n              [3., np.nan],\n              [8., 60.]])\nprint(SimpleImputer().fit_transform(X)[1, 0])\nprint(SimpleImputer(strategy='median').fit_transform(X)[1, 0])\nprint(SimpleImputer().fit_transform(X)[2, 1])",
+    "options": [
+      { "text": "4.0, 3.0, 30.0", "correct": true },
+      { "text": "4.0, 3.0, 20.0", "correct": false },
+      { "text": "3.0, 4.0, 30.0", "correct": false },
+      { "text": "20.0, 20.0, 3.0", "correct": false }
+    ],
+    "explanation": "Imputer počíta po stĺpcoch. Prvý stĺpec má známe hodnoty 1, 3, 8: priemer 4.0, medián 3.0. Druhý stĺpec má 10, 20, 60: priemer 30.0 (medián by bol 20.0). Prvé dva výpisy sú doplnená hodnota na pozícii [1, 0] – najprv predvolenou stratégiou `mean`, potom `median`; tretí výpis je pozícia [2, 1] so stratégiou `mean`. Posledná možnosť by vyšla, keby sa dopĺňalo z hodnôt toho istého riadku."
+  },
+  {
+    "id": "t3-q12",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "moodle",
+    "text": "V súbore s imputáciou veku v Titanicu je poznámka, že postup je zjednodušený. Aký postup je metodicky správny?",
+    "options": [
+      { "text": "Najprv rozdeliť dáta na trénovacie a testovacie, priemer vypočítať iba z trénovacích a doplniť ním obe množiny.", "correct": true },
+      { "text": "Vypočítať priemer zo všetkých dát a až potom dáta rozdeliť.", "correct": false },
+      { "text": "Rozdeliť dáta a priemer vypočítať zvlášť z trénovacích a zvlášť z testovacích dát.", "correct": false },
+      { "text": "Chýbajúce hodnoty doplniť iba v testovacích dátach.", "correct": false }
+    ],
+    "explanation": "Poznámka v súbore: správne sa dáta rozdelia na trénovaciu a testovaciu množinu ešte pred imputáciou (domáca úloha so `SimpleImputer`). Imputer sa naučí priemer (`fit`) iba z trénovacích dát a tým istým priemerom sa doplnia trénovacie aj testovacie (`transform`). Priemer zo všetkých dát je práve to zjednodušenie z cvičenia – do trénovania pretečie informácia z testu. Počítať priemer z testovacích dát znamená `fit` na teste, čo sa nesmie."
+  },
+  {
+    "id": "t3-q13",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré z týchto atribútov sú **ordinálne**?",
+    "options": [
+      { "text": "veľkosť trička (S, M, L, XL, XXL)", "correct": true },
+      { "text": "stupeň vzdelania (základné, stredné, vysokoškolské)", "correct": true },
+      { "text": "farba (červený, zelený, modrý, čierny)", "correct": false },
+      { "text": "hudobný žáner (pop, rock, classical)", "correct": false },
+      { "text": "pohlavie (male, female)", "correct": false }
+    ],
+    "explanation": "Ordinálny atribút je kategorický atribút, ktorého hodnoty majú prirodzené poradie: S < M < L < XL < XXL, podobne stupne vzdelania. Farba, žáner a pohlavie sú nominálne – ich hodnoty sa nedajú zoradiť, poradie je irelevantné."
+  },
+  {
+    "id": "t3-q14",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako správne previesť ordinálny atribút veľkosť (S, M, L, XL) na čísla?",
+    "options": [
+      { "text": "Ručne definovaným slovníkom, ktorý zachová poradie (S → 1, M → 2, L → 3, XL → 4), a metódou `map` z pandas.", "correct": true },
+      { "text": "Triedou `LabelEncoder`, ktorá prirodzené poradie veľkostí rozpozná sama.", "correct": false },
+      { "text": "Triedou `OneHotEncoder`, lebo jedine tá zachová informáciu o poradí.", "correct": false },
+      { "text": "Triedou `StandardScaler` priamo na textových hodnotách.", "correct": false }
+    ],
+    "explanation": "Pri ordinálnom atribúte treba poradie zachovať, preto sa mapovanie zadáva ručne a aplikuje metódou `map`. `LabelEncoder` čísluje hodnoty abecedne (L → 0, M → 1, S → 2, XL → 3), čo skutočnému poradiu nezodpovedá. One-hot kódovanie poradie naopak zahodí – každá hodnota je samostatný stĺpec. `StandardScaler` pracuje iba s číslami."
+  },
+  {
+    "id": "t3-q15",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód?",
+    "code": "import pandas as pd\n\ndf = pd.DataFrame({'size': ['M', 'XL', 'S', 'L']})\nsize_mapping = {'S': 1, 'M': 2, 'L': 3, 'XL': 4}\ndf['size'] = df['size'].map(size_mapping)\nprint(df['size'].tolist())",
+    "options": [
+      { "text": "`[2, 4, 1, 3]`", "correct": true },
+      { "text": "`[1, 3, 2, 0]`", "correct": false },
+      { "text": "`[1, 2, 3, 4]`", "correct": false },
+      { "text": "`[0, 1, 2, 3]`", "correct": false }
+    ],
+    "explanation": "`map` nahradí každú hodnotu stĺpca hodnotou zo slovníka: M → 2, XL → 4, S → 1, L → 3; poradie riadkov sa nemení. `[1, 3, 2, 0]` by dal `LabelEncoder`, ktorý čísluje abecedne (L 0, M 1, S 2, XL 3) – práve preto sa na ordinálne atribúty nehodí. Zvyšné možnosti by znamenali, že sa hodnoty v stĺpci zoradili alebo očíslovali podľa poradia riadkov."
+  },
+  {
+    "id": "t3-q16",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Označenie tried zakódujeme celými číslami, napr. „chorá“ → 0, „zdravá“ → 1 alebo „pop“ → 0, „rock“ → 1, „classical“ → 2. Prečo to pri označení tried nevadí?",
+    "options": [
+      { "text": "Označenie tried je nominálne – slúži iba na rozlíšenie tried a poradie čísel je irelevantné.", "correct": true },
+      { "text": "Triedy sú ordinálne, takže čísla vyjadrujú ich skutočné poradie.", "correct": false },
+      { "text": "`LabelEncoder` označenia tried zároveň preškáluje do intervalu [0, 1].", "correct": false },
+      { "text": "Čísla tried sa pri trénovaní spriemerujú, takže sa rozdiely medzi nimi stratia.", "correct": false }
+    ],
+    "explanation": "Podľa prednášky je pri mapovaní označenia tried poradie irelevantné – klasifikátor čísla tried nepoužíva ako veličinu, iba ako menovky. Triedy nie sú ordinálne (rock nie je „viac“ než pop). `LabelEncoder` nič neškáluje, vracia celé čísla 0 … k−1. Problém s umelým poradím vzniká až pri nominálnych **vstupných atribútoch**, kde sa s číslami počíta."
+  },
+  {
+    "id": "t3-q17",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o triede `LabelEncoder`?",
+    "options": [
+      { "text": "Hodnoty nahradí celými číslami 0 až k − 1, kde k je počet rôznych hodnôt.", "correct": true },
+      { "text": "Číslo hodnoty je jej poradie v atribúte `classes_`, kde sú hodnoty zoradené abecedne.", "correct": true },
+      { "text": "Zachová prirodzené poradie ordinálnych hodnôt, napr. S < M < L < XL.", "correct": false },
+      { "text": "Pre každú hodnotu vytvorí samostatný stĺpec 0/1.", "correct": false }
+    ],
+    "explanation": "`LabelEncoder` si pri `fit` uloží zoradené unikátne hodnoty do `classes_` (na cvičení `['female' 'male']`) a pri `transform` každú hodnotu nahradí jej indexom: female → 0, male → 1. Zoradenie je abecedné, o skutočnom poradí veľkostí nič nevie. Samostatné stĺpce 0/1 vytvára `OneHotEncoder`."
+  },
+  {
+    "id": "t3-q18",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "from sklearn.preprocessing import LabelEncoder\n\nenc = LabelEncoder()\nenc.fit(['male', 'female', 'female', 'male'])\nprint(enc.classes_)\nprint(enc.transform(['male', 'female']))",
+    "options": [
+      { "text": "`['female' 'male']` a `[1 0]`", "correct": true },
+      { "text": "`['male' 'female']` a `[0 1]`", "correct": false },
+      { "text": "`['female' 'male']` a `[0 1]`", "correct": false },
+      { "text": "`['male' 'female' 'female' 'male']` a `[0 1]`", "correct": false }
+    ],
+    "explanation": "`classes_` obsahuje unikátne hodnoty zoradené abecedne, nie v poradí výskytu: `['female' 'male']`. Kód hodnoty je jej index v `classes_`, teda female → 0 a male → 1. `transform(['male', 'female'])` preto vráti `[1 0]`. Presne takto sa na cvičení kódovalo pohlavie v Titanicu."
+  },
+  {
+    "id": "t3-q19",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Nominálny vstupný atribút farba zakódujeme ako červený → 0, zelený → 1, modrý → 2. Aký problém tým vzniká?",
+    "options": [
+      { "text": "Model môže čísla chápať ako usporiadané (modrý > zelený > červený), hoci medzi farbami žiadne poradie nie je.", "correct": true },
+      { "text": "Počet atribútov datasetu sa strojnásobí.", "correct": false },
+      { "text": "Hodnoty 0 až 2 sa už nedajú preškálovať.", "correct": false },
+      { "text": "V stĺpci vzniknú chýbajúce hodnoty.", "correct": false }
+    ],
+    "explanation": "Prednáška sa pýta „je zelený > červený? je modrý > zelený?“ – celé čísla zavedú medzi hodnotami vzťah (poradie, vzdialenosť), ktorý v skutočnosti neexistuje. Počet atribútov ostáva rovnaký (jeden stĺpec), čísla sa škálovať dajú a žiadne chýbajúce hodnoty nevznikajú. Riešením je one-hot kódovanie."
+  },
+  {
+    "id": "t3-q20",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Atribút farba má tri hodnoty: black, green, red. Čo platí po jeho one-hot kódovaní?",
+    "options": [
+      { "text": "Vzniknú tri nové stĺpce s hodnotami 0/1.", "correct": true },
+      { "text": "V každom riadku je v týchto stĺpcoch práve jedna jednotka.", "correct": true },
+      { "text": "Medzi farbami nevznikne žiadne umelé poradie.", "correct": true },
+      { "text": "Počet atribútov datasetu sa nezmení.", "correct": false },
+      { "text": "Vzorka s farbou green má jednotku vo všetkých troch stĺpcoch.", "correct": false }
+    ],
+    "explanation": "One-hot kódovanie vytvorí pre každú hodnotu nominálneho atribútu vlastný stĺpec 0/1 (v prednáške `f_new_black`, `f_new_green`, `f_new_red`); vzorka má jednotku iba v stĺpci svojej hodnoty. Keďže žiadna farba nedostane „väčšie“ číslo, nevzniká poradie. Jeden pôvodný stĺpec nahradia tri, takže počet atribútov rastie."
+  },
+  {
+    "id": "t3-q21",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "import numpy as np\nfrom sklearn.preprocessing import OneHotEncoder\n\npclass = np.array([0, 2, 1, 2])\nohe = OneHotEncoder()\npclass_reshaped = pclass.reshape(-1, 1)\nohe_coded = ohe.fit_transform(pclass_reshaped).toarray()\nprint(ohe_coded.shape)\nprint(ohe_coded[1])",
+    "options": [
+      { "text": "Prvý výpis je `(4, 3)`.", "correct": true },
+      { "text": "Druhý výpis je `[0. 0. 1.]`.", "correct": true },
+      { "text": "Bez `reshape(-1, 1)` by `fit_transform` skončil chybou, lebo očakáva 2D pole.", "correct": true },
+      { "text": "Bez `.toarray()` by bol výsledkom riedka matica, nie bežné NumPy pole.", "correct": true },
+      { "text": "`pclass_reshaped` má tvar `(1, 4)`.", "correct": false }
+    ],
+    "explanation": "Štyri vzorky a tri rôzne hodnoty (0, 1, 2) dajú maticu 4 × 3. Druhá vzorka má hodnotu 2, teda jednotku v treťom stĺpci: `[0. 0. 1.]`. `OneHotEncoder` vyžaduje 2D vstup; `reshape(-1, 1)` spraví z vektora stĺpec tvaru `(4, 1)` (−1 = počet riadkov sa dopočíta), nie `(1, 4)`. Kóder vracia riedku maticu, ktorú `.toarray()` prevedie na husté pole."
+  },
+  {
+    "id": "t3-q22",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o rozdelení dát na trénovacie a testovacie sú správne?",
+    "options": [
+      { "text": "Trénovacie dáta slúžia na natrénovanie modelu a naladenie parametrov.", "correct": true },
+      { "text": "Testovacie dáta slúžia na finálne overenie modelu.", "correct": true },
+      { "text": "Bežné pomery rozdelenia sú napr. 80–20, 90–10 alebo 60–40.", "correct": true },
+      { "text": "Po natrénovaní a otestovaní sa model pretrénuje na celej dátovej sade.", "correct": true },
+      { "text": "Testovacie dáta možno použiť na ladenie parametrov, pokiaľ sa na nich nevolá `fit` modelu.", "correct": false }
+    ],
+    "explanation": "Všetky štyri správne tvrdenia sú z prednášky. Posledné je nesprávne: vo fáze trénovania nesmú byť testovacie dáta použité nijako – „nikdy sa nedotýkaj testovacích dát“. Aj ladenie parametrov podľa testovacej množiny z nej robí nepriamu súčasť trénovania."
+  },
+  {
+    "id": "t3-q23",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Predspracovaný Titanic má 1313 vzoriek. Ktoré tvrdenia o tomto volaní sú pravdivé?",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(\n    titanic_reduced, titanic_y, test_size=0.25, random_state=33)",
+    "options": [
+      { "text": "`X_test` má 329 riadkov a `X_train` 984 riadkov.", "correct": true },
+      { "text": "Pri každom spustení s `random_state=33` vznikne to isté rozdelenie.", "correct": true },
+      { "text": "`y_train` obsahuje cieľové hodnoty práve tých vzoriek, ktoré sú v `X_train`.", "correct": true },
+      { "text": "`test_size=0.25` znamená, že testovacia množina má 25 vzoriek.", "correct": false },
+      { "text": "Funkcia vracia hodnoty v poradí `X_train, y_train, X_test, y_test`.", "correct": false }
+    ],
+    "explanation": "Desatinné `test_size` je podiel: štvrtina z 1313 je 328.25, zaokrúhli sa nahor na 329 testovacích vzoriek a zvyšných 984 je trénovacích. `random_state` zafixuje náhodné premiešanie, takže rozdelenie je opakovateľné. Vstupy aj ciele sa delia rovnako, preto si `X_train` a `y_train` zodpovedajú. Poradie výstupov je `X_train, X_test, y_train, y_test`."
+  },
+  {
+    "id": "t3-q24",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Rozhodovací strom je natrénovaný na trénovacej množine. Ktoré výrazy vrátia jeho presnosť (accuracy) na **testovacej** množine?",
+    "code": "clf = tree.DecisionTreeClassifier(criterion='entropy', max_depth=5, min_samples_leaf=5)\nclf = clf.fit(X_train, y_train)\ny_pred_test = clf.predict(X_test)",
+    "options": [
+      { "text": "`metrics.accuracy_score(y_test, y_pred_test)`", "correct": true },
+      { "text": "`clf.score(X_test, y_test)`", "correct": true },
+      { "text": "`clf.score(X_train, y_train)`", "correct": false },
+      { "text": "`metrics.accuracy_score(y_train, y_pred_test)`", "correct": false }
+    ],
+    "explanation": "`accuracy_score` porovná skutočné triedy testovacej množiny s predikovanými (takto to bolo na cvičení, výsledok ≈ 0.78). `clf.score(X_test, y_test)` spraví predikciu aj porovnanie naraz a dá to isté číslo. `clf.score(X_train, y_train)` je presnosť na trénovacích dátach, ktorá o správaní na nových dátach nehovorí. Posledný výraz porovnáva trénovacie ciele s predikciami pre testovacie vzorky – polia majú rôznu dĺžku a volanie skončí chybou."
+  },
+  {
+    "id": "t3-q25",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Pri ktorých algoritmoch výsledok výrazne závisí od mierky (škály) atribútov, takže ich treba pred trénovaním škálovať?",
+    "options": [
+      { "text": "KNN (k najbližších susedov)", "correct": true },
+      { "text": "SVM s RBF kernelom", "correct": true },
+      { "text": "rozhodovací strom", "correct": false },
+      { "text": "náhodný les", "correct": false }
+    ],
+    "explanation": "KNN aj SVM s RBF kernelom pracujú so vzdialenosťami medzi vzorkami – atribút s veľkými číslami by v nich prevážil ostatné (na cvičení 6 dosiahol SVC bez škálovania CV presnosť len ≈ 0.54 namiesto 0.85). Prednáška uvádza KNN ako citlivý a rozhodovacie stromy ako výnimku: strom delí vždy podľa prahu jedného atribútu, takže mu je mierka jedno; to isté platí pre náhodný les zložený zo stromov."
+  },
+  {
+    "id": "t3-q26",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o normalizácii (min-max škálovaní) sú pravdivé?",
+    "options": [
+      { "text": "Hodnoty atribútu prevedie do rozsahu [0, 1].", "correct": true },
+      { "text": "Počíta sa ako `x' = (x − min) / (max − min)`.", "correct": true },
+      { "text": "V scikit-learn ju robí `MinMaxScaler`.", "correct": true },
+      { "text": "Výsledný atribút má priemer 0 a štandardnú odchýlku 1.", "correct": false },
+      { "text": "Z dát odstráni odľahlé hodnoty.", "correct": false }
+    ],
+    "explanation": "Normalizácia = min-max škálovanie do pevného rozsahu [0, 1]: najmenšia hodnota sa zobrazí na 0, najväčšia na 1. Nulový priemer a jednotkovú odchýlku dáva štandardizácia (`StandardScaler`). Odľahlé hodnoty normalizácia neodstraňuje – naopak, je na ne citlivá, lebo práve minimum a maximum určujú rozsah."
+  },
+  {
+    "id": "t3-q27",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o štandardizácii atribútu?",
+    "options": [
+      { "text": "Počíta sa ako `x' = (x − μ) / σ`, kde μ je priemer a σ štandardná odchýlka atribútu.", "correct": true },
+      { "text": "Hodnoty po štandardizácii môžu byť záporné aj väčšie než 1.", "correct": true },
+      { "text": "Všetky hodnoty po štandardizácii ležia v intervale [0, 1].", "correct": false },
+      { "text": "V scikit-learn ju robí `MinMaxScaler`.", "correct": false }
+    ],
+    "explanation": "Štandardizácia od každej hodnoty odčíta priemer a vydelí ju štandardnou odchýlkou; výsledný atribút má priemer 0 a odchýlku 1 (na cvičení s datasetom wine vyšli odchýlky `[1. 1. 1.]`). Podpriemerné hodnoty sú záporné a rozsah nie je ohraničený. Pevný rozsah [0, 1] dáva normalizácia (`MinMaxScaler`); štandardizáciu robí `StandardScaler`."
+  },
+  {
+    "id": "t3-q28",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dáta sú rozdelené na trénovacie a testovacie. Ktoré volania škálovača (napr. `StandardScaler`) sú metodicky v poriadku?",
+    "options": [
+      { "text": "`fit` na trénovacích dátach", "correct": true },
+      { "text": "`transform` na trénovacích dátach", "correct": true },
+      { "text": "`transform` na testovacích dátach", "correct": true },
+      { "text": "`fit` na testovacích dátach", "correct": false },
+      { "text": "`fit_transform` na testovacích dátach", "correct": false }
+    ],
+    "explanation": "Pravidlo z prednášky: fit – trénovacie, transform – trénovacie, transform – testovacie, fit na testovacích – NIE. Škálovač sa parametre (priemer, odchýlku, minimum, maximum) učí iba z trénovacích dát a tými istými parametrami sa transformujú aj testovacie. `fit_transform` v sebe `fit` obsahuje, takže na testovacie dáta nepatrí."
+  },
+  {
+    "id": "t3-q29",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Prečo sa škálovač alebo imputer nesmie trénovať (`fit`) na testovacích dátach?",
+    "options": [
+      { "text": "Do predspracovania by sa dostala informácia z testovacích dát a odhad výkonnosti modelu by bol skreslený (príliš optimistický).", "correct": true },
+      { "text": "Testovacie dáta majú iný počet atribútov než trénovacie.", "correct": false },
+      { "text": "Metóda `fit` testovacie dáta nenávratne zmení.", "correct": false },
+      { "text": "Testovacie dáta sa neškálujú vôbec, model ich dostane v pôvodnej mierke.", "correct": false }
+    ],
+    "explanation": "Testovacie dáta majú simulovať úplne nové dáta, preto sa pri trénovaní nesmú použiť nijako – ani na výpočet priemeru či odchýlky. Inak informácia z testu pretečie do trénovania. Počet atribútov je v oboch množinách rovnaký, `fit` dáta nemení (iba si ukladá štatistiky) a testovacie dáta sa škálovať musia – cez `transform` s parametrami z trénovacích dát."
+  },
+  {
+    "id": "t3-q30",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Platí `stdsc = StandardScaler()`. Ktoré úryvky škálujú trénovacie a testovacie dáta metodicky správne?",
+    "options": [
+      { "text": "`X_train_std = stdsc.fit_transform(X_train)` a potom `X_test_std = stdsc.transform(X_test)`", "correct": true },
+      { "text": "`stdsc.fit(X_train)`, potom `X_train_std = stdsc.transform(X_train)` a `X_test_std = stdsc.transform(X_test)`", "correct": true },
+      { "text": "`X_train_std = stdsc.fit_transform(X_train)` a potom `X_test_std = stdsc.fit_transform(X_test)`", "correct": false },
+      { "text": "`stdsc.fit(X_test)`, potom `X_train_std = stdsc.transform(X_train)` a `X_test_std = stdsc.transform(X_test)`", "correct": false },
+      { "text": "`X_train_std = stdsc.transform(X_train)` a potom `X_test_std = stdsc.fit_transform(X_test)`", "correct": false }
+    ],
+    "explanation": "Prvý úryvok je priamo z prednášky; druhý robí to isté, len `fit` a `transform` volá zvlášť (ako na cvičení so `StandardScaler`). V treťom sa škálovač na testovacích dátach trénuje znova, takže obe množiny sú škálované inými parametrami. Vo štvrtom a piatom sa parametre učia z testovacích dát; v piatom navyše `transform` pred `fit` skončí chybou."
+  },
+  {
+    "id": "t3-q31",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód (hodnoty zaokrúhlené na 3 desatinné miesta)?",
+    "code": "import numpy as np\nfrom sklearn.preprocessing import MinMaxScaler\n\nX_train = np.array([[10.], [20.], [40.]])\nX_test = np.array([[50.], [25.]])\nmms = MinMaxScaler()\nX_train_norm = mms.fit_transform(X_train)\nX_test_norm = mms.transform(X_test)\nprint(X_train_norm.ravel(), X_test_norm.ravel())",
+    "options": [
+      { "text": "`[0. 0.333 1.]` a `[1.333 0.5]`", "correct": true },
+      { "text": "`[0. 0.333 1.]` a `[1. 0.]`", "correct": false },
+      { "text": "`[0. 0.333 1.]` a `[1. 0.5]`", "correct": false },
+      { "text": "`[0.25 0.5 1.]` a `[1.25 0.625]`", "correct": false }
+    ],
+    "explanation": "`fit_transform` sa z trénovacích dát naučí min = 10 a max = 40: (10 − 10)/30 = 0, (20 − 10)/30 ≈ 0.333, (40 − 10)/30 = 1. Testovacie dáta sa transformujú **tými istými** parametrami: (50 − 10)/30 ≈ 1.333 a (25 − 10)/30 = 0.5. Testovacia hodnota teda môže vyjsť aj mimo [0, 1] – neoreže sa. `[1. 0.]` by vyšlo, keby sa škálovač trénoval znova na testovacích dátach; posledná možnosť je delenie maximom."
+  },
+  {
+    "id": "t3-q32",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "import numpy as np\nfrom sklearn.preprocessing import StandardScaler\n\nX = np.array([[1.], [2.], [3.]])\nsc = StandardScaler()\nsc.fit(X)\nprint(sc.mean_)\nprint(sc.transform(np.array([[2.], [4.]])).ravel())",
+    "options": [
+      { "text": "Prvý výpis je `[2.]`.", "correct": true },
+      { "text": "Hodnota 2 sa transformuje na 0.", "correct": true },
+      { "text": "Hodnota 4 sa transformuje na číslo väčšie než 1 (≈ 2.45).", "correct": true },
+      { "text": "`transform` si priemer prepočíta z nových dát, takže druhý výpis je `[-1. 1.]`.", "correct": false },
+      { "text": "Hodnota 4 leží mimo trénovacieho rozsahu, preto sa oreže na 1.", "correct": false }
+    ],
+    "explanation": "`fit` sa naučí priemer 2 (`mean_`) a štandardnú odchýlku ≈ 0.816. `transform` už nič nepočíta nanovo, iba dosadí do `(x − μ) / σ`: (2 − 2)/0.816 = 0 a (4 − 2)/0.816 ≈ 2.45. Štandardizácia nemá ohraničený rozsah a nič neorezáva."
+  },
+  {
+    "id": "t3-q33",
+    "topicId": "t3-predspracovanie",
+    "week": 4,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo môže byť cieľom detekcie odľahlých hodnôt (outlierov)?",
+    "options": [
+      { "text": "Nájsť také hodnoty, napr. pri odhaľovaní podvodov (fraud detection).", "correct": true },
+      { "text": "Vyčistiť od nich dáta pred trénovaním modelu.", "correct": true },
+      { "text": "Doplniť chýbajúce hodnoty atribútu.", "correct": false },
+      { "text": "Previesť kategorické atribúty na číselné.", "correct": false }
+    ],
+    "explanation": "Podľa prednášky môže byť cieľom buď samotné nájdenie odľahlých hodnôt (práve ony sú zaujímavé, napr. podvodné transakcie), alebo vyčistenie dát od nich – to však znamená stratu informácie. Dopĺňanie chýbajúcich hodnôt je imputácia a prevod kategorických atribútov na čísla je kódovanie."
+  }
+]

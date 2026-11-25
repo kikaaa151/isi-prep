@@ -1,0 +1,1066 @@
+[
+  {
+    "id": "t2-q01",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o perceptróne sú pravdivé?",
+    "options": [
+      {
+        "text": "Počíta váhovanú kombináciu vstupov a výsledok porovnáva s rozhodovacou úrovňou.",
+        "correct": true
+      },
+      {
+        "text": "Je to najjednoduchšia neurónová sieť a lineárny klasifikátor.",
+        "correct": true
+      },
+      {
+        "text": "Učí sa s učiteľom – pri trénovaní potrebuje označenia tried.",
+        "correct": true
+      },
+      {
+        "text": "Maximalizuje šírku hraničného pásma medzi triedami.",
+        "correct": false
+      },
+      {
+        "text": "Pomocou jadrových funkcií oddelí aj dáta typu XOR.",
+        "correct": false
+      }
+    ],
+    "explanation": "Perceptrón je najjednoduchšia neurónová sieť, lineárny klasifikátor a metóda učenia s učiteľom; vstupy vynásobí váhami, sčíta a porovná s prahom. Jadrové funkcie a maximalizácia marginu sú vlastnosti SVM – perceptrón nelineárne dáta (XOR) oddeliť nedokáže."
+  },
+  {
+    "id": "t2-q02",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o učení a aktivácii perceptrónu?",
+    "options": [
+      {
+        "text": "Pri správne zaradenej vzorke sa váhy menia najviac.",
+        "correct": false
+      },
+      {
+        "text": "Aktivačnou funkciou je jednotkový skok.",
+        "correct": true
+      },
+      {
+        "text": "Konvergencia učenia je zaručená len pre lineárne separovateľné triedy.",
+        "correct": true
+      },
+      {
+        "text": "Aktivačnou funkciou je sigmoida, ktorej výstup je pravdepodobnosť triedy.",
+        "correct": false
+      }
+    ],
+    "explanation": "Učiace pravidlo mení váhy úmerne rozdielu skutočnej a predikovanej triedy – pri správnej predikcii je rozdiel nula a váhy sa nemenia. Ak triedy nie sú lineárne separovateľné, váhy sa neustália (preto sa obmedzuje počet epoch). Aktivácia perceptrónu je jednotkový skok: výstup je priamo trieda, nie pravdepodobnosť."
+  },
+  {
+    "id": "t2-q03",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo je cieľom SVM a čo sú podporné vektory?",
+    "options": [
+      {
+        "text": "Podporné vektory sú trénovacie vzorky ležiace najbližšie k hranici.",
+        "correct": true
+      },
+      {
+        "text": "Margin je vzdialenosť medzi oddeľujúcimi hranicami (rovinami) oboch tried.",
+        "correct": true
+      },
+      {
+        "text": "Podporné vektory sú všetky zle zaradené testovacie vzorky.",
+        "correct": false
+      },
+      {
+        "text": "Cieľom je maximalizovať hraničné pásmo (margin) medzi triedami.",
+        "correct": true
+      },
+      {
+        "text": "Cieľom je minimalizovať počet príznakov.",
+        "correct": false
+      }
+    ],
+    "explanation": "SVM je „rozšírenie perceptrónu“: namiesto samotnej chyby zaradenia maximalizuje margin – vzdialenosť medzi oddeľujúcimi rovinami. Tie prechádzajú najbližšími trénovacími vzorkami oboch tried, ktoré sa volajú podporné vektory. S testovacími vzorkami ani s počtom príznakov to nesúvisí."
+  },
+  {
+    "id": "t2-q04",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dáta sa nedajú oddeliť rovinou bez chyby. Čo platí o voľnej (slack) premennej a parametri `C` v SVM?",
+    "options": [
+      {
+        "text": "Parametrom `C` volíme, či uprednostníme širší margin, alebo menej chýb na trénovacích dátach.",
+        "correct": true
+      },
+      {
+        "text": "Malé `C` zakáže akékoľvek nesprávne zaradenie.",
+        "correct": false
+      },
+      {
+        "text": "Slack premenná dovolí niektorým vzorkám porušiť margin alebo byť zle zaradené.",
+        "correct": true
+      },
+      {
+        "text": "Slack premenná sa dá použiť iba s RBF jadrom.",
+        "correct": false
+      },
+      {
+        "text": "Veľmi veľké `C` silno trestá chyby – margin je užší a hrozí pretrénovanie.",
+        "correct": true
+      }
+    ],
+    "explanation": "Slack („voľnú“) premennú zaviedol Vapnik (1995) práve pre neoddeliteľné dáta. Minimalizuje sa ½‖w‖² + C·Σξ: veľké `C` = veľký trest za chyby, úzky margin, riziko pretrénovania; malé `C` = chyby sa tolerujú viac, margin je širší (riziko podtrénovania). Funguje s ľubovoľným jadrom vrátane lineárneho."
+  },
+  {
+    "id": "t2-q05",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dáta typu XOR nie sú lineárne separovateľné. Ktoré tvrdenia o ich riešení platia?",
+    "options": [
+      {
+        "text": "Kernelizácia premietne dáta do viacrozmerného priestoru, kde sa dajú oddeliť.",
+        "correct": true
+      },
+      {
+        "text": "Lineárny SVM ich oddelí, ak zvolíme dostatočne veľké `C`.",
+        "correct": false
+      },
+      {
+        "text": "Dokážu ich modelovať aj umelé neurónové siete (univerzálny aproximátor funkcie).",
+        "correct": true
+      },
+      {
+        "text": "Perceptrón ich oddelí po dostatočnom počte epoch.",
+        "correct": false
+      }
+    ],
+    "explanation": "Prednáška uvádza dve cesty pre lineárne neseparovateľné dáta: kernelizáciu (projekcia do viacrozmerného priestoru) a neskôr umelé neurónové siete. Lineárny model – perceptrón ani lineárny SVM – vie nakresliť len priamku, bez ohľadu na `C` či počet epoch (lineárny SVM má na XOR dátach z prednášky presnosť len asi 0.67)."
+  },
+  {
+    "id": "t2-q06",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Na dátach Iris použijeme `SVC(kernel='rbf', gamma=2, C=10)` a potom zvýšime `gamma` na 200. Čo sa stane?",
+    "options": [
+      {
+        "text": "Model prestane používať jadrovú funkciu.",
+        "correct": false
+      },
+      {
+        "text": "Margin sa rozšíri a model sa podtrénuje.",
+        "correct": false
+      },
+      {
+        "text": "Rozhodovacia hranica sa zmení na priamku.",
+        "correct": false
+      },
+      {
+        "text": "Rozhodovacie regióny sa stiahnu tesne okolo trénovacích vzoriek – model sa pretrénuje.",
+        "correct": true
+      }
+    ],
+    "explanation": "Gamma je parameter RBF jadra: čím je väčšia, tým menší dosah má každá trénovacia vzorka a tým členitejšia je hranica. Pri `gamma=200` regióny tesne obopínajú trénovacie body – na tréningu presnosť 0.99, na teste len 0.76. Priamku by dalo lineárne jadro; podtrénovanie hrozí naopak pri veľmi malej gamme."
+  },
+  {
+    "id": "t2-q07",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo predstavujú jednotlivé časti rozhodovacieho stromu?",
+    "options": [
+      {
+        "text": "Koreň – uzol s konečnou predikciou.",
+        "correct": false
+      },
+      {
+        "text": "Listový uzol – vlastnosť s najvyšším informačným ziskom.",
+        "correct": false
+      },
+      {
+        "text": "Listový uzol – konečná trieda (klasifikácia) alebo číselná hodnota (regresia).",
+        "correct": true
+      },
+      {
+        "text": "Vetva – výsledok rozhodnutia.",
+        "correct": true
+      },
+      {
+        "text": "Vnútorný uzol – rozhodnutie na základe určitej vlastnosti.",
+        "correct": true
+      }
+    ],
+    "explanation": "Strom modeluje rozhodnutia: vnútorné uzly kladú otázku na vlastnosť, vetvy sú možné výsledky a listy nesú konečnú triedu alebo hodnotu. Koreň je začiatok stromu (prvé rozhodnutie), nie predikcia; vlastnosť s najvyšším informačným ziskom sa vyberá pre vnútorný uzol, nie pre list."
+  },
+  {
+    "id": "t2-q08",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré vlastnosti majú rozhodovacie stromy?",
+    "options": [
+      {
+        "text": "Sú interpretovateľné a dajú sa vizualizovať.",
+        "correct": true
+      },
+      {
+        "text": "Sú citlivé na malé zmeny v dátach.",
+        "correct": true
+      },
+      {
+        "text": "Nedokážu pracovať so zmiešanými numerickými a kategorickými atribútmi.",
+        "correct": false
+      },
+      {
+        "text": "Nevyžadujú normalizáciu ani štandardizáciu vlastností.",
+        "correct": true
+      },
+      {
+        "text": "Sú náchylné na pretrénovanie.",
+        "correct": true
+      },
+      {
+        "text": "Ich rozhodovacia hranica je vždy jedna šikmá priamka.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pozitíva stromov: interpretovateľnosť a vizualizácia, dobre zvládajú zmiešané numerické a kategorické atribúty, nepotrebujú škálovanie. Negatíva: náchylnosť na pretrénovanie a citlivosť na malé zmeny v dátach. Hranice stromu sú rovnobežné s osami („schodíky“), lebo každá otázka sa týka jednej vlastnosti."
+  },
+  {
+    "id": "t2-q09",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako sa pri tvorbe klasifikačného rozhodovacieho stromu vyberá rozdelenie uzla?",
+    "options": [
+      {
+        "text": "Delenie pokračuje vždy, kým nemá každý list práve jednu vzorku.",
+        "correct": false
+      },
+      {
+        "text": "Vyberie sa rozdelenie, po ktorom majú potomkovia čo najvyššiu entropiu.",
+        "correct": false
+      },
+      {
+        "text": "Vlastnosť sa vyberá náhodne a strom sa potom opraví hlasovaním.",
+        "correct": false
+      },
+      {
+        "text": "Ako miera sa používa napr. Giniho index alebo entropia.",
+        "correct": true
+      },
+      {
+        "text": "Vyberie sa vlastnosť a bod rozdelenia s najvyšším informačným ziskom.",
+        "correct": true
+      }
+    ],
+    "explanation": "Informačný zisk = nečistota rodiča mínus vážená nečistota potomkov; strom volí rozdelenie s najvyšším ziskom, teda s čo najčistejšími potomkami (nízka entropia / Gini). Náhodný výber a hlasovanie patria k náhodnému lesu. Delenie sa zastaví aj skôr – pri maximálnej hĺbke alebo minimálnom počte vzoriek v uzle."
+  },
+  {
+    "id": "t2-q10",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o entropii v uzle rozhodovacieho stromu?",
+    "options": [
+      {
+        "text": "Vysoká entropia znamená, že dáta v uzle sú distribuované vo viacerých triedach.",
+        "correct": true
+      },
+      {
+        "text": "Čím vyššia entropia potomkov, tým väčší informačný zisk rozdelenia.",
+        "correct": false
+      },
+      {
+        "text": "Uzol, v ktorom sú vzorky jedinej triedy, má entropiu 0.",
+        "correct": true
+      },
+      {
+        "text": "Entropia sa používa iba pri regresných stromoch.",
+        "correct": false
+      }
+    ],
+    "explanation": "Entropia meria nečistotu uzla: 0 pre čistý uzol, najvyššia pri rovnomernom zastúpení tried. Informačný zisk je tým väčší, čím je entropia potomkov nižšia. Entropia a Gini sú kritériá pre klasifikáciu; pri regresii sa používa redukcia rozptylu."
+  },
+  {
+    "id": "t2-q11",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Uzol stromu obsahuje 8 vzoriek: 4 triedy A a 4 triedy B. Ktoré tvrdenia platia (entropia s logaritmom so základom 2)?",
+    "options": [
+      {
+        "text": "Giniho index uzla je 1.",
+        "correct": false
+      },
+      {
+        "text": "Rozdelenie na potomkov (4 A, 0 B) a (0 A, 4 B) má informačný zisk 1.",
+        "correct": true
+      },
+      {
+        "text": "Entropia uzla je 1.",
+        "correct": true
+      },
+      {
+        "text": "Rozdelenie na potomkov (2 A, 2 B) a (2 A, 2 B) má informačný zisk 0.",
+        "correct": true
+      },
+      {
+        "text": "Strom uprednostní rozdelenie s menším informačným ziskom.",
+        "correct": false
+      }
+    ],
+    "explanation": "H = −(0.5·log2 0.5 + 0.5·log2 0.5) = 1. Čistí potomkovia majú entropiu 0, zisk je 1 − 0 = 1 (najlepšie možné rozdelenie). Potomkovia s pomerom 2 : 2 majú entropiu 1, zisk je 1 − 1 = 0 – rozdelenie nič neprinieslo. Gini uzla je 1 − (0.5² + 0.5²) = 0.5. Strom vyberá rozdelenie s najvyšším ziskom."
+  },
+  {
+    "id": "t2-q12",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "teams",
+    "text": "Ktoré z uvedených sú hyperparametre, teda hodnoty, ktoré nastavujeme pred učením?",
+    "options": [
+      {
+        "text": "Pravidlá v uzloch natrénovaného stromu",
+        "correct": false
+      },
+      {
+        "text": "`max_depth` rozhodovacieho stromu",
+        "correct": true
+      },
+      {
+        "text": "Váhy naučené modelom SVM",
+        "correct": false
+      },
+      {
+        "text": "`n_neighbors` pri k-NN",
+        "correct": true
+      },
+      {
+        "text": "`C` a `kernel` pri SVM",
+        "correct": true
+      }
+    ],
+    "explanation": "Parametre si model naučí sám z dát počas `fit()` – pravidlá v uzloch stromu, váhy SVM. Hyperparametre nastavujeme my pred učením a riadia zložitosť modelu: `max_depth`, `C`, `kernel`, `n_neighbors`."
+  },
+  {
+    "id": "t2-q13",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "teams",
+    "text": "Tri modely majú presnosť: A – train 100 %, test 71 %; B – train 63 %, test 61 %; C – train 91 %, test 88 %. Ktoré diagnózy sú správne?",
+    "options": [
+      {
+        "text": "Model A je najlepší, lebo má najvyššiu presnosť na trénovacích dátach.",
+        "correct": false
+      },
+      {
+        "text": "Model B je pretrénovaný, lebo má malý rozdiel medzi train a test.",
+        "correct": false
+      },
+      {
+        "text": "Model C je v poriadku.",
+        "correct": true
+      },
+      {
+        "text": "Model B je podtrénovaný (underfitting).",
+        "correct": true
+      },
+      {
+        "text": "Model A je pretrénovaný (overfitting).",
+        "correct": true
+      }
+    ],
+    "explanation": "Overfitting: train výborný, test slabý (A – naučil sa aj šum). Underfitting: chyba vysoká všade (B – príliš jednoduchý model). C má vysokú presnosť a malý rozdiel. Nerozhoduje len výška presnosti, ale aj rozdiel medzi train a test; presnosť na trénovacích dátach sama nič nezaručuje."
+  },
+  {
+    "id": "t2-q14",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "teams",
+    "text": "Ktoré tvrdenia o trénovacej, validačnej a testovacej množine sú správne?",
+    "options": [
+      {
+        "text": "Testovacia množina sa použije raz, na konci, ako nezávislý odhad kvality.",
+        "correct": true
+      },
+      {
+        "text": "Testovacia množina slúži na nastavenie parametrov modelu vo `fit`.",
+        "correct": false
+      },
+      {
+        "text": "Na validačnej množine sa model učí a na trénovacej sa vyberajú hyperparametre.",
+        "correct": false
+      },
+      {
+        "text": "Na validačnej množine vyberáme najlepší model a jeho nastavenia.",
+        "correct": true
+      }
+    ],
+    "explanation": "Trénovacia: model sa učí (nastavuje parametre). Validačná: výber modelu a hyperparametrov. Testovacia: jediný raz na konci. Ak by sme model vyberali alebo učili podľa testu, test by sa stal súčasťou učenia (únik informácie) a jeho výsledok by bol príliš optimistický."
+  },
+  {
+    "id": "t2-q15",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "teams",
+    "text": "99 % pacientov má negatívny test. Čo platí o modeli, ktorý vždy predikuje „negatívny“?",
+    "options": [
+      {
+        "text": "Dosiahne accuracy 99 %.",
+        "correct": true
+      },
+      {
+        "text": "Je pretrénovaný, lebo má vysokú accuracy.",
+        "correct": false
+      },
+      {
+        "text": "Ukazuje, že pri nevyvážených triedach samotná accuracy nestačí.",
+        "correct": true
+      },
+      {
+        "text": "Nájde 99 % chorých pacientov.",
+        "correct": false
+      },
+      {
+        "text": "Nenájde ani jedného chorého – recall je 0.",
+        "correct": true
+      }
+    ],
+    "explanation": "Accuracy = podiel správnych predikcií = 99 %, lebo 99 % pacientov je naozaj negatívnych. Recall = TP / (TP + FN) = 0, pretože model neoznačil žiadneho pozitívneho. Preto treba pri nevyvážených triedach sledovať aj precision a recall. S pretrénovaním to nesúvisí – model sa nič nenaučil."
+  },
+  {
+    "id": "t2-q16",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "teams",
+    "text": "Klasifikátor má na testovacej množine TP = 40, FP = 10, FN = 20, TN = 30. Ktoré hodnoty sú správne?",
+    "options": [
+      {
+        "text": "Accuracy = 0.70",
+        "correct": true
+      },
+      {
+        "text": "Recall = 0.57",
+        "correct": false
+      },
+      {
+        "text": "Precision = 0.80",
+        "correct": true
+      },
+      {
+        "text": "Recall = 0.80",
+        "correct": false
+      },
+      {
+        "text": "Accuracy = 0.40",
+        "correct": false
+      }
+    ],
+    "explanation": "Accuracy = (TP + TN) / všetky = 70 / 100 = 0.70. Precision = TP / (TP + FP) = 40 / 50 = 0.80. Recall = TP / (TP + FN) = 40 / 60 ≈ 0.67. Hodnota 0.40 je iba TP / všetky a 0.57 je TP / (TP + TN) – ani jedno nie je definovaná metrika."
+  },
+  {
+    "id": "t2-q17",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "theory",
+    "source": "teams",
+    "text": "Aké tvary rozhodovacích hraníc vytvárajú klasifikátory?",
+    "options": [
+      {
+        "text": "Lineárny SVM – ľubovoľne zakrivená krivka.",
+        "correct": false
+      },
+      {
+        "text": "Rozhodovací strom – vždy jedna šikmá priamka.",
+        "correct": false
+      },
+      {
+        "text": "Rozhodovací strom – hranice rovnobežné s osami („schodíky“).",
+        "correct": true
+      },
+      {
+        "text": "Lineárny SVM – priamka (v 2D).",
+        "correct": true
+      }
+    ],
+    "explanation": "Klasifikácia je hľadanie rozhodovacej hranice a rôzne algoritmy dávajú rôzne tvary. Strom kladie otázky typu „je x3 > 2,5?“, preto sú jeho hranice rovnobežné s osami. Lineárny SVM hľadá priamku s najväčším okrajom; zakrivenú hranicu dá až jadro (napr. RBF)."
+  },
+  {
+    "id": "t2-q18",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo platí o tomto kóde z úlohy s tvárami?",
+    "code": "faces = fetch_olivetti_faces()\nprint(faces.images.shape)\nprint(faces.data.shape)\n\nsvc = SVC(kernel='linear')\nX_train, X_test, y_train, y_test = train_test_split(faces.data, faces.target, test_size=0.25,\n                                                    random_state=0, stratify=faces.target)",
+    "options": [
+      {
+        "text": "Každá vzorka v `faces.data` má 64 príznakov.",
+        "correct": false
+      },
+      {
+        "text": "`faces.data.shape` je `(400, 4096)`.",
+        "correct": true
+      },
+      {
+        "text": "`stratify=faces.target` zachová pomer tried (osôb) v trénovacej aj testovacej časti.",
+        "correct": true
+      },
+      {
+        "text": "`stratify=faces.target` zabezpečí, že všetky príznaky majú rovnaký rozsah.",
+        "correct": false
+      },
+      {
+        "text": "`faces.images.shape` je `(400, 64, 64)`.",
+        "correct": true
+      },
+      {
+        "text": "`X_test` obsahuje 100 vzoriek.",
+        "correct": true
+      }
+    ],
+    "explanation": "Dataset má 400 fotografií 64 × 64; `faces.data` je každý obrázok rozvinutý do 64 · 64 = 4096 príznakov (pixelov). 25 % zo 400 je 100 testovacích vzoriek. `stratify` rozdelí dáta tak, aby každá osoba mala v oboch častiach rovnaký podiel fotiek; s rozsahom príznakov (škálovaním) nemá nič spoločné."
+  },
+  {
+    "id": "t2-q19",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorý riadok patrí na miesto komentára `# ???`, aby kód vypísal presnosť rozhodovacieho stromu?",
+    "code": "X, y = datasets.make_classification(n_samples=1000, n_features=3, n_redundant=0, random_state=1)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)\n\ndtc = DecisionTreeClassifier()\n# ???\ny_predict = dtc.predict(X_test)\nprint(accuracy_score(y_test, y_predict))",
+    "options": [
+      {
+        "text": "`dtc.fit(X_train, X_test)`",
+        "correct": false
+      },
+      {
+        "text": "`dtc.train(X_train, y_train)`",
+        "correct": false
+      },
+      {
+        "text": "`dtc.predict(X_train, y_train)`",
+        "correct": false
+      },
+      {
+        "text": "`dtc.fit(X_train, y_train)`",
+        "correct": true
+      },
+      {
+        "text": "`dtc.fit(X_test, y_test)`",
+        "correct": false
+      }
+    ],
+    "explanation": "Pred predikciou treba model natrénovať na trénovacích dátach: `fit(X_train, y_train)`. Učiť na testovacích dátach je chyba (únik informácie), `fit(X_train, X_test)` mieša príznaky dvoch množín, metóda `train` v scikit-learn neexistuje a `predict` berie iba `X`."
+  },
+  {
+    "id": "t2-q20",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Dáta majú 200 príznakov, z toho 5 informatívnych. Strom bez obmedzenia hĺbky dosiahol na teste 0.70; cyklus vypísal pre hĺbku 3 presnosť 0.81 a pre hĺbku 10 presnosť 0.70. Čo platí?",
+    "code": "for depth in range(1, 21):\n    dt = DecisionTreeClassifier(max_depth=depth, random_state=0)\n    dt.fit(X_train, y_train)\n    preds = dt.predict(X_test)\n    print(depth, (y_test == preds).mean())",
+    "options": [
+      {
+        "text": "Presnosť na testovacej množine s rastúcou hĺbkou stále rastie.",
+        "correct": false
+      },
+      {
+        "text": "Hlboký strom sa pretrénoval; obmedzenie `max_depth` znížilo zložitosť a zlepšilo výsledok na teste.",
+        "correct": true
+      },
+      {
+        "text": "`(y_test == preds).mean()` je accuracy na testovacej množine.",
+        "correct": true
+      },
+      {
+        "text": "`range(1, 21)` obsahuje aj hodnotu 21.",
+        "correct": false
+      },
+      {
+        "text": "Cyklus natrénuje 20 stromov s maximálnou hĺbkou 1 až 20.",
+        "correct": true
+      }
+    ],
+    "explanation": "`range(1, 21)` dáva 1 až 20. Porovnanie `y_test == preds` je pole True/False a jeho priemer je podiel správnych predikcií. `max_depth` je hyperparameter riadiaci zložitosť: plytký strom (hĺbka 3) generalizuje lepšie (0.81), hlboký sa učí šum z neinformatívnych príznakov a na teste klesne späť na 0.70."
+  },
+  {
+    "id": "t2-q21",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Kód z úlohy o rozhodovacej hranici: `svm` je už natrénovaný `SVC(kernel='linear')`. Čo platí?",
+    "code": "for xpt, ypt in product(np.linspace(xmin - 2.5, xmax + 2.5, 20),\n                        np.linspace(ymin - 2.5, ymax + 2.5, 20)):\n    p = Point(xpt, ypt, svm.predict(np.array([xpt, ypt]).reshape(1, -1)))\n    decision_boundery.append(p)",
+    "options": [
+      {
+        "text": "V každom kroku cyklu sa SVM znova trénuje.",
+        "correct": false
+      },
+      {
+        "text": "`reshape(1, -1)` vytvorí z dvoch súradníc jednu vzorku s dvoma príznakmi.",
+        "correct": true
+      },
+      {
+        "text": "Cyklus prejde 40 bodov mriežky.",
+        "correct": false
+      },
+      {
+        "text": "Cyklus prejde 400 bodov mriežky.",
+        "correct": true
+      }
+    ],
+    "explanation": "`product` dvoch polí po 20 hodnotách dá všetky dvojice, teda 20 · 20 = 400 bodov. Pre každý bod sa iba volá `predict` (model sa trénoval raz, pred cyklom) a vstup musí byť 2D – `reshape(1, -1)` dá tvar (1, 2). Vyfarbením bodov podľa predikcie vzniknú rozhodovacie regióny."
+  },
+  {
+    "id": "t2-q22",
+    "topicId": "t2-klasifikacia",
+    "week": 2,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "import numpy as np\n\ny_test = np.array([1, 0, 1, 1, 0, 1, 0, 0])\ny_predict = np.array([1, 0, 0, 1, 1, 1, 0, 0])\n\nwrong = np.where(y_test != y_predict)[0]\nprint(wrong, len(wrong), (y_test == y_predict).mean())",
+    "options": [
+      {
+        "text": "`[2 4] 6 0.75`",
+        "correct": false
+      },
+      {
+        "text": "`[2 4] 2 0.25`",
+        "correct": false
+      },
+      {
+        "text": "`[2 4] 2 0.75`",
+        "correct": true
+      },
+      {
+        "text": "`[0 1 3 5 6 7] 6 0.75`",
+        "correct": false
+      }
+    ],
+    "explanation": "Predikcia sa líši od skutočnosti na pozíciách 2 a 4. `np.where(podmienka)[0]` vráti pole indexov, kde podmienka platí → `[2 4]`, jeho dĺžka je 2. Správnych je 6 z 8, teda `(y_test == y_predict).mean()` = 0.75 (accuracy); 0.25 by bol podiel chýb."
+  },
+  {
+    "id": "t2-q23",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako náhodný les vytvára a kombinuje stromy?",
+    "options": [
+      {
+        "text": "Pri tvorbe stromu sa vyberá aj podmnožina atribútov.",
+        "correct": true
+      },
+      {
+        "text": "Každý nový strom sa učí opraviť chyby predchádzajúceho stromu.",
+        "correct": false
+      },
+      {
+        "text": "Každý strom sa trénuje na bootstrap vzorke – podmnožine trénovacích dát vybranej s opakovaním.",
+        "correct": true
+      },
+      {
+        "text": "Všetky stromy sa trénujú na úplne rovnakých dátach aj atribútoch.",
+        "correct": false
+      },
+      {
+        "text": "Výsledky stromov sa agregujú väčšinovým hlasovaním (majority voting).",
+        "correct": true
+      }
+    ],
+    "explanation": "Algoritmus: 1. bootstrap – výber podmnožiny dát s opakovaním, 2. strom na tejto vzorke s podmnožinou atribútov (bez opakovania), 3. opakovať N-krát, 4. agregovať výsledky hlasovaním. Práve náhodnosť robí stromy odlišnými a znižuje pretrénovanie. Postupné opravovanie chýb predchádzajúcich stromov je boosting (XGBoost)."
+  },
+  {
+    "id": "t2-q24",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čím sa XGBoost líši od náhodného lesa?",
+    "options": [
+      {
+        "text": "Náhodný les využíva bagging (bootstrap aggregating) a náhodný výber vlastností.",
+        "correct": true
+      },
+      {
+        "text": "XGBoost nekombinuje rozhodovacie stromy, ale lineárne modely.",
+        "correct": false
+      },
+      {
+        "text": "XGBoost je založený na boostingu – stromy vytvára iteratívne a každý nový koriguje chyby predchádzajúcich.",
+        "correct": true
+      },
+      {
+        "text": "XGBoost využíva mechanizmus pozornosti (attention).",
+        "correct": false
+      }
+    ],
+    "explanation": "Oba sú ensemble metódy zo slabých modelov – rozhodovacích stromov. Náhodný les ich stavia nezávisle (bagging) a hlasuje; XGBoost ich pridáva postupne tak, aby každý opravoval chyby predchádzajúcich (boosting). Mechanizmus pozornosti používa TabNet."
+  },
+  {
+    "id": "t2-q25",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o algoritme K najbližších susedov?",
+    "options": [
+      {
+        "text": "Po natrénovaní už trénovacie dáta nepotrebuje uchovávať.",
+        "correct": false
+      },
+      {
+        "text": "Triedu priradí majoritným rozhodnutím medzi k najbližšími susedmi.",
+        "correct": true
+      },
+      {
+        "text": "Vysvetlí, prečo vzorku zaradil, pomocou zrozumiteľných pravidiel.",
+        "correct": false
+      },
+      {
+        "text": "Je určený na klasifikačné aj regresné úlohy.",
+        "correct": true
+      },
+      {
+        "text": "Je to lenivý (lazy) prístup – neučí sa rozdeľujúcu funkciu, pamätá si samotné dáta.",
+        "correct": true
+      }
+    ],
+    "explanation": "KNN je instance-based learning: „trénovanie“ je uloženie dát, práca sa robí až pri predikcii (hľadanie k najbližších susedov a hlasovanie). Preto je náročný na pamäť – uchováva celý dataset – a „nenapovedá prečo“. Použiť sa dá na klasifikáciu aj regresiu."
+  },
+  {
+    "id": "t2-q26",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako ovplyvňuje voľba hodnoty k správanie KNN?",
+    "options": [
+      {
+        "text": "Hodnota k určuje počet tried, do ktorých sa klasifikuje.",
+        "correct": false
+      },
+      {
+        "text": "Príliš nízke k vedie k preučeniu, príliš vysoké k k podučeniu.",
+        "correct": true
+      },
+      {
+        "text": "Hodnota k ovplyvňuje iba rýchlosť výpočtu, nie presnosť.",
+        "correct": false
+      },
+      {
+        "text": "Príliš nízke k vedie k podučeniu, príliš vysoké k k preučeniu.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pri malom k rozhoduje pár najbližších bodov vrátane šumu – hranica je členitá (overfitting). Pri veľkom k sa hlasovanie vyhladí až príliš a model ignoruje lokálnu štruktúru (underfitting). Voľba k je rovnováha medzi pretrénovaním a podtrénovaním; k je počet susedov, nie tried."
+  },
+  {
+    "id": "t2-q27",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Trénovacie body triedy 0: (1, 1), (2, 1), (1, 2). Trénovacie body triedy 1: (3, 3), (5, 5), (6, 5), (5, 6). Klasifikujeme bod (2.5, 2.5). Ktoré tvrdenia platia?",
+    "code": "knn = KNeighborsClassifier(n_neighbors=k, p=2, metric='minkowski')\nknn.fit(X, y)\nprint(knn.predict([[2.5, 2.5]]))",
+    "options": [
+      {
+        "text": "Pre k = 1 je výsledkom trieda 1.",
+        "correct": true
+      },
+      {
+        "text": "Pre k = 3 je výsledkom trieda 0.",
+        "correct": true
+      },
+      {
+        "text": "Pre k = 7 je výsledkom trieda 1.",
+        "correct": true
+      },
+      {
+        "text": "`p=2` znamená manhattanskú vzdialenosť.",
+        "correct": false
+      },
+      {
+        "text": "Pre k = 5 je výsledkom trieda 1.",
+        "correct": false
+      }
+    ],
+    "explanation": "Vzdialenosti od (2.5, 2.5): (3, 3) → 0.71 (trieda 1); (2, 1) a (1, 2) → 1.58 (trieda 0); (1, 1) → 2.12 (trieda 0); (5, 5) → 3.54 (trieda 1); zvyšné dva body triedy 1 → 4.30. k = 1: najbližší je (3, 3) → trieda 1. k = 3: jeden hlas za 1, dva za 0 → trieda 0. k = 5: tri hlasy za 0, dva za 1 → trieda 0. k = 7: všetky body, 4 : 3 pre triedu 1. `p=2` v metrike Minkowski je euklidovská vzdialenosť (manhattan je `p=1`)."
+  },
+  {
+    "id": "t2-q28",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré sú dôsledky kliatby dimenzionality (curse of dimensionality)?",
+    "options": [
+      {
+        "text": "Narastá vzdialenosť medzi jednotlivými dátovými bodmi.",
+        "correct": true
+      },
+      {
+        "text": "Klasifikátory sa prestanú pretrénovať, lebo majú viac informácií.",
+        "correct": false
+      },
+      {
+        "text": "Nastáva typicky vtedy, keď je vzoriek oveľa viac než príznakov.",
+        "correct": false
+      },
+      {
+        "text": "Výrazne sa zhoršuje interpretovateľnosť.",
+        "correct": true
+      },
+      {
+        "text": "Klasifikátory (napr. KNN) sa ľahšie pretrénujú.",
+        "correct": true
+      },
+      {
+        "text": "Zvyšujú sa nároky na úložný priestor a výpočtovú náročnosť.",
+        "correct": true
+      }
+    ],
+    "explanation": "Kliatba dimenzionality znamená vysoký počet príznakov, zvyčajne N_features >> N_samples (príznakov je oveľa viac ako vzoriek, nie naopak). Dôsledky: väčšie nároky na pamäť a výpočet, horšia interpretovateľnosť, pretrénovanie klasifikátorov a rast vzdialeností medzi bodmi – priestor je riedky, čo škodí najmä KNN."
+  },
+  {
+    "id": "t2-q29",
+    "topicId": "t2-klasifikacia",
+    "week": null,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo hovorí No free lunch theorem?",
+    "options": [
+      {
+        "text": "Každý model je zjednodušením reality založeným na predpokladoch, ktoré neplatia vždy a všade – žiadny model nie je najlepší pre všetky úlohy.",
+        "correct": true
+      },
+      {
+        "text": "Hlboké neurónové siete prekonávajú stromové modely na všetkých typoch dát.",
+        "correct": false
+      },
+      {
+        "text": "Model s najvyššou presnosťou na trénovacích dátach je najlepší aj na nových dátach.",
+        "correct": false
+      },
+      {
+        "text": "Zložitejší model je vždy presnejší ako jednoduchší.",
+        "correct": false
+      }
+    ],
+    "explanation": "Model je založený na zjednodušení reality, zjednodušenie na predpokladoch a predpoklady neplatia vždy a všade. Preto treba modely na konkrétnych dátach porovnávať. Zložitejší model sa môže pretrénovať; na tabuľkových dátach stromové modely (gradient boosting) hlboké siete stále väčšinou prekonávajú."
+  },
+  {
+    "id": "t2-q30",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo znamenajú parametre v týchto konštruktoroch z prednášky?",
+    "code": "forest = RandomForestClassifier(criterion='entropy', n_estimators=10, random_state=1, n_jobs=2)\nknn = KNeighborsClassifier(n_neighbors=5, p=2, metric='minkowski')\ntree = DecisionTreeClassifier(criterion='entropy', max_depth=3, random_state=0)",
+    "options": [
+      {
+        "text": "`max_depth=3` – strom použije najviac 3 príznaky.",
+        "correct": false
+      },
+      {
+        "text": "`n_neighbors=5` – o triede rozhoduje 5 najbližších susedov.",
+        "correct": true
+      },
+      {
+        "text": "`criterion='entropy'` – miera nečistoty, podľa ktorej sa vyberá rozdelenie uzla.",
+        "correct": true
+      },
+      {
+        "text": "`n_estimators=10` – les bude mať 10 stromov.",
+        "correct": true
+      },
+      {
+        "text": "`n_jobs=2` – klasifikuje sa do 2 tried.",
+        "correct": false
+      },
+      {
+        "text": "`p=2` s metrikou `'minkowski'` zodpovedá euklidovskej vzdialenosti.",
+        "correct": true
+      }
+    ],
+    "explanation": "`n_estimators` je počet stromov lesa, `n_neighbors` je k v KNN, `p=2` v Minkowského metrike je euklidovská vzdialenosť (`p=1` manhattan), `criterion` určuje mieru nečistoty (entropia alebo Gini). `max_depth=3` obmedzuje hĺbku stromu (počet úrovní rozhodnutí), nie počet príznakov; `n_jobs` je počet jadier procesora použitých pri výpočte."
+  },
+  {
+    "id": "t2-q31",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "X, y = datasets.make_classification(1000, random_state=1)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=14)\n\nrf = RandomForestClassifier(random_state=500)\nrf.fit(X_train, y_train)\n\nprobs = rf.predict_proba(X_test)\nprint(probs.shape)",
+    "options": [
+      {
+        "text": "`(250,)`",
+        "correct": false
+      },
+      {
+        "text": "`(1000, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(750, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(250, 2)`",
+        "correct": true
+      },
+      {
+        "text": "`(250, 20)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`make_classification(1000, ...)` vytvorí 1000 vzoriek s 20 príznakmi a 2 triedami; 25 % je 250 testovacích vzoriek. `predict_proba` vráti pre každú testovaciu vzorku jeden stĺpec na triedu → `(250, 2)`. Tvar `(250,)` by malo `rf.predict(X_test)`."
+  },
+  {
+    "id": "t2-q32",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Kód z úlohy „Random Forest confidence“. Čo platí?",
+    "code": "probs = np.around(rf.predict_proba(X_test), 1)\nprobs_df = pd.DataFrame(probs, columns=['0', '1'])\nprobs_df['was_correct'] = y_predict == y_test\n\nbins = probs_df.groupby('0').was_correct.agg(['mean', 'count'])\nprint(bins)",
+    "options": [
+      {
+        "text": "Stĺpec `count` v `bins` je počet testovacích vzoriek v skupine.",
+        "correct": true
+      },
+      {
+        "text": "`np.around(..., 1)` zaokrúhli pravdepodobnosti na jedno desatinné miesto.",
+        "correct": true
+      },
+      {
+        "text": "`groupby('0')` ponechá iba vzorky, ktorých skutočná trieda je 0.",
+        "correct": false
+      },
+      {
+        "text": "Stĺpec `was_correct` obsahuje pravdepodobnosť správnej triedy.",
+        "correct": false
+      },
+      {
+        "text": "Stĺpec `mean` v `bins` je presnosť v skupine vzoriek s rovnakou pravdepodobnosťou triedy 0.",
+        "correct": true
+      }
+    ],
+    "explanation": "`predict_proba` dáva podiel stromov hlasujúcich za triedu 0 a 1; po zaokrúhlení vzniknú skupiny 0.0, 0.1, …, 1.0. `was_correct` je True/False (zhoda predikcie so skutočnosťou). `groupby('0')` zoskupuje podľa hodnoty stĺpca `'0'` – nič nefiltruje; priemer z True/False je presnosť v skupine a `count` jej veľkosť. Výsledok: pri hlasovaní okolo 0.5 je les nespoľahlivý, pri 0 alebo 1 takmer bezchybný."
+  },
+  {
+    "id": "t2-q33",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o hodnotení regresného modelu (SVR na dátach Boston housing)?",
+    "options": [
+      {
+        "text": "Metóda `score` regresora vracia koeficient determinácie R².",
+        "correct": true
+      },
+      {
+        "text": "Skóre na trénovacej množine je spoľahlivejší odhad ako skóre na testovacej.",
+        "correct": false
+      },
+      {
+        "text": "R² = 1.0 znamená dokonalú zhodu predikcií so skutočnosťou.",
+        "correct": true
+      },
+      {
+        "text": "Kvalita regresie sa meria funkciou `accuracy_score`.",
+        "correct": false
+      },
+      {
+        "text": "Stredná absolútna chyba je priemerná odchýlka v jednotkách cieľovej premennej.",
+        "correct": true
+      }
+    ],
+    "explanation": "Pri regresii je cieľ číslo, nie trieda – accuracy nedáva zmysel. `score` regresora je R² (podiel rozptylu vysvetlený modelom, 1.0 = dokonalé), MAE je priemerná chyba v jednotkách cieľa (tu tisíce dolárov). Skóre na trénovacej množine je optimistické (0.714 oproti 0.651 na teste), preto sa hodnotí na testovacej."
+  },
+  {
+    "id": "t2-q34",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorá dvojica riadkov doplnená za kód správne štandardizuje dáta pred trénovaním SVR?",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=33)\n\nscaler = StandardScaler()",
+    "options": [
+      {
+        "text": "`X_train = scaler.fit_transform(X_train)` a `X_test = scaler.fit_transform(X_test)`",
+        "correct": false
+      },
+      {
+        "text": "`X_test = scaler.fit_transform(X_test)` a `X_train = scaler.transform(X_train)`",
+        "correct": false
+      },
+      {
+        "text": "`X_train = scaler.transform(X_train)` a `X_test = scaler.transform(X_test)`",
+        "correct": false
+      },
+      {
+        "text": "`X_train = scaler.fit_transform(X_train)` a `X_test = scaler.transform(X_test)`",
+        "correct": true
+      }
+    ],
+    "explanation": "Škálovač sa učí (počíta priemer a smerodajnú odchýlku) iba na trénovacej množine – `fit_transform(X_train)` – a tie isté hodnoty sa aplikujú na test cez `transform(X_test)`. `fit` na teste (samostatne alebo namiesto tréningu) je únik informácie a obe množiny by boli škálované inak. Samotné `transform` bez predchádzajúceho `fit` skončí chybou."
+  },
+  {
+    "id": "t2-q35",
+    "topicId": "t2-klasifikacia",
+    "week": 3,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Kód vypísal postupne 0.714, 0.651 a 3.413. Čo platí?",
+    "code": "clf_svr = svm.SVR(kernel='linear')\nclf_svr.fit(X_train, y_train)\nprint(clf_svr.score(X_train, y_train))\n\ny_pred = clf_svr.predict(X_test)\nprint(metrics.r2_score(y_test, y_pred))\nprint(metrics.mean_absolute_error(y_test, y_pred))",
+    "options": [
+      {
+        "text": "Prvý výpis je accuracy, lebo `svm.SVR` je klasifikátor.",
+        "correct": false
+      },
+      {
+        "text": "Tretí výpis je podiel správne zaradených vzoriek.",
+        "correct": false
+      },
+      {
+        "text": "Druhý výpis je koeficient determinácie R² na testovacej množine.",
+        "correct": true
+      },
+      {
+        "text": "Tretí výpis je priemerná absolútna chyba v jednotkách cieľovej premennej.",
+        "correct": true
+      },
+      {
+        "text": "Prvý výpis je R² na testovacej množine.",
+        "correct": false
+      }
+    ],
+    "explanation": "`svm.SVR` je regresor (support vector regression), jeho `score` vracia R² – prvý výpis je R² na trénovacej množine (optimistické 0.714). `r2_score(y_test, y_pred)` je R² na teste (0.651) a `mean_absolute_error` je priemerná odchýlka predikcie od skutočnosti (3.413 tisíc dolárov). O zaraďovaní do tried pri regresii nejde."
+  }
+]

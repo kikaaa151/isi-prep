@@ -1,0 +1,150 @@
+[
+  {
+    "id": "w09-sudoku-is-valid",
+    "title": "Sudoku: kontrola ohraničení is_valid",
+    "week": 9,
+    "file": "w09-sudoku-is-valid.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/board.py",
+    "task": "Napíš metódu `is_valid(self, r, c, val)` triedy `SudokuBoard`. Doska je `self.grid` – zoznam 9 zoznamov, `0` znamená prázdnu bunku. Metóda vráti `False`, ak sa hodnota `val` už nachádza v riadku `r`, v stĺpci `c` alebo v bloku 3×3, do ktorého bunka `(r, c)` patrí; inak vráti `True`. Riadok over operátorom `in`, stĺpec cyklom cez `i`, blok dvoma cyklami cez `i`, `j` od ľavého horného rohu `block_row`, `block_col`.",
+    "explanation": "Metóda kontroluje tri ohraničenia Sudoku – je to základ všetkých solverov.\n\n1. **Riadok:** `val in self.grid[r]` – riadok je obyčajný zoznam.\n2. **Stĺpec:** stĺpec nie je uložený ako zoznam, preto cyklus `for i in range(9)` a porovnanie `self.grid[i][c] == val`.\n3. **Blok:** ľavý horný roh bloku je `(r // 3) * 3`, `(c // 3) * 3` – celočíselné delenie zaokrúhli nadol na 0, 1 alebo 2 a násobenie tromi dá 0, 3 alebo 6. Potom sa prejdú 3 × 3 bunky.\n4. Ak žiadna kontrola nezlyhala, `return True`.\n\n**Pozor:** metóda sa volá pre **prázdnu** bunku. Na vyplnenej bunke by vrátila `False` aj pre hodnotu, ktorá v nej už je.",
+    "expectedOutput": "Doska easy: is_valid(0, 0, 3) -> True, is_valid(0, 0, 6) -> False, is_valid(4, 4, 8) -> True, is_valid(4, 4, 7) -> False",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "ohraničenia",
+      "is_valid"
+    ]
+  },
+  {
+    "id": "w09-sudoku-find-empty",
+    "title": "Sudoku: prvá prázdna bunka find_empty",
+    "week": 9,
+    "file": "w09-sudoku-find-empty.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/board.py",
+    "task": "Napíš metódu `find_empty(self)` triedy `SudokuBoard`. Prejde dosku `self.grid` po riadkoch zhora nadol a v riadku zľava doprava (premenné `r`, `c`) a vráti súradnice prvej bunky s hodnotou `0` ako dvojicu `r, c`. Ak prázdna bunka neexistuje, vráti `None`.",
+    "explanation": "`find_empty` je najjednoduchší **výber premennej** pre backtracking – berie prvú nepriradenú premennú v pevnom poradí.\n\n- Dva vnorené cykly dávajú poradie po riadkoch (row-major).\n- `return r, c` vracia **tuple** `(r, c)`, najprv riadok, potom stĺpec.\n- `return None` po cykloch znamená, že doska je plná. V `_dfs` je to ukončovacia podmienka rekurzie: žiadna prázdna bunka = riešenie.",
+    "expectedOutput": "Doska easy -> (0, 0); plná doska -> None",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "výber premennej",
+      "find_empty"
+    ]
+  },
+  {
+    "id": "w09-sudoku-get-domain",
+    "title": "Sudoku: doména bunky get_domain",
+    "week": 9,
+    "file": "w09-sudoku-get-domain.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/board.py",
+    "task": "Napíš metódu `get_domain(self, r, c)` triedy `SudokuBoard`. Ak je bunka `(r, c)` už vyplnená (hodnota nie je `0`), vráti prázdny zoznam. Inak vráti zoznam `domain` všetkých hodnôt `v` od 1 do 9, pre ktoré `self.is_valid(r, c, v)` vráti `True` (vzostupne).",
+    "explanation": "Doména = hodnoty, ktoré premenná ešte môže dostať bez porušenia ohraničení.\n\n- Vyplnená bunka nie je premenná na priradenie → `[]`.\n- `range(1, 10)` dáva hodnoty 1 až 9 (horná hranica sa nepočíta).\n- Do domény ide každá hodnota, ktorú `is_valid` povolí – doména sa teda **počíta z aktuálnej dosky**, nikde sa neukladá.\n\nPoužíva ju backtracking (skúša len tieto hodnoty), MRV (dĺžka domény) aj forward checking (prázdna doména = slepá ulička).",
+    "expectedOutput": "Doska easy: get_domain(0, 0) -> [3, 4, 5], get_domain(0, 1) -> [3], get_domain(0, 3) -> [] (bunka je vyplnená)",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "doména",
+      "get_domain"
+    ]
+  },
+  {
+    "id": "w09-sudoku-check-full-board",
+    "title": "Sudoku: kontrola plnej dosky _check_full_board",
+    "week": 9,
+    "file": "w09-sudoku-check-full-board.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Napíš metódu `_check_full_board(self)` triedy `SudokuSolver` (doska je `self.board.grid`), ktorá overí, či je **úplne vyplnená** doska platným riešením. Pre každé `i` od 0 do 8 zober riadok `row` a stĺpec `col` (list comprehension cez `r`) a vráť `False`, ak množina ich hodnôt nemá 9 prvkov. Potom pre každý blok (rohy `br`, `bc` v krokoch po 3) nazbieraj hodnoty do zoznamu `block` a over to isté. Inak vráť `True`.",
+    "explanation": "Je to **cieľový test** hrubej sily – volá sa až vtedy, keď sú vyplnené všetky bunky.\n\n- `len(set(row)) != 9`: množina odstráni duplicity; ak má 9 čísel 1–9 menej než 9 rôznych hodnôt, niektorá sa opakuje.\n- Stĺpec sa poskladá cez `[self.board.grid[r][i] for r in range(9)]`.\n- `range(0, 9, 3)` dáva rohy blokov 0, 3, 6.\n- Kontrolujú sa všetky tri typy ohraničení: 9 riadkov, 9 stĺpcov, 9 blokov.",
+    "expectedOutput": "Vyriešená doska -> True; po výmene dvoch susedných hodnôt v riadku -> False",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "brute force",
+      "cieľový test"
+    ]
+  },
+  {
+    "id": "w09-sudoku-bruteforce-dfs",
+    "title": "Sudoku: hrubá sila _bruteforce_dfs",
+    "week": 9,
+    "file": "w09-sudoku-bruteforce-dfs.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Napíš rekurzívnu metódu `_bruteforce_dfs(self, r, c)` triedy `SudokuSolver` – slepé DFS bez kontroly ohraničení. Ak `r == 9`, vráť výsledok `self._check_full_board()`. Vypočítaj súradnice ďalšej bunky `next_r`, `next_c` (po stĺpci 8 nasleduje stĺpec 0 ďalšieho riadku). Vyplnenú bunku preskoč rekurzívnym volaním. Inak skúšaj `val` od 1 do 9: zapíš ju do `self.board.grid[r][c]`, zvýš `self.expanded`, zavolaj `self.gui_callback()` (ak je nastavený) a ak rekurzia na ďalšiu bunku vráti `True`, vráť `True`. Po cykle bunku vynuluj a vráť `False`.",
+    "explanation": "Hrubá sila = **generuj a testuj**.\n\n- `r == 9` znamená, že sme prešli za posledný riadok – doska je plná, až teraz sa overí platnosť.\n- `next_r = r + 1 if c == 8 else r`, `next_c = 0 if c == 8 else c + 1` – posun zľava doprava, riadok po riadku.\n- Predvyplnené bunky sa nemenia, len sa preskočia.\n- V cykle sa hodnota zapíše **bez** `is_valid` – to je rozdiel oproti backtrackingu.\n- Vynulovanie bunky po cykle je návrat: žiadna z 9 hodnôt neviedla k riešeniu.\n\nPre `k` prázdnych buniek je až `9^k` plných dosiek, preto funguje len na takmer vyplnenej doske. Obálka `solve_bruteforce_dfs()` vynuluje `expanded`, zavolá `_bruteforce_dfs(0, 0)` a vráti `(result, expanded, time)`.",
+    "expectedOutput": "Vyriešená doska easy s vynulovanými bunkami (0,0) a (0,1): (True, 34, čas); backtracking na tej istej doske: expanded = 2",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "brute force",
+      "DFS"
+    ]
+  },
+  {
+    "id": "w09-sudoku-backtracking-dfs",
+    "title": "Sudoku: backtracking _dfs s voliteľným MRV a LCV",
+    "week": 9,
+    "file": "w09-sudoku-backtracking-dfs.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Doplň rekurzívnu metódu `_dfs(self, use_mrv, use_lcv)` triedy `SudokuSolver` (v zadaní je `pass`). Výber bunky: ak `use_mrv`, zavolaj `self.select_unassigned_mrv()` (vracia `cell, domain`), inak `cell = self.board.find_empty()`. Ak je `cell` `None`, vráť `True`. Rozbaľ `r, c = cell`; bez MRV vypočítaj `domain = self.board.get_domain(r, c)`; ak `use_lcv`, zoraď doménu cez `self.sort_values_lcv(r, c, domain)`. Pre každú `val` z domény: zapíš ju na dosku, zvýš `self.expanded`, zavolaj `self.gui_callback()` (ak je nastavený), rekurzívne zavolaj `_dfs` – ak vráti `True`, vráť `True`; inak bunku vynuluj. Po cykle vráť `False`.",
+    "explanation": "Backtracking = DFS, ktoré priraďuje **jednu premennú v každom kroku** a skúša **iba konzistentné hodnoty**.\n\n1. **Výber premennej:** `find_empty()` (prvá prázdna) alebo MRV (najmenšia doména).\n2. **Koniec rekurzie:** `cell is None` → žiadna prázdna bunka → riešenie.\n3. **Hodnoty:** `get_domain` vráti len hodnoty, ktoré neporušujú ohraničenia; LCV ich iba preusporiada.\n4. **Priradenie + rekurzia:** `expanded` počíta každý pokus o priradenie.\n5. **Návrat (backtrack):** `self.board.grid[r][c] = 0` po neúspešnej rekurzii – bez toho by na doske zostala chybná hodnota.\n6. `return False` po cykle = slepá ulička; pri prázdnej doméne cyklus ani neprebehne.\n\nObálka `solve_dfs(use_mrv=False, use_lcv=False)` vracia `(result, expanded, time)`.",
+    "expectedOutput": "solve_dfs(): easy (True, 54), medium (True, 2250), hard (True, 8892); solve_dfs(use_mrv=True): 45 / 1138 / 215",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "backtracking",
+      "DFS",
+      "rekurzia"
+    ]
+  },
+  {
+    "id": "w09-sudoku-mrv",
+    "title": "Sudoku: heuristika MRV select_unassigned_mrv",
+    "week": 9,
+    "file": "w09-sudoku-mrv.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Napíš metódu `select_unassigned_mrv(self)` triedy `SudokuSolver`. Prejdi všetky bunky dosky (`r`, `c`); pre každú prázdnu vypočítaj `domain = self.board.get_domain(r, c)` a zapamätaj si bunku s najmenšou doménou do `best_cell` (dvojica `(r, c)`) a `best_domain`. Pri zhode ponechaj prvú nájdenú. Vráť dvojicu `best_cell, best_domain` (pre plnú dosku `None, None`).",
+    "explanation": "**MRV (Minimum Remaining Values)** vyberá premennú, ktorá má najmenej legálnych hodnôt – najskôr rieši najviac obmedzenú bunku (*fail-first*).\n\n- `best_cell is None` zachytí prvú prázdnu bunku; `or` sa vyhodnocuje skrátene, takže `len(best_domain)` sa nevolá na `None`.\n- Ostré `<` znamená, že pri rovnako veľkých doménach zostáva **prvá** nájdená bunka.\n- Bunka s prázdnou doménou má dĺžku 0, takže ju MRV vyberie – `_dfs` potom hneď vráti `False`.\n- Vracia sa aj doména, aby ju `_dfs` nemusel počítať znova.\n\nCena: pri každom volaní sa počítajú domény všetkých prázdnych buniek.",
+    "expectedOutput": "Doska easy -> ((0, 1), [3]); medium -> ((0, 7), [4, 5]); hard -> ((1, 2), [4, 6])",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "MRV",
+      "heuristika",
+      "výber premennej"
+    ]
+  },
+  {
+    "id": "w09-sudoku-lcv",
+    "title": "Sudoku: heuristika LCV sort_values_lcv",
+    "week": 9,
+    "file": "w09-sudoku-lcv.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Napíš metódu `sort_values_lcv(self, r, c, domain)` triedy `SudokuSolver`. Krok 1: do množiny `peers` nazbieraj súradnice všetkých buniek v riadku `r`, v stĺpci `c` a v bloku 3×3 (roh `block_r`, `block_c`) okrem samotnej bunky `(r, c)`. Krok 2: pre každú hodnotu `val` z domény spočítaj `score` – počet **prázdnych** buniek z `peers`, pre ktoré `self.board.is_valid(rr, cc, val)` vráti `False`; skóre ulož do slovníka `value_scores`. Krok 3: vráť doménu zoradenú vzostupne podľa skóre.",
+    "explanation": "**LCV (Least Constraining Value)** určuje **poradie hodnôt** vybranej bunky.\n\n1. **Susedia (peers):** riadok a stĺpec jedným cyklom (`i != c`, `i != r`), blok dvoma cyklami; množina odstráni duplicity – vždy ich je 20.\n2. **Skóre:** vyplnení susedia sa preskočia (`continue`), za každého prázdneho suseda, do ktorého sa `val` nedá vložiť, sa pripočíta 1.\n3. **Zoradenie:** `sorted(domain, key=lambda v: value_scores[v])` – najnižšie skóre prvé; `sorted` je stabilné, pri zhode zostáva pôvodné poradie.\n\n**Pozor:** učebnicová definícia LCV hovorí „hodnota, ktorá susedom vylúči najmenej možností“. Kód z cvičenia počíta susedov, ktorí hodnotu prijať nemôžu – nauč sa ho tak, ako je napísaný, a princíp LCV vedz povedať definíciou.",
+    "expectedOutput": "Doska easy: sort_values_lcv(0, 0, [3, 4, 5]) -> [5, 3, 4] (skóre 3: 8, 4: 10, 5: 6)",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "LCV",
+      "heuristika",
+      "poradie hodnôt"
+    ]
+  },
+  {
+    "id": "w09-sudoku-forward-checking",
+    "title": "Sudoku: forward checking _fc",
+    "week": 9,
+    "file": "w09-sudoku-forward-checking.py",
+    "source": "moodle/w09/isi_sudoku_student_ver/core/solver.py",
+    "task": "Doplň rekurzívnu metódu `_fc(self, use_mrv, use_lcv)` triedy `SudokuSolver` (v zadaní je `pass`). Výber bunky, ukončenie a poradie hodnôt sú rovnaké ako v `_dfs`. Po zapísaní hodnoty `val` (a zvýšení `self.expanded`, volaní `gui_callback`) vypočítaj `ok` – či **každá prázdna bunka** dosky (cykly cez `rr`, `cc`) má neprázdnu doménu `self.board.get_domain(rr, cc)`; použi `all(...)`. Rekurzívne pokračuj, iba ak je `ok` pravda; ak `ok and self._fc(...)`, vráť `True`. Inak bunku vynuluj. Po cykle vráť `False`.",
+    "explanation": "Forward checking = backtracking + **pohľad dopredu** po každom priradení.\n\n- Začiatok je totožný s `_dfs` (výber bunky, `cell is None` → `True`, doména, LCV).\n- `all(self.board.get_domain(rr, cc) for ... if self.board.grid[rr][cc] == 0)`: prázdny zoznam je nepravdivý, takže `all` vráti `False`, len čo niektorá prázdna bunka nemá žiadnu legálnu hodnotu.\n- `ok and self._fc(...)`: pri `ok == False` sa rekurzia vôbec nezavolá (skrátené vyhodnotenie) – vetva sa oreže hneď.\n- Vynulovanie bunky je rovnaký návrat ako pri backtrackingu; cyklus potom pokračuje ďalšou hodnotou.\n\nDomény sa tu neukladajú, počítajú sa z dosky – preto netreba pri návrate nič obnovovať okrem samotnej bunky. Obálka `solve_forward_checking(use_mrv=False, use_lcv=False)` vracia `(result, expanded, time)`.",
+    "expectedOutput": "solve_forward_checking(): easy (True, 50), medium (True, 921), hard (True, 5138); s MRV: 45 / 1138 / 215",
+    "tags": [
+      "CSP",
+      "Sudoku",
+      "forward checking",
+      "backtracking",
+      "filtrovanie domén"
+    ]
+  }
+]

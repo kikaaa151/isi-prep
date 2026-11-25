@@ -1,0 +1,10 @@
+[
+  { "id": "t1-zaklady", "order": 1, "weeks": [1], "title": "Základy: Python, NumPy, Matplotlib a pojmy strojového učenia" },
+  { "id": "t2-klasifikacia", "order": 2, "weeks": [2, 3], "title": "Klasifikácia: SVM, rozhodovacie stromy, náhodné lesy, KNN" },
+  { "id": "t3-predspracovanie", "order": 3, "weeks": [4], "title": "Predspracovanie dát: pandas, kódovanie, škálovanie, imputácia" },
+  { "id": "t4-validacia-ladenie", "order": 4, "weeks": [5, 6], "title": "Validácia a ladenie: K-fold, grid search, pipeline, metriky" },
+  { "id": "t5-vyber-pca-klastrovanie", "order": 5, "weeks": [6], "title": "Výber príznakov, PCA a klastrovanie (K-means, DBSCAN)" },
+  { "id": "t6-vyhladavanie", "order": 6, "weeks": [7, 8], "title": "Vyhľadávanie: DFS, BFS, UCS, Greedy, A* a heuristiky" },
+  { "id": "t7-csp", "order": 7, "weeks": [9], "title": "Problémy s ohraničeniami (CSP): backtracking, MRV, LCV, forward checking" },
+  { "id": "t8-lokalne-vyhladavanie", "order": 8, "weeks": [10], "title": "Lokálne vyhľadávanie: hill climbing, simulované žíhanie, genetické algoritmy" }
+]

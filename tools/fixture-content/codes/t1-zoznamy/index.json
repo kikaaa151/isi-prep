@@ -1,0 +1,13 @@
+[
+  {
+    "id": "w01-sum-even",
+    "title": "Súčet párnych čísel",
+    "week": 1,
+    "file": "w01-sum-even.py",
+    "source": "moodle/w01/ex_01_lists.py",
+    "task": "Napíš funkciu `sum_even(numbers)`, ktorá vráti súčet párnych čísel zoznamu.\nZavolaj ju pre `[1, 2, 3, 4, 5, 6]` a výsledok vypíš.",
+    "explanation": "Premenná `total` začína na nule. Cyklus prejde **každý** prvok:\n\n1. podmienka `x % 2 == 0` vyberie párne čísla,\n2. `total += x` ich pripočíta.\n\nFunkcia musí hodnotu vrátiť príkazom `return`.",
+    "expectedOutput": "12",
+    "tags": ["for", "modulo"]
+  }
+]

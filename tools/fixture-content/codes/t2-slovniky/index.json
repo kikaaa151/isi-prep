@@ -1,0 +1,12 @@
+[
+  {
+    "id": "w02-word-count",
+    "title": "Počítanie slov slovníkom",
+    "week": 2,
+    "file": "w02-word-count.py",
+    "source": "teams/cv_02/word_count.py",
+    "task": "Spočítaj výskyty slov vo vete `\"ano nie ano mozno ano\"` do slovníka `counts` a vypíš ho zoradený podľa počtu zostupne.",
+    "explanation": "`dict.get(word, 0)` vráti nulu pre slovo, ktoré v slovníku ešte nie je. `sorted` s `key` a `reverse=True` zoradí dvojice podľa počtu.",
+    "tags": ["dict", "sorted"]
+  }
+]

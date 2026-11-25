@@ -1,0 +1,743 @@
+[
+  {
+    "id": "t1-q01",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o terminológii strojového učenia sú správne?",
+    "options": [
+      {
+        "text": "Vzorka (pozorovanie) zodpovedá jednému riadku matice dát `X`.",
+        "correct": true
+      },
+      {
+        "text": "Cieľová premenná `y` obsahuje označenia tried, ktoré chceme predpovedať.",
+        "correct": true
+      },
+      {
+        "text": "Dimenzionalitu dát určuje počet vzoriek.",
+        "correct": false
+      },
+      {
+        "text": "Príznak je iný názov pre označenie triedy.",
+        "correct": false
+      },
+      {
+        "text": "Počet príznakov (atribútov) určuje dimenzionalitu dát.",
+        "correct": true
+      }
+    ],
+    "explanation": "Vzorky (pozorovania) sú „uskutočnené merania“ – riadky `X`. Príznaky (atribúty) sú „namerané hodnoty“ – stĺpce `X` – a ich počet determinuje dimenzionalitu. Označenie triedy (cieľová premenná) je `y`. Príznak teda nie je označenie triedy a dimenzionalita nezávisí od počtu vzoriek."
+  },
+  {
+    "id": "t1-q02",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré z uvedených patria medzi tri základné koncepty strojového učenia?",
+    "options": [
+      {
+        "text": "Učenie redukciou dimenzionality",
+        "correct": false
+      },
+      {
+        "text": "Učenie krížovou validáciou",
+        "correct": false
+      },
+      {
+        "text": "Učenie posilňovaním (reinforcement learning)",
+        "correct": true
+      },
+      {
+        "text": "Učenie s učiteľom",
+        "correct": true
+      },
+      {
+        "text": "Učenie bez učiteľa",
+        "correct": true
+      }
+    ],
+    "explanation": "Prednáška uvádza tri koncepty: učenie s učiteľom, učenie bez učiteľa a učenie posilňovaním. Krížová validácia je spôsob overovania modelu, nie koncept učenia. Redukcia dimenzionality je úloha patriaca pod učenie bez učiteľa."
+  },
+  {
+    "id": "t1-q03",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré úlohy patria pod učenie s učiteľom?",
+    "options": [
+      {
+        "text": "Klasifikácia",
+        "correct": true
+      },
+      {
+        "text": "Regresná analýza",
+        "correct": true
+      },
+      {
+        "text": "Redukcia dimenzionality",
+        "correct": false
+      },
+      {
+        "text": "Klastrovanie (clustering)",
+        "correct": false
+      }
+    ],
+    "explanation": "Učenie s učiteľom má k dispozícii správne odpovede `y` a delí sa na klasifikáciu a regresnú analýzu. Klastrovanie a redukcia dimenzionality pracujú bez `y` – patria pod učenie bez učiteľa."
+  },
+  {
+    "id": "t1-q04",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré príklady uvádza prednáška ako úlohy učenia bez učiteľa?",
+    "options": [
+      {
+        "text": "Identifikácia témy blogu",
+        "correct": true
+      },
+      {
+        "text": "Rozpoznávanie rukou písaných čísel",
+        "correct": false
+      },
+      {
+        "text": "Marketing: nájdenie skupín zákazníkov s rovnakou preferenciou",
+        "correct": true
+      },
+      {
+        "text": "Detekcia tumoru zo skenu",
+        "correct": false
+      },
+      {
+        "text": "Identifikácia spamu a hamu",
+        "correct": false
+      }
+    ],
+    "explanation": "Skupiny zákazníkov a témy blogov sa hľadajú bez vopred daných označení – ide o klastrovanie, teda učenie bez učiteľa. Detekcia tumoru, rozpoznávanie čísel a spam/ham sú klasifikačné úlohy s označenými príkladmi, teda učenie s učiteľom."
+  },
+  {
+    "id": "t1-q05",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré úlohy sú regresné, teda ich výstupom je spojitá číselná hodnota?",
+    "options": [
+      {
+        "text": "Rozhodnutie, či je e-mail spam",
+        "correct": false
+      },
+      {
+        "text": "Určenie druhu kvetu Iris",
+        "correct": false
+      },
+      {
+        "text": "Predikcia ceny pizze podľa jej priemeru",
+        "correct": true
+      },
+      {
+        "text": "Rozpoznanie osoby na fotografii",
+        "correct": false
+      },
+      {
+        "text": "Predikcia ceny domu podľa vlastností štvrte",
+        "correct": true
+      }
+    ],
+    "explanation": "Regresia predpovedá číslo (cena pizze, cena domu). Druh kvetu, spam/ham a identita osoby sú diskrétne triedy – to je klasifikácia."
+  },
+  {
+    "id": "t1-q06",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o lineárnej regresii z príkladu s pizzou?",
+    "options": [
+      {
+        "text": "Jej výstupom je označenie triedy.",
+        "correct": false
+      },
+      {
+        "text": "Modeluje lineárny vzťah medzi atribútom a cieľovou premennou.",
+        "correct": true
+      },
+      {
+        "text": "Je to metóda učenia bez učiteľa, lebo nepotrebuje cieľové hodnoty.",
+        "correct": false
+      },
+      {
+        "text": "Na základe dát sa naučí parametre A a B modelu y = A + B·x.",
+        "correct": true
+      }
+    ],
+    "explanation": "Lineárna regresia modeluje lineárny vzťah medzi atribútom (priemer) a cieľovou premennou (cena) a učí sa parametre A, B priamky y = A + B·x. Potrebuje cieľové hodnoty `y` (ceny), je to teda učenie s učiteľom, a výstupom je číslo, nie trieda."
+  },
+  {
+    "id": "t1-q07",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o `LogisticRegression` použitej v príklade Iris?",
+    "options": [
+      {
+        "text": "Je to klasifikátor – „regression“ je iba názov algoritmu.",
+        "correct": true
+      },
+      {
+        "text": "Učí sa volaním `fit(X_train, y_train)` a predikuje volaním `predict`.",
+        "correct": true
+      },
+      {
+        "text": "Predpovedá spojitú hodnotu, preto sa hodnotí koeficientom determinácie.",
+        "correct": false
+      },
+      {
+        "text": "V príklade zaraďuje kvet do jednej z troch tried.",
+        "correct": true
+      },
+      {
+        "text": "Nepotrebuje označenia tried `y`.",
+        "correct": false
+      }
+    ],
+    "explanation": "Komentár v prednáškovom kóde hovorí: v názve má algoritmus regression, ale ide o klasifikačnú úlohu. Model sa učí cez `fit` s označeniami `y_train`, predikuje jednu z troch tried Iris a hodnotí sa presnosťou (accuracy), nie R²."
+  },
+  {
+    "id": "t1-q08",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré priradenia krokov spracovania dát k ich významu sú správne?",
+    "options": [
+      {
+        "text": "Reprezentácia znalostí – výber relevantných dát z databáz.",
+        "correct": false
+      },
+      {
+        "text": "Transformácia dát – posúdenie kvality modelu na základe objektívneho kritéria.",
+        "correct": false
+      },
+      {
+        "text": "Dolovanie znalostí – aplikácia učiacich sa algoritmov s cieľom extrahovať vzory a pravidlá.",
+        "correct": true
+      },
+      {
+        "text": "Čistenie dát – odstránenie nekvalitných a nekonzistentných dát.",
+        "correct": true
+      },
+      {
+        "text": "Integrácia dát – napr. kombinácia rôznych dátových zdrojov.",
+        "correct": true
+      }
+    ],
+    "explanation": "Posúdenie kvality na základe objektívneho kritéria je krok „ohodnotenie naučeného modelu“, nie transformácia (tá znamená preprocessing a prevod dát do podoby vhodnej pre dolovanie). Výber relevantných dát z databáz je krok „výber dát“; reprezentácia znalostí znamená vizualizáciu alebo inú prezentáciu naučenej znalosti používateľovi."
+  },
+  {
+    "id": "t1-q09",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o vlastnostiach dát?",
+    "options": [
+      {
+        "text": "Riedke (sparse) dáta obsahujú veľa nulových hodnôt.",
+        "correct": true
+      },
+      {
+        "text": "Outliers sú body ležiace mimo prevažnú časť dát.",
+        "correct": true
+      },
+      {
+        "text": "Vysoká dimenzionalita znižuje nároky na pamäť a spracovanie.",
+        "correct": false
+      },
+      {
+        "text": "Riedke dáta sú dáta s malým počtom vzoriek.",
+        "correct": false
+      }
+    ],
+    "explanation": "Riedke dáta zaznamenávajú napr. iba prítomnosť v kategórii, preto majú veľa núl – nesúvisí to s počtom vzoriek. Outliers ležia mimo prevažnej časti dát. Veľké množstvo dát a vysoká dimenzionalita sú naopak náročné na pamäť a spracovanie."
+  },
+  {
+    "id": "t1-q10",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré priradenia typu dát sú správne?",
+    "options": [
+      {
+        "text": "Veľkosť trička (S, M, L) – ordinálny typ",
+        "correct": true
+      },
+      {
+        "text": "Odpoveď áno/nie bez poradia – ordinálny typ",
+        "correct": false
+      },
+      {
+        "text": "Farba auta (červená, modrá, zelená) – nominálny typ",
+        "correct": true
+      },
+      {
+        "text": "Priemer pizze v palcoch – numerický typ",
+        "correct": true
+      },
+      {
+        "text": "Fotografia tváre – nominálny typ",
+        "correct": false
+      }
+    ],
+    "explanation": "Nominálne dáta sú kategórie bez poradia (farba; hodnota áno/nie je binominálna, teda tiež nominálna). Ordinálne hodnoty nasledujú za sebou (S < M < L). Numerické sú reálne alebo celočíselné hodnoty. Obraz patrí medzi špeciálne typy (obraz, zvuk, časová postupnosť, video)."
+  },
+  {
+    "id": "t1-q11",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Nech m je počet vzoriek a TP, FN, FP, TN prvky matice zámen. Ktoré vzťahy platia?",
+    "options": [
+      {
+        "text": "m = TP + FN + FP + TN",
+        "correct": true
+      },
+      {
+        "text": "accuracy = (TP + TN) / m",
+        "correct": true
+      },
+      {
+        "text": "FP je pozitívna vzorka, ktorú model označil ako negatívnu.",
+        "correct": false
+      },
+      {
+        "text": "accuracy = TP / (TP + FP)",
+        "correct": false
+      }
+    ],
+    "explanation": "Každá vzorka padne práve do jednej zo štyroch buniek, preto m = TP + FN + FP + TN. Accuracy je podiel správnych predikcií (TP + TN) / m. Výraz TP / (TP + FP) je precision. Pozitívna vzorka označená ako negatívna je FN; FP je negatívna vzorka označená ako pozitívna (falošný poplach)."
+  },
+  {
+    "id": "t1-q12",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "V príklade Iris vyšla presnosť 0.82 na trénovacej a 0.68 na testovacej časti. Čo platí?",
+    "options": [
+      {
+        "text": "Testovacie dáta model pri učení nevidel, preto ukazujú, ako funguje na nových dátach.",
+        "correct": true
+      },
+      {
+        "text": "Testovacia časť sa používa na výpočet parametrov modelu vo `fit`.",
+        "correct": false
+      },
+      {
+        "text": "Presnosť na trénovacích dátach býva optimistickejšia ako na testovacích.",
+        "correct": true
+      },
+      {
+        "text": "Presnosť na trénovacej a testovacej časti musí vyjsť vždy rovnako.",
+        "correct": false
+      }
+    ],
+    "explanation": "Model sa učí iba z trénovacej časti (`fit(X_train, y_train)`), testovacia slúži na vyhodnotenie na nevidených dátach. Na dátach, ktoré model videl, býva výsledok lepší, preto sa presnosti líšia a rozhodujúca je testovacia."
+  },
+  {
+    "id": "t1-q13",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o rozhraní modelov v scikit-learn?",
+    "options": [
+      {
+        "text": "`fit(X, y)` naučí model z dát.",
+        "correct": true
+      },
+      {
+        "text": "Vstup `X` je dvojrozmerný: riadky sú vzorky, stĺpce príznaky.",
+        "correct": true
+      },
+      {
+        "text": "Každý typ modelu má na učenie metódu s iným názvom.",
+        "correct": false
+      },
+      {
+        "text": "`predict(X)` využíva už naučený model.",
+        "correct": true
+      },
+      {
+        "text": "`predict` treba zavolať pred `fit`, aby model poznal tvar dát.",
+        "correct": false
+      }
+    ],
+    "explanation": "Všetky modely majú rovnaké rozhranie: najprv `fit` (učenie), potom `predict` (využitie naučeného modelu). `X` musí byť 2D – preto sa jedna vzorka upravuje cez `reshape(1, -1)`. Volať `predict` pred `fit` skončí chybou."
+  },
+  {
+    "id": "t1-q14",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o práci v Jupyter notebooku platia?",
+    "options": [
+      {
+        "text": "Každá bunka má vlastnú, oddelenú pamäť premenných.",
+        "correct": false
+      },
+      {
+        "text": "Posledný výraz v bunke sa vypíše automaticky aj bez `print`.",
+        "correct": true
+      },
+      {
+        "text": "Všetky bunky zdieľajú jeden bežiaci kernel, premenné z jednej bunky sú dostupné v ďalších.",
+        "correct": true
+      },
+      {
+        "text": "Stav kernelu závisí od poradia, v akom sa bunky spúšťali.",
+        "correct": true
+      },
+      {
+        "text": "Pri spustení jednej bunky sa vždy znova vykonajú všetky bunky nad ňou.",
+        "correct": false
+      }
+    ],
+    "explanation": "Bunka sa spúšťa samostatne (`Shift+Enter`) a nič iné sa pri tom znova nevykoná – to je výhoda oproti skriptu, ktorý beží vždy celý. Premenné žijú v spoločnom kerneli, preto záleží na poradí spúšťania; pri pochybnostiach pomôže Restart & Run All."
+  },
+  {
+    "id": "t1-q15",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo je sentiment analysis?",
+    "options": [
+      {
+        "text": "Zníženie počtu príznakov textového dokumentu.",
+        "correct": false
+      },
+      {
+        "text": "Zoskupenie zákazníkov podľa nákupných preferencií.",
+        "correct": false
+      },
+      {
+        "text": "Identifikácia a klasifikácia názorov vyjadrených v texte, najčastejšie negatívny – pozitívny – neutrálny.",
+        "correct": true
+      },
+      {
+        "text": "Rozpoznanie a identifikácia hlasu záujmovej osoby.",
+        "correct": false
+      }
+    ],
+    "explanation": "Sentiment analysis je proces identifikácie a klasifikácie názorov v texte (mapovanie názoru populácie na určitú tému). Rozpoznávanie hlasu je iná aplikácia, zníženie počtu príznakov je redukcia dimenzionality a zoskupovanie zákazníkov je klastrovanie."
+  },
+  {
+    "id": "t1-q16",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "import numpy as np\n\na = np.arange(15).reshape(3, 5)\nprint(a.sum(1))",
+    "options": [
+      {
+        "text": "`[5 6 7 8 9]`",
+        "correct": false
+      },
+      {
+        "text": "`105`",
+        "correct": false
+      },
+      {
+        "text": "`[15 18 21 24 27]`",
+        "correct": false
+      },
+      {
+        "text": "`[10 35 60]`",
+        "correct": true
+      }
+    ],
+    "explanation": "`a` je matica 3 × 5 s číslami 0 až 14. `a.sum(1)` (to isté ako `axis=1`) sčíta hodnoty v každom riadku: 0+1+2+3+4 = 10, 5+…+9 = 35, 10+…+14 = 60. `[15 18 21 24 27]` by vrátilo `a.sum(0)` (súčty stĺpcov), 105 je `a.sum()` a `[5 6 7 8 9]` je druhý riadok `a[1]`."
+  },
+  {
+    "id": "t1-q17",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o poli `a` platia?",
+    "code": "import numpy as np\n\na = np.arange(15).reshape(3, 5)",
+    "options": [
+      {
+        "text": "`a` obsahuje čísla 1 až 15.",
+        "correct": false
+      },
+      {
+        "text": "`a.sum()` vráti `105`.",
+        "correct": true
+      },
+      {
+        "text": "`a.shape` je `(3, 5)`.",
+        "correct": true
+      },
+      {
+        "text": "`a.sum(axis=0)` má tvar `(3,)`.",
+        "correct": false
+      },
+      {
+        "text": "`a.size` je `15`.",
+        "correct": true
+      }
+    ],
+    "explanation": "`np.arange(15)` dá čísla 0 až 14 (15 už nie), `reshape(3, 5)` z nich spraví 3 riadky a 5 stĺpcov, takže `shape` je `(3, 5)` a `size` 15. Súčet 0 + … + 14 je 105. `a.sum(axis=0)` sčíta po stĺpcoch, výsledok má jeden údaj na stĺpec, teda tvar `(5,)`."
+  },
+  {
+    "id": "t1-q18",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód?",
+    "code": "from sklearn import datasets\nfrom sklearn.model_selection import train_test_split\n\niris = datasets.load_iris()\nX, y = iris.data[:, :2], iris.target\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=33)\nprint(X_train.shape, X_test.shape)",
+    "options": [
+      {
+        "text": "`(112, 2) (38, 2)`",
+        "correct": true
+      },
+      {
+        "text": "`(75, 2) (25, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(112, 2) (112,)`",
+        "correct": false
+      },
+      {
+        "text": "`(112, 4) (38, 4)`",
+        "correct": false
+      },
+      {
+        "text": "`(38, 2) (112, 2)`",
+        "correct": false
+      }
+    ],
+    "explanation": "Iris má 150 vzoriek a 4 príznaky; `iris.data[:, :2]` ponechá prvé dva príznaky. `test_size=0.25` dá 38 testovacích (37.5 sa zaokrúhli nahor) a 112 trénovacích vzoriek. Výstupy sú v poradí `X_train, X_test, y_train, y_test`, preto je prvý tvar trénovacej a druhý testovacej časti `X`."
+  },
+  {
+    "id": "t1-q19",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Model je natrénovaný na priemeroch pizze. Ktorými volaniami správne získame predikciu ceny 12-palcovej pizze?",
+    "code": "X = [[6], [8], [10], [14], [18]]\ny = [[7], [9], [13], [17.5], [18]]\n\nmodel = LinearRegression()\nmodel.fit(X, y)",
+    "options": [
+      {
+        "text": "`model.predict(np.array([12]).reshape(-1, 1))`",
+        "correct": true
+      },
+      {
+        "text": "`model.predict([[12]])`",
+        "correct": true
+      },
+      {
+        "text": "`model.predict(np.array([12]))`",
+        "correct": false
+      },
+      {
+        "text": "`model.predict(12)`",
+        "correct": false
+      },
+      {
+        "text": "`model.fit(12)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`predict` očakáva 2D vstup tvaru (počet vzoriek, počet príznakov). `np.array([12]).reshape(-1, 1)` aj `[[12]]` majú tvar (1, 1) – jedna vzorka, jeden príznak. Samotné číslo `12` ani 1D pole `np.array([12])` skončia chybou (Expected 2D array). `fit` slúži na učenie, nie na predikciu."
+  },
+  {
+    "id": "t1-q20",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo platí o tomto kóde z príkladu s pizzou?",
+    "code": "model = LinearRegression()\nmodel.fit(X, y)\n\nX_model = np.linspace(0, 20, 21)\ny_model = X_model * model.coef_ + model.intercept_",
+    "options": [
+      {
+        "text": "`coef_` a `intercept_` treba nastaviť pred volaním `fit`.",
+        "correct": false
+      },
+      {
+        "text": "`model.coef_` je sklon naučenej priamky (parameter B).",
+        "correct": true
+      },
+      {
+        "text": "`model.intercept_` je hodnota modelu pre x = 0 (parameter A).",
+        "correct": true
+      },
+      {
+        "text": "`y_model` sú skutočné ceny z trénovacích dát.",
+        "correct": false
+      },
+      {
+        "text": "`X_model` obsahuje 21 hodnôt 0, 1, …, 20.",
+        "correct": true
+      }
+    ],
+    "explanation": "Po `fit` má model naučené parametre priamky y = A + B·x: `intercept_` = A (≈ 1.97), `coef_` = B (≈ 0.98). `np.linspace(0, 20, 21)` dá 21 rovnomerných bodov vrátane koncov. `y_model` sú hodnoty vypočítané modelom pre tieto body (naučená priamka), nie trénovacie ceny. Parametre nenastavujeme my – naučí ich `fit`."
+  },
+  {
+    "id": "t1-q21",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód?",
+    "code": "import numpy as np\n\nX_train = np.array([[5.1, 3.5], [7.0, 3.2], [4.9, 3.0], [6.3, 3.3]])\ny_train = np.array([0, 1, 0, 2])\n\nxs = X_train[:, 0][y_train == 0]\nprint(xs)",
+    "options": [
+      {
+        "text": "`[ True False  True False]`",
+        "correct": false
+      },
+      {
+        "text": "`[5.1 3.5]`",
+        "correct": false
+      },
+      {
+        "text": "`[5.1 4.9]`",
+        "correct": true
+      },
+      {
+        "text": "`[3.5 3. ]`",
+        "correct": false
+      }
+    ],
+    "explanation": "`X_train[:, 0]` je prvý stĺpec `[5.1 7.  4.9 6.3]`. `y_train == 0` je booleovská maska `[True False True False]`, ktorá z neho vyberie prvky na pozíciách 0 a 2 → `[5.1 4.9]`. `[3.5 3. ]` by dal druhý stĺpec (`X_train[:, 1]`), `[5.1 3.5]` je prvý riadok."
+  },
+  {
+    "id": "t1-q22",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo platí o tomto kóde?",
+    "code": "from sklearn import datasets\nimport matplotlib.pyplot as plt\n\ndigits = datasets.load_digits()\n\nX = digits.data\ny = digits.target\n\nplt.figure(1, figsize=(3, 3))\nplt.imshow(digits.images[24], cmap=plt.cm.gray_r)\nplt.show()",
+    "options": [
+      {
+        "text": "`y` obsahuje obrázky číslic.",
+        "correct": false
+      },
+      {
+        "text": "Kód zobrazí prvých 24 číslic naraz.",
+        "correct": false
+      },
+      {
+        "text": "`X.shape` je `(1797, 64)`.",
+        "correct": true
+      },
+      {
+        "text": "`digits.images[24]` je matica 8 × 8, ktorú `plt.imshow` vykreslí ako obrázok.",
+        "correct": true
+      }
+    ],
+    "explanation": "`load_digits()` obsahuje 1797 číslic; `digits.data` má každý obrázok 8 × 8 rozvinutý do 64 príznakov, `digits.images` má tie isté dáta ako matice 8 × 8. `y = digits.target` sú označenia (číslice 0–9), nie obrázky. `digits.images[24]` je jeden obrázok s indexom 24."
+  },
+  {
+    "id": "t1-q23",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Ktoré výrazy doplnené na miesto `___` vypíšu presnosť klasifikátora na testovacej množine?",
+    "code": "clf = LogisticRegression()\nclf.fit(X_train, y_train)\n\ny_test_predicted = clf.predict(X_test)\nprint(___)",
+    "options": [
+      {
+        "text": "`metrics.accuracy_score(X_test, y_test)`",
+        "correct": false
+      },
+      {
+        "text": "`(y_test == y_test_predicted).mean()`",
+        "correct": true
+      },
+      {
+        "text": "`clf.fit(X_test, y_test)`",
+        "correct": false
+      },
+      {
+        "text": "`metrics.accuracy_score(y_train, y_test_predicted)`",
+        "correct": false
+      },
+      {
+        "text": "`metrics.accuracy_score(y_test, y_test_predicted)`",
+        "correct": true
+      }
+    ],
+    "explanation": "Presnosť porovnáva skutočné označenia testovacej množiny `y_test` s predikciami `y_test_predicted` – buď cez `metrics.accuracy_score`, alebo ručne ako priemer zhôd. `y_train` patrí k iným vzorkám (a má inú dĺžku), `X_test` sú príznaky, nie označenia, a `fit` na testovacej množine by model znova učil, nie hodnotil."
+  },
+  {
+    "id": "t1-q24",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód?",
+    "code": "import numpy as np\n\na = np.array([5.3, 4.1]).reshape(1, -1)\nb = np.array([5.3, 4.1]).reshape(-1, 1)\nprint(a.shape, b.shape)",
+    "options": [
+      {
+        "text": "`(2,) (2,)`",
+        "correct": false
+      },
+      {
+        "text": "`(2, 1) (1, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(1, 2) (1, 2)`",
+        "correct": false
+      },
+      {
+        "text": "`(1, 2) (2, 1)`",
+        "correct": true
+      }
+    ],
+    "explanation": "`reshape(1, -1)` znamená jeden riadok a stĺpce sa dopočítajú → `(1, 2)`: jedna vzorka s dvoma príznakmi – takto sa v prednáške predikuje jeden kvet. `reshape(-1, 1)` znamená jeden stĺpec a riadky sa dopočítajú → `(2, 1)`: dve vzorky s jedným príznakom."
+  },
+  {
+    "id": "t1-q25",
+    "topicId": "t1-zaklady",
+    "week": 1,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Takto sa v prednáške vytvárajú označenia XOR dát. Čo vypíše tento kód?",
+    "code": "import numpy as np\n\nX = np.array([[1.0, 2.0], [-1.0, 0.5], [-0.3, -2.0], [0.7, -0.1]])\ny = np.logical_xor(X[:, 0] > 0, X[:, 1] > 0)\ny = np.where(y, 1, -1)\nprint(y)",
+    "options": [
+      {
+        "text": "`[ 1  1 -1 -1]`",
+        "correct": false
+      },
+      {
+        "text": "`[False  True False  True]`",
+        "correct": false
+      },
+      {
+        "text": "`[-1  1 -1  1]`",
+        "correct": true
+      },
+      {
+        "text": "`[ 1 -1  1 -1]`",
+        "correct": false
+      }
+    ],
+    "explanation": "`np.logical_xor` je True, keď platí práve jedna z podmienok. Bod (1, 2): obe súradnice kladné → False; (−1, 0.5): kladná len druhá → True; (−0.3, −2): žiadna → False; (0.7, −0.1): kladná len prvá → True. `np.where(y, 1, -1)` prevedie True na 1 a False na −1 → `[-1  1 -1  1]`. Booleovské pole by sa vypísalo bez riadku s `np.where`."
+  }
+]

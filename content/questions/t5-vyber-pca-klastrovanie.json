@@ -1,0 +1,1060 @@
+[
+  {
+    "id": "t5-q01",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia správne opisujú tri rodiny metód výberu príznakov (feature selection)?",
+    "options": [
+      {
+        "text": "Filter hodnotí príznaky ich štatistikou (rozptyl, vzťah k cieľu) bez trénovania modelu.",
+        "correct": true
+      },
+      {
+        "text": "Wrapper trénuje model na podmnožinách príznakov a porovnáva dosiahnuté skóre.",
+        "correct": true
+      },
+      {
+        "text": "Embedded metóda získa dôležitosť príznakov ako vedľajší produkt trénovania jedného modelu.",
+        "correct": true
+      },
+      {
+        "text": "Filter je z troch rodín výpočtovo najnáročnejší.",
+        "correct": false
+      },
+      {
+        "text": "Wrapper sa zaobíde bez cieľovej premennej `y`.",
+        "correct": false
+      }
+    ],
+    "explanation": "Filter (napr. `VarianceThreshold`, `SelectKBest`) používa iba štatistiku príznaku a je najlacnejší. Wrapper (`RFE`, `RFECV`) trénuje model opakovane na podmnožinách – je najdrahší a potrebuje `y`, lebo porovnáva skóre modelu. Embedded (`SelectFromModel` nad náhodným lesom alebo L1 regularizáciou) berie dôležitosť z jedného natrénovaného modelu."
+  },
+  {
+    "id": "t5-q02",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čím sa výber príznakov líši od redukcie dimenzionality pomocou PCA?",
+    "options": [
+      {
+        "text": "Výber príznakov ponechá podmnožinu pôvodných príznakov, ktoré si zachovajú svoj význam.",
+        "correct": true
+      },
+      {
+        "text": "PCA vytvára nové príznaky ako lineárne kombinácie pôvodných.",
+        "correct": true
+      },
+      {
+        "text": "PCA potrebuje označenia tried, výber príznakov ich nepotrebuje nikdy.",
+        "correct": false
+      },
+      {
+        "text": "Po PCA sú nové stĺpce pôvodné príznaky, len zoradené podľa rozptylu.",
+        "correct": false
+      }
+    ],
+    "explanation": "Výber príznakov stĺpce iba vyberá – `age` ostane vekom. PCA zostrojí nové osi (hlavné komponenty), každá je váženým súčtom všetkých pôvodných príznakov, takže pôvodný význam sa stráca. PCA je učenie bez učiteľa (žiadne `y`); naopak väčšina metód výberu príznakov (`SelectKBest`, `RFECV`, `SelectFromModel`) cieľ potrebuje."
+  },
+  {
+    "id": "t5-q03",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré spôsoby riešenia pretrénovania uvádza prednáška v časti o redukcii dimenzionality?",
+    "options": [
+      {
+        "text": "Získať viac dát.",
+        "correct": true
+      },
+      {
+        "text": "Zvoliť jednoduchší model.",
+        "correct": true
+      },
+      {
+        "text": "Redukovať dimenzionalitu dát.",
+        "correct": true
+      },
+      {
+        "text": "Pridať ďalšie príznaky, aby mal model viac informácií.",
+        "correct": false
+      },
+      {
+        "text": "Trénovať model dlhšie na tých istých dátach.",
+        "correct": false
+      }
+    ],
+    "explanation": "Prednáška 4: pretrénovanie – ako vyriešiť? Získať viac dát, zvoliť jednoduchší model, redukovať dimenzionalitu dát. Pridávanie príznakov model naopak skomplikuje a dlhšie trénovanie na tých istých dátach ho ešte tesnejšie naviaže na trénovaciu množinu."
+  },
+  {
+    "id": "t5-q04",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o `VarianceThreshold` sú pravdivé?",
+    "options": [
+      {
+        "text": "Nepoužíva cieľovú premennú ani žiadny model.",
+        "correct": true
+      },
+      {
+        "text": "Jeho výsledok závisí od mierky (jednotiek) príznakov.",
+        "correct": true
+      },
+      {
+        "text": "S predvoleným prahom odstráni iba stĺpce, ktoré majú vo všetkých vzorkách rovnakú hodnotu.",
+        "correct": true
+      },
+      {
+        "text": "Odstraňuje príznaky, ktoré slabo korelujú s cieľom.",
+        "correct": false
+      },
+      {
+        "text": "Patrí medzi wrapper metódy.",
+        "correct": false
+      }
+    ],
+    "explanation": "`VarianceThreshold` je filter: pozerá len na rozptyl každého stĺpca, takže `fit_transform(data)` nepotrebuje `y`. Rozptyl závisí od jednotiek – `salary` v eurách má rozptyl ≈ 45 782, v tisícoch eur 0.046. Predvolené `threshold=0` odstráni len konštantné stĺpce. Vzťah k cieľu hodnotia iné filtre (`SelectKBest`)."
+  },
+  {
+    "id": "t5-q05",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "teams",
+    "text": "Čo vypíše tento kód (domáca úloha „zero variance“, zmenšená na malé pole)?",
+    "code": "import numpy as np\nfrom sklearn.feature_selection import VarianceThreshold\n\nX = np.array([[0, 2, 0, 3],\n              [0, 1, 4, 3],\n              [0, 1, 1, 3]])\nsel = VarianceThreshold()\nprint(sel.fit_transform(X).shape)",
+    "options": [
+      {
+        "text": "`(3, 2)`",
+        "correct": true
+      },
+      {
+        "text": "`(3, 4)`",
+        "correct": false
+      },
+      {
+        "text": "`(3, 3)`",
+        "correct": false
+      },
+      {
+        "text": "`(2, 4)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`VarianceThreshold()` má predvolený prah 0, takže odstráni stĺpce s nulovým rozptylom. Prvý stĺpec (samé 0) a posledný (samé 3) sú konštantné → vypadnú. Ostanú dva stĺpce a všetky tri riadky: `(3, 2)`. Selektor odstraňuje stĺpce (príznaky), nikdy nie riadky (vzorky)."
+  },
+  {
+    "id": "t5-q06",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Rozptyly stĺpcov sú: `salary` 45781.68, `experience` 1.92, `graduated` 0.083, `spam` 0.0035. Ktoré tvrdenia o tomto kóde platia?",
+    "code": "data = pd.read_csv('employees_research.csv').drop(columns=['ID'])\nrng = np.random.default_rng(5)\ndata[\"spam\"] = rng.uniform(low=0.9, high=1.1, size=len(data))\nprint(data.shape)   # (100, 4)\n\nselector = VarianceThreshold(threshold=0.05)\nnew_selection = selector.fit_transform(data)",
+    "options": [
+      {
+        "text": "`new_selection.shape` je `(100, 3)`.",
+        "correct": true
+      },
+      {
+        "text": "Keby bol `salary` uvedený v tisícoch eur (rozptyl ≈ 0.046), odstránil by sa aj on.",
+        "correct": true
+      },
+      {
+        "text": "`fit_transform(data)` skončí chybou, lebo chýba `y`.",
+        "correct": false
+      },
+      {
+        "text": "Odstráni sa aj `graduated`, lebo je to binárny príznak.",
+        "correct": false
+      },
+      {
+        "text": "`new_selection` je `DataFrame` s pôvodnými názvami stĺpcov.",
+        "correct": false
+      }
+    ],
+    "explanation": "Prah 0.05 neprekročí iba `spam` (0.0035) → zo 4 stĺpcov ostanú 3. `VarianceThreshold` je metóda bez učiteľa, `y` nepotrebuje. `graduated` má rozptyl 0.083 > 0.05, ostáva. Rozptyl závisí od mierky: `salary / 1000` má rozptyl 0.046 < 0.05 a vypadol by. `fit_transform` vracia NumPy pole – názvy ponechaných stĺpcov dá `selector.get_feature_names_out()`."
+  },
+  {
+    "id": "t5-q07",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Aké obmedzenia má univariačný filter typu `SelectKBest`?",
+    "options": [
+      {
+        "text": "Každý príznak hodnotí samostatne, takže neodhalí redundantné príznaky nesúce tú istú informáciu.",
+        "correct": true
+      },
+      {
+        "text": "Neodhalí príznaky, ktoré sú užitočné iba v kombinácii s inými.",
+        "correct": true
+      },
+      {
+        "text": "Nedá sa použiť bez vopred natrénovaného klasifikátora.",
+        "correct": false
+      },
+      {
+        "text": "Nepoužíva cieľovú premennú.",
+        "correct": false
+      },
+      {
+        "text": "Vždy ponechá presne polovicu príznakov.",
+        "correct": false
+      }
+    ],
+    "explanation": "`SelectKBest(f_classif, k=5)` dá každému príznaku skóre podľa jeho vzťahu k cieľu (ANOVA F-test, `chi2`, vzájomná informácia) – cieľ teda používa, model nie. Keďže príznaky posudzuje jeden po druhom, nevidí redundanciu ani interakcie. Počet ponechaných príznakov určuje parameter `k`."
+  },
+  {
+    "id": "t5-q08",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "teams",
+    "text": "V domácej úlohe „univariate selection“ sa dáta o srdcových chorobách (`X.shape` je `(303, 13)`) pred výberom škálujú. Ktoré tvrdenia platia?",
+    "code": "from sklearn.feature_selection import SelectKBest, chi2\nfrom sklearn.preprocessing import MinMaxScaler\n\nX_scaled = MinMaxScaler().fit_transform(X)\nselector = SelectKBest(chi2, k=5)\nX_new = selector.fit_transform(X_scaled, y)\nprint(X_new.shape)\nprint(selector.scores_)",
+    "options": [
+      {
+        "text": "Prvý `print` vypíše `(303, 5)`.",
+        "correct": true
+      },
+      {
+        "text": "`selector.scores_` obsahuje 13 hodnôt – skóre každého pôvodného príznaku.",
+        "correct": true
+      },
+      {
+        "text": "`chi2` vyžaduje nezáporné hodnoty; po `StandardScaler` by `fit_transform` skončil chybou.",
+        "correct": true
+      },
+      {
+        "text": "`fit_transform` tu `y` nepotrebuje.",
+        "correct": false
+      },
+      {
+        "text": "`k=5` znamená, že sa 5 príznakov odstráni a 8 ostane.",
+        "correct": false
+      }
+    ],
+    "explanation": "`SelectKBest(chi2, k=5)` ponechá 5 príznakov s najvyšším skóre → `(303, 5)`. Skóre sa počíta pre všetkých 13 príznakov (`scores_`). Test chí-kvadrát je definovaný pre nezáporné hodnoty (početnosti), preto `MinMaxScaler` (rozsah 0 až 1); `StandardScaler` vyrobí záporné hodnoty a `chi2` vyhodí `ValueError: Input X must be non-negative`. Filter s cieľom potrebuje `y`."
+  },
+  {
+    "id": "t5-q09",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ako postupuje rekurzívna eliminácia príznakov (RFE)?",
+    "options": [
+      {
+        "text": "Natrénuje model na všetkých príznakoch, odstráni príznak s najmenšou dôležitosťou a opakuje to, kým nezostane požadovaný počet príznakov.",
+        "correct": true
+      },
+      {
+        "text": "Začne s prázdnou množinou a postupne pridáva príznak s najväčším rozptylom.",
+        "correct": false
+      },
+      {
+        "text": "Natrénuje model raz a ponechá príznaky s nadpriemernou dôležitosťou.",
+        "correct": false
+      },
+      {
+        "text": "Každému príznaku samostatne spočíta F-štatistiku voči cieľu a ponechá k najlepších.",
+        "correct": false
+      }
+    ],
+    "explanation": "RFE je wrapper: 1. natrénuj model na všetkých príznakoch, 2. odstráň príznak s najmenšou dôležitosťou (pri lineárnom modeli najmenšie `|w_i|`), 3. opakuj. Jedno trénovanie s prahom dôležitosti je `SelectFromModel` (embedded), F-štatistika po jednom príznaku je `SelectKBest` (filter). `RFECV` navyše vyberie počet príznakov krížovou validáciou."
+  },
+  {
+    "id": "t5-q10",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorá hodnota patrí na miesto `_____`, aby `RFECV` vedel, kde má v pipeline hľadať váhy príznakov?",
+    "code": "clf = Pipeline([('scl', StandardScaler()),\n                ('clf', SVC(C=1, kernel='linear'))])\n\nselector = RFECV(clf, step=1, cv=5, scoring='accuracy',\n                 importance_getter=_____)\nX_selected = selector.fit_transform(X, y)",
+    "options": [
+      {
+        "text": "`'named_steps.clf.coef_'`",
+        "correct": true
+      },
+      {
+        "text": "`'clf__coef_'`",
+        "correct": false
+      },
+      {
+        "text": "`'named_steps.scl.coef_'`",
+        "correct": false
+      },
+      {
+        "text": "`'feature_importances_'`",
+        "correct": false
+      }
+    ],
+    "explanation": "`importance_getter` je cesta k atribútu s dôležitosťami: `named_steps` je slovník krokov pipeline, `clf` je krok s lineárnym SVC a `coef_` jeho váhy. Zápis s dvoma podčiarkovníkmi (`clf__C`) sa používa na parametre v grid searchi, nie tu. Škálovač (`scl`) nemá `coef_` a `feature_importances_` majú stromové modely, nie pipeline so SVC – tieto voľby skončia chybou `AttributeError`."
+  },
+  {
+    "id": "t5-q11",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Kód s `RFECV` nad 13 príznakmi vypísal toto. Čo z výpisu vyplýva?",
+    "code": "print('Optimal number of features:', selector.n_features_)\nprint(dict(zip(feature_names.tolist(), selector.ranking_.tolist())))\n\n# Optimal number of features: 11\n# {'age': 3, 'sex': 1, 'cp': 1, 'trestbps': 1, 'chol': 1, 'fbs': 1, 'restecg': 2,\n#  'thalach': 1, 'exang': 1, 'oldpeak': 1, 'slope': 1, 'ca': 1, 'thal': 1}",
+    "options": [
+      {
+        "text": "`X_selected.shape` je `(303, 11)`.",
+        "correct": true
+      },
+      {
+        "text": "`age` vypadol ako prvý a `restecg` ako druhý.",
+        "correct": true
+      },
+      {
+        "text": "Príznaky s hodnotou 1 v `ranking_` sú vybrané.",
+        "correct": true
+      },
+      {
+        "text": "`age` je najdôležitejší príznak, lebo má najvyššie číslo.",
+        "correct": false
+      },
+      {
+        "text": "Model sa počas výberu trénoval iba raz.",
+        "correct": false
+      }
+    ],
+    "explanation": "`n_features_` = 11 → ostane 11 stĺpcov. V `ranking_` majú vybrané príznaky 1; čím vyššie číslo, tým skôr príznak vypadol – `age` (3) prvý, `restecg` (2) druhý. Vysoké číslo teda znamená najmenej dôležitý príznak. Wrapper trénuje model veľakrát: pri 13 príznakoch, `step=1` a `cv=5` je to asi 13 × 5 = 65 trénovaní."
+  },
+  {
+    "id": "t5-q12",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Pri ktorých postupoch zo 6. týždňa záleží na mierke príznakov (treba ich škálovať)?",
+    "options": [
+      {
+        "text": "`VarianceThreshold` – rozptyl závisí od jednotiek príznaku.",
+        "correct": true
+      },
+      {
+        "text": "RFE s lineárnym SVC – váhy sa dajú porovnávať len pri rovnakej mierke.",
+        "correct": true
+      },
+      {
+        "text": "K-means – pracuje so vzdialenosťami.",
+        "correct": true
+      },
+      {
+        "text": "PCA – hľadá smery najväčšieho rozptylu.",
+        "correct": true
+      },
+      {
+        "text": "Dôležitosti príznakov z náhodného lesa.",
+        "correct": false
+      }
+    ],
+    "explanation": "Všetko, čo pracuje s rozptylom, vzdialenosťami alebo veľkosťou váh, závisí od mierky: prah rozptylu, váhy lineárneho modelu (preto je v ex_04 `StandardScaler` v pipeline), K-means aj PCA (dáta `market_research.csv` sú vopred štandardizované). Stromy škálovanie nepotrebujú – rozdelenie `chol < 240` funguje v ľubovoľných jednotkách, preto v ex_05 škálovač nie je."
+  },
+  {
+    "id": "t5-q13",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré z uvedených sú embedded (vložené) metódy výberu príznakov?",
+    "options": [
+      {
+        "text": "`SelectFromModel` nad náhodným lesom (`feature_importances_`).",
+        "correct": true
+      },
+      {
+        "text": "L1 regularizácia, ktorá váhy zbytočných príznakov stlačí presne na nulu.",
+        "correct": true
+      },
+      {
+        "text": "`VarianceThreshold`.",
+        "correct": false
+      },
+      {
+        "text": "`RFECV`.",
+        "correct": false
+      },
+      {
+        "text": "`SelectKBest` s `f_classif`.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pri embedded metóde je výber súčasťou trénovania jedného modelu: náhodný les dá `feature_importances_`, L1 regularizácia (Lasso) vynuluje váhy nepotrebných príznakov. `VarianceThreshold` a `SelectKBest` sú filtre (štatistika bez modelu), `RFECV` je wrapper (model sa trénuje opakovane na podmnožinách)."
+  },
+  {
+    "id": "t5-q14",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Náhodný les natrénovaný na 13 príznakoch má tieto dôležitosti: `cp` 0.147, `thalach` 0.117, `oldpeak` 0.110, `thal` 0.108, `ca` 0.108, `age` 0.089, `chol` 0.079, `trestbps` 0.073, `exang` 0.061, `slope` 0.044, `sex` 0.034, `restecg` 0.019, `fbs` 0.010. Čo vypíše kód?",
+    "code": "rf = RandomForestClassifier(n_estimators=200, random_state=5)\nrf.fit(X, y)   # X.shape == (303, 13)\n\nselector = SelectFromModel(rf, threshold='mean', prefit=True)\nX_selected = selector.transform(X)\nprint(X_selected.shape)",
+    "options": [
+      {
+        "text": "`(303, 7)`",
+        "correct": true
+      },
+      {
+        "text": "`(303, 6)`",
+        "correct": false
+      },
+      {
+        "text": "`(303, 5)`",
+        "correct": false
+      },
+      {
+        "text": "`(303, 8)`",
+        "correct": false
+      },
+      {
+        "text": "`(303, 13)`",
+        "correct": false
+      }
+    ],
+    "explanation": "`feature_importances_` majú súčet 1, takže priemerná dôležitosť 13 príznakov je 1/13 ≈ 0.077. `threshold='mean'` ponechá príznaky nad touto hodnotou: `cp`, `thalach`, `oldpeak`, `thal`, `ca`, `age`, `chol` (0.079) – sedem. `trestbps` (0.073) je už pod prahom. `prefit=True` znamená, že les je už natrénovaný, preto sa volá priamo `transform`."
+  },
+  {
+    "id": "t5-q15",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Chceme zistiť, či výber príznakov zlepší náhodný les. `rf` je les natrénovaný na všetkých dátach `X`, `y`. Ktoré tvrdenia o variantoch A a B platia?",
+    "code": "# A\nX_sel = SelectFromModel(rf, threshold='mean', prefit=True).transform(X)\nscores_a = cross_val_score(RandomForestClassifier(n_estimators=200, random_state=5),\n                           X_sel, y, cv=5)\n\n# B\npipe = Pipeline([('sel', SelectFromModel(RandomForestClassifier(n_estimators=200, random_state=5),\n                                         threshold='mean')),\n                 ('clf', RandomForestClassifier(n_estimators=200, random_state=5))])\nscores_b = cross_val_score(pipe, X, y, cv=5)",
+    "options": [
+      {
+        "text": "Vo variante A výber príznakov videl aj vzorky, ktoré sa neskôr použijú ako validačné – uniká informácia.",
+        "correct": true
+      },
+      {
+        "text": "Vo variante B sa výber príznakov zopakuje v každom folde iba na trénovacej časti.",
+        "correct": true
+      },
+      {
+        "text": "Poctivejší odhad dáva variant A, lebo výber prebehne iba raz.",
+        "correct": false
+      },
+      {
+        "text": "Variant B skončí chybou, lebo `SelectFromModel` nemá `prefit=True`.",
+        "correct": false
+      }
+    ],
+    "explanation": "Výber príznakov sa učí z dát, takže patrí do pipeline (variant B, takto je to v ex_05): `cross_val_score` potom v každom folde natrénuje selektor aj klasifikátor len na trénovacích foldoch. Vo variante A sa príznaky vybrali podľa všetkých dát vrátane budúcich validačných foldov – skóre je príliš optimistické (tu 0.785 oproti 0.775). Bez `prefit=True` si `SelectFromModel` svoj les natrénuje sám pri `fit` pipeline."
+  },
+  {
+    "id": "t5-q16",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré z uvedených metód patria do učenia bez učiteľa?",
+    "options": [
+      {
+        "text": "K-means",
+        "correct": true
+      },
+      {
+        "text": "DBSCAN",
+        "correct": true
+      },
+      {
+        "text": "PCA",
+        "correct": true
+      },
+      {
+        "text": "Náhodný les",
+        "correct": false
+      },
+      {
+        "text": "SVM",
+        "correct": false
+      },
+      {
+        "text": "KNN",
+        "correct": false
+      }
+    ],
+    "explanation": "Učenie bez učiteľa (označenie tried nie je známe) zahŕňa klastrovanie (K-means, DBSCAN) a redukciu dimenzionality (PCA). Náhodný les, SVM a KNN sú klasifikátory – učenie s učiteľom, pri trénovaní potrebujú `y`. Pozor na zámenu KNN (K najbližších susedov, klasifikácia) a K-means (K klastrov)."
+  },
+  {
+    "id": "t5-q17",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o druhoch klastrovania sú podľa prednášky pravdivé?",
+    "options": [
+      {
+        "text": "K-means je klastrovanie založené na prototypoch.",
+        "correct": true
+      },
+      {
+        "text": "DBSCAN je klastrovanie založené na hustote.",
+        "correct": true
+      },
+      {
+        "text": "K-means je hierarchické klastrovanie.",
+        "correct": false
+      },
+      {
+        "text": "DBSCAN reprezentuje každý klaster jeho centroidom.",
+        "correct": false
+      }
+    ],
+    "explanation": "Prednáška delí klastrovanie na založené na prototypoch (K-means – klaster reprezentuje centroid alebo medoid), založené na rozložení hustoty (DBSCAN) a hierarchické. DBSCAN žiadne centroidy nemá – klaster je súvislá hustá oblasť bodov."
+  },
+  {
+    "id": "t5-q18",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré kroky patria do algoritmu K-means?",
+    "options": [
+      {
+        "text": "Náhodne vybrať k centroidov.",
+        "correct": true
+      },
+      {
+        "text": "Prideliť každú vzorku k najbližšiemu centroidu.",
+        "correct": true
+      },
+      {
+        "text": "Presunúť centroid do stredu vzoriek, ktoré mu boli priradené.",
+        "correct": true
+      },
+      {
+        "text": "Označiť body s malým počtom susedov ako šum.",
+        "correct": false
+      },
+      {
+        "text": "Rozložiť kovariančnú maticu na vlastné vektory a vlastné čísla.",
+        "correct": false
+      }
+    ],
+    "explanation": "K-means: 1. náhodne vybrať k centroidov, 2. prideliť každú vzorku k najbližšiemu centroidu, 3. presunúť centroid do stredu jeho vzoriek, 4. opakovať kroky 2 a 3, kým sa priradenie neprestane meniť (alebo po dosiahnutí tolerancie či maximálneho počtu iterácií). Šum je pojem z DBSCAN, rozklad kovariančnej matice patrí k PCA."
+  },
+  {
+    "id": "t5-q19",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo K-means ako optimalizačný problém minimalizuje?",
+    "options": [
+      {
+        "text": "Sumu štvorcov chýb v rámci klastrov – vzdialeností vzoriek od ich centroidu.",
+        "correct": true
+      },
+      {
+        "text": "Počet klastrov.",
+        "correct": false
+      },
+      {
+        "text": "Vzdialenosť medzi centroidmi rôznych klastrov.",
+        "correct": false
+      },
+      {
+        "text": "Počet vzoriek označených ako šum.",
+        "correct": false
+      }
+    ],
+    "explanation": "K-means minimalizuje sumu štvorcov chýb v rámci klastra (SSE, skreslenie) – v scikit-learn je to `km.inertia_`. Počet klastrov je vstup, nie výsledok optimalizácie. Vzdialenosť medzi centroidmi sa priamo neoptimalizuje a pojem šumu K-means nepozná."
+  },
+  {
+    "id": "t5-q20",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o K-means sú pravdivé?",
+    "options": [
+      {
+        "text": "Počet klastrov treba zadať vopred.",
+        "correct": true
+      },
+      {
+        "text": "Výsledok závisí od počiatočného rozmiestnenia centroidov.",
+        "correct": true
+      },
+      {
+        "text": "Dobre funguje aj na nekonvexných klastroch, napríklad na dvoch polmesiacoch.",
+        "correct": false
+      },
+      {
+        "text": "Je to metóda hierarchického klastrovania.",
+        "correct": false
+      },
+      {
+        "text": "Body v riedkych oblastiach označí ako šum.",
+        "correct": false
+      }
+    ],
+    "explanation": "K-means potrebuje `n_clusters` vopred a začína z náhodných centroidov – preto `n_init` (viac behov) a `init='k-means++'`. Predpokladá guľaté klastre: polmesiace z `make_moons` pretne priamkou. Je založený na prototypoch, nie hierarchický, a každú vzorku priradí do niektorého klastra – šum rozlišuje DBSCAN."
+  },
+  {
+    "id": "t5-q21",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o prototypoch klastrov?",
+    "options": [
+      {
+        "text": "Centroid je priemer podobných objektov a používa sa pri spojitých hodnotách.",
+        "correct": true
+      },
+      {
+        "text": "Medoid je najreprezentatívnejší (najčastejšie sa vyskytujúci) objekt a používa sa pri kategorických hodnotách.",
+        "correct": true
+      },
+      {
+        "text": "Centroid musí byť vždy jednou zo vzoriek dátovej sady.",
+        "correct": false
+      },
+      {
+        "text": "Medoid je bod klastra najvzdialenejší od jeho stredu.",
+        "correct": false
+      }
+    ],
+    "explanation": "Prednáška: klastre sú reprezentované prototypmi – centroid je priemer podobných objektov (spojité hodnoty), medoid najreprezentatívnejší z najčastejšie sa vyskytujúcich objektov (kategorické hodnoty). Centroid je vypočítaný priemer, takže spravidla nie je žiadnou zo vzoriek; medoid naopak je skutočný objekt."
+  },
+  {
+    "id": "t5-q22",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo znamenajú parametre v tomto volaní z prednášky?",
+    "code": "km = KMeans(n_clusters=3,\n            init='random',\n            n_init=10,\n            max_iter=300,\n            tol=1e-04,\n            random_state=0)\ny_km = km.fit_predict(X)",
+    "options": [
+      {
+        "text": "`n_init=10` – algoritmus sa spustí 10-krát s rôznymi počiatočnými centroidmi a ostane beh s najmenším skreslením.",
+        "correct": true
+      },
+      {
+        "text": "`max_iter=300` – jeden beh má najviac 300 iterácií.",
+        "correct": true
+      },
+      {
+        "text": "`init='random'` – počiatočné centroidy sa vyberú náhodne.",
+        "correct": true
+      },
+      {
+        "text": "`n_init=10` – na začiatku sa vyberie 10 centroidov.",
+        "correct": false
+      },
+      {
+        "text": "`tol=1e-04` – najmenšia povolená vzdialenosť medzi dvoma centroidmi.",
+        "correct": false
+      }
+    ],
+    "explanation": "Počet centroidov určuje `n_clusters=3`. `n_init` je počet nezávislých behov z rôznych počiatočných centroidov – vyberie sa ten s najmenším SSE (`inertia_`). `max_iter` obmedzuje iterácie jedného behu a `tol` je tolerancia zmeny, pri ktorej sa beh vyhlási za skonvergovaný. Alternatíva k `init='random'` je `'k-means++'`, ktorá centroidy rozmiestni ďalej od seba."
+  },
+  {
+    "id": "t5-q23",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "lecture",
+    "text": "K-means s k = 2 beží na jednorozmerných bodoch 1, 2, 3, 10, 11, 12. Počiatočné centroidy sú 1 a 2. Kde budú centroidy po skonvergovaní?",
+    "options": [
+      {
+        "text": "2 a 11",
+        "correct": true
+      },
+      {
+        "text": "1 a 7.6",
+        "correct": false
+      },
+      {
+        "text": "1.5 a 9",
+        "correct": false
+      },
+      {
+        "text": "3 a 10",
+        "correct": false
+      }
+    ],
+    "explanation": "1. kolo – priradenie: k centroidu 1 patrí len bod 1, k centroidu 2 body 2, 3, 10, 11, 12; nové centroidy: 1 a (2 + 3 + 10 + 11 + 12) / 5 = 7.6. 2. kolo – body 2 a 3 sú bližšie k 1 než k 7.6, takže klastre sú {1, 2, 3} a {10, 11, 12}; nové centroidy 2 a 11. 3. kolo – priradenie sa nezmení, koniec. Hodnoty 1 a 7.6 sú iba medzistav po prvom kole. (Overené: `KMeans(n_clusters=2, init=np.array([[1.0], [2.0]]), n_init=1)` dá centroidy 2 a 11, `inertia_` = 4.)"
+  },
+  {
+    "id": "t5-q24",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde z ex_06 platia?",
+    "code": "data = pd.read_csv('market_research.csv')\nprint(data.shape)   # (2212, 23)\n\nkm = KMeans(n_clusters=3, random_state=5)\ny_km = km.fit_predict(data)",
+    "options": [
+      {
+        "text": "`y_km` má 2212 hodnôt z množiny 0, 1, 2.",
+        "correct": true
+      },
+      {
+        "text": "`km.cluster_centers_.shape` je `(3, 23)`.",
+        "correct": true
+      },
+      {
+        "text": "`km.labels_` obsahuje to isté čo `y_km`.",
+        "correct": true
+      },
+      {
+        "text": "`km.inertia_` je počet iterácií do konvergencie.",
+        "correct": false
+      },
+      {
+        "text": "`fit_predict` potrebuje ako druhý argument skutočné triedy zákazníkov.",
+        "correct": false
+      }
+    ],
+    "explanation": "`fit_predict(data)` natrénuje K-means a vráti číslo klastra každej vzorky – to isté ostane v `km.labels_`. Centroidov je toľko, koľko klastrov, a každý má súradnicu pre každý príznak: `(3, 23)`. `inertia_` je skreslenie (suma štvorcov vzdialeností vzoriek od najbližšieho centroidu). Klastrovanie je učenie bez učiteľa – žiadne `y`."
+  },
+  {
+    "id": "t5-q25",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o lakťovej metóde (elbow method) sú pravdivé?",
+    "options": [
+      {
+        "text": "Vykresľuje skreslenie (klastrovú SSE) v závislosti od počtu klastrov.",
+        "correct": true
+      },
+      {
+        "text": "Hľadá sa počet klastrov, za ktorým ďalší klaster skreslenie už výrazne nezníži.",
+        "correct": true
+      },
+      {
+        "text": "Skreslenie s rastúcim počtom klastrov klesá; keby mal každý bod vlastný klaster, bolo by nulové.",
+        "correct": true
+      },
+      {
+        "text": "Najlepší počet klastrov je ten s najmenším skreslením.",
+        "correct": false
+      },
+      {
+        "text": "Vyžaduje poznať skutočné triedy vzoriek.",
+        "correct": false
+      }
+    ],
+    "explanation": "Pri klastrovaní nepoznáme skutočné triedy, preto sa počet klastrov odhaduje graficky z klastrovej SSE. Skreslenie s pribúdajúcimi klastrami vždy klesá (pri K = N je 0), takže minimum by vždy vybralo najväčšie K – hľadá sa zlom krivky (lakeť). Na dátach `make_blobs` z prednášky: 713.7 → 283.5 → 72.5 → 62.9 → 54.3, lakeť je pri K = 3."
+  },
+  {
+    "id": "t5-q26",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorý riadok chýba v lakťovej metóde na mieste komentára?",
+    "code": "distortions = []\nfor i in range(1, 11):\n    km = KMeans(n_clusters=i, random_state=5)\n    km.fit(data)\n    # chybajuci riadok\nplt.plot(range(1, 11), distortions, marker='o')\nplt.xlabel('# of clusters')\nplt.ylabel('Distortion')\nplt.show()",
+    "options": [
+      {
+        "text": "`distortions.append(km.inertia_)`",
+        "correct": true
+      },
+      {
+        "text": "`distortions.append(km.labels_)`",
+        "correct": false
+      },
+      {
+        "text": "`distortions.append(km.cluster_centers_)`",
+        "correct": false
+      },
+      {
+        "text": "`distortions.append(km.n_clusters)`",
+        "correct": false
+      },
+      {
+        "text": "`distortions.append(km.predict(data))`",
+        "correct": false
+      }
+    ],
+    "explanation": "Lakťová metóda kreslí skreslenie pre každý počet klastrov. Skreslenie natrénovaného modelu je v atribúte `inertia_` – jedno číslo (suma štvorcov vzdialeností vzoriek od ich najbližšieho centroidu). `labels_` a `predict` dávajú čísla klastrov vzoriek, `cluster_centers_` súradnice centroidov a `n_clusters` je len zadané K."
+  },
+  {
+    "id": "t5-q27",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o siluete (`silhouette_score`), ktorou sa v notebooku overuje počet klastrov?",
+    "options": [
+      {
+        "text": "Nadobúda hodnoty od −1 do 1.",
+        "correct": true
+      },
+      {
+        "text": "Porovnáva priemernú vzdialenosť vzorky k vlastnému klastru a k najbližšiemu cudziemu klastru.",
+        "correct": true
+      },
+      {
+        "text": "Vyššia priemerná silueta znamená kompaktnejšie a lepšie oddelené klastre.",
+        "correct": true
+      },
+      {
+        "text": "Na výpočet potrebuje skutočné triedy vzoriek.",
+        "correct": false
+      },
+      {
+        "text": "S rastúcim počtom klastrov vždy rastie.",
+        "correct": false
+      }
+    ],
+    "explanation": "Silueta vzorky je `s = (b − a) / max(a, b)`, kde `a` je priemerná vzdialenosť k vlastnému klastru a `b` k najbližšiemu cudziemu; leží v intervale od −1 do 1 a vyššia hodnota je lepšia. Počíta sa len z dát a priradenia do klastrov. Na rozdiel od skreslenia sa s pribúdajúcimi klastrami nemení monotónne – preto sa hodí, keď lakeť nie je ostrý."
+  },
+  {
+    "id": "t5-q28",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako DBSCAN označuje body?",
+    "options": [
+      {
+        "text": "Hlavný (core) bod má v okolí s polomerom ε aspoň MinPts bodov.",
+        "correct": true
+      },
+      {
+        "text": "Hraničný (border) bod má menej ako MinPts susedov, ale leží v polomere ε od hlavného bodu.",
+        "correct": true
+      },
+      {
+        "text": "Bod, ktorý nie je hlavný ani hraničný, je šum.",
+        "correct": true
+      },
+      {
+        "text": "Hraničný bod je bod klastra najvzdialenejší od centroidu.",
+        "correct": false
+      },
+      {
+        "text": "Hlavný bod je priemer všetkých bodov klastra.",
+        "correct": false
+      }
+    ],
+    "explanation": "DBSCAN definuje hustotu ako počet bodov vo vzdialenosti danej polomerom ε. Hlavný bod má v tomto okolí aspoň MinPts bodov, hraničný ich má menej, ale je v dosahu ε niektorého hlavného bodu, a všetko ostatné je šum. Centroidy a priemery sú pojmy K-means."
+  },
+  {
+    "id": "t5-q29",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré nevýhody DBSCAN uvádza prednáška?",
+    "options": [
+      {
+        "text": "Trpí kliatbou dimenzionality, ako všetky algoritmy využívajúce euklidovskú vzdialenosť.",
+        "correct": true
+      },
+      {
+        "text": "Treba správne nastaviť parametre MinPts a ε.",
+        "correct": true
+      },
+      {
+        "text": "Predpokladá guľatý tvar klastrov.",
+        "correct": false
+      },
+      {
+        "text": "Vyžaduje zadať počet klastrov vopred.",
+        "correct": false
+      },
+      {
+        "text": "Nedokáže rozlíšiť šum od bodov klastrov.",
+        "correct": false
+      }
+    ],
+    "explanation": "Výhoda DBSCAN je práve to, že nepredpokladá guľatý tvar klastrov (ako K-means); počet klastrov vyjde z dát a body mimo hustých oblastí označí ako šum. Nevýhody: kliatba dimenzionality a citlivosť na nastavenie MinPts a ε (`min_samples`, `eps`)."
+  },
+  {
+    "id": "t5-q30",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo vypíše tento kód? (V scikit-learn sa do `min_samples` počíta aj bod sám.)",
+    "code": "import numpy as np\nfrom sklearn.cluster import DBSCAN\n\nX = np.array([[1.0], [1.5], [2.0], [2.5], [3.4], [8.0]])\ndb = DBSCAN(eps=1.1, min_samples=4)\nprint(db.fit_predict(X))",
+    "options": [
+      {
+        "text": "`[ 0  0  0  0  0 -1]`",
+        "correct": true
+      },
+      {
+        "text": "`[-1  0  0  0 -1 -1]`",
+        "correct": false
+      },
+      {
+        "text": "`[0 0 0 0 0 1]`",
+        "correct": false
+      },
+      {
+        "text": "`[0 0 0 0 1 2]`",
+        "correct": false
+      }
+    ],
+    "explanation": "Okolie s polomerom 1.1: bod 1.0 má v ňom 3 body (1.0, 1.5, 2.0), 1.5 má 4, 2.0 má 4, 2.5 má 4 (1.5, 2.0, 2.5, 3.4), 3.4 má 2 a 8.0 má 1. Hlavné body sú teda 1.5, 2.0 a 2.5 – ležia pri sebe a tvoria jeden klaster 0. Body 1.0 a 3.4 nie sú hlavné, ale sú v dosahu hlavného bodu → hraničné, patria do klastra 0. Bod 8.0 nemá v dosahu žiadny hlavný bod → šum so značkou −1. Hraničné body teda nie sú šum a šum nedostane vlastný klaster."
+  },
+  {
+    "id": "t5-q31",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "V čom sa K-means líši od DBSCAN?",
+    "options": [
+      {
+        "text": "K-means potrebuje počet klastrov vopred, DBSCAN nie.",
+        "correct": true
+      },
+      {
+        "text": "K-means predpokladá guľaté klastre, DBSCAN zvládne aj iné tvary.",
+        "correct": true
+      },
+      {
+        "text": "DBSCAN môže niektoré body označiť ako šum, K-means priradí každý bod do klastra.",
+        "correct": true
+      },
+      {
+        "text": "DBSCAN minimalizuje sumu štvorcov vzdialeností bodov od centroidov.",
+        "correct": false
+      }
+    ],
+    "explanation": "K-means je založený na prototypoch: zadáme K, algoritmus minimalizuje SSE okolo centroidov a každý bod niekam priradí. DBSCAN je založený na hustote: z parametrov ε a MinPts spojí husté oblasti ľubovoľného tvaru do klastrov, ich počet vyjde sám a riedke body označí ako šum. SSE okolo centroidov minimalizuje K-means, nie DBSCAN."
+  },
+  {
+    "id": "t5-q32",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Kód z prednášky zhlukuje dva polmesiace. Ktoré tvrdenia o výsledku platia?",
+    "code": "X, y = make_moons(n_samples=200, noise=0.05, random_state=0)\n\nkm = KMeans(n_clusters=2, random_state=0)\ny_km = km.fit_predict(X)\n\ndb = DBSCAN(eps=0.2, min_samples=5, metric='euclidean')\ny_db = db.fit_predict(X)",
+    "options": [
+      {
+        "text": "DBSCAN nájde oba polmesiace ako dva klastre.",
+        "correct": true
+      },
+      {
+        "text": "K-means rozdelí dáta približne priamkou, takže časť bodov každého polmesiaca skončí v nesprávnom klastri.",
+        "correct": true
+      },
+      {
+        "text": "S oveľa menším `eps` (napr. 0.05) by DBSCAN označil všetky body ako šum.",
+        "correct": true
+      },
+      {
+        "text": "DBSCAN dostal počet klastrov 2 cez parameter `min_samples`.",
+        "correct": false
+      },
+      {
+        "text": "K-means zlyhá preto, lebo dáta nie sú štandardizované.",
+        "correct": false
+      }
+    ],
+    "explanation": "Polmesiace nie sú guľaté klastre. K-means priraďuje body k bližšiemu z dvoch centroidov, čo je rez priamkou – správne zaradí len asi tri štvrtiny bodov. DBSCAN spája husté oblasti, takže sleduje tvar polmesiacov: výsledkom sú klastre 0 a 1 po 100 bodov, bez šumu. `min_samples=5` je MinPts (koľko bodov treba v okolí hlavného bodu), nie počet klastrov. Pri `eps=0.05` nemá žiadny bod v okolí 5 bodov → všetko je šum (−1); pri `eps=0.5` by naopak vznikol jediný klaster."
+  },
+  {
+    "id": "t5-q33",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo hľadá analýza hlavných komponentov (PCA)?",
+    "options": [
+      {
+        "text": "Smery maximálneho rozptylu v dátach, do ktorých dáta následne premietne.",
+        "correct": true
+      },
+      {
+        "text": "Smery, ktoré najlepšie oddeľujú známe triedy vzoriek.",
+        "correct": false
+      },
+      {
+        "text": "Oblasti s vysokou hustotou bodov.",
+        "correct": false
+      },
+      {
+        "text": "Pôvodné príznaky s najmenším rozptylom, ktoré odstráni.",
+        "correct": false
+      }
+    ],
+    "explanation": "PCA je metóda učenia bez učiteľa pre lineárnu transformáciu dát: hľadá smery maximálneho rozptylu vo vysokodimenzionálnych dátach a premieta dáta do priestoru nižších rozmerov. Triedy nepozná (žiadne `y`), husté oblasti hľadá DBSCAN a odstraňovanie stĺpcov s malým rozptylom je `VarianceThreshold` – PCA pôvodné stĺpce nevyberá, vytvára nové."
+  },
+  {
+    "id": "t5-q34",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré kroky patria do základného postupu PCA (d = počet pôvodných príznakov, k = počet komponentov)?",
+    "options": [
+      {
+        "text": "Štandardizácia dátovej sady.",
+        "correct": true
+      },
+      {
+        "text": "Konštrukcia kovariančnej matice a jej rozklad na vlastné vektory a vlastné čísla.",
+        "correct": true
+      },
+      {
+        "text": "Výber k vlastných vektorov, ktoré zodpovedajú najväčším vlastným číslam.",
+        "correct": true
+      },
+      {
+        "text": "Konštrukcia matice W rozmeru d × k a transformácia dát do k-rozmerného priestoru.",
+        "correct": true
+      },
+      {
+        "text": "Výber k vlastných vektorov s najmenšími vlastnými číslami, aby sa odstránil šum.",
+        "correct": false
+      },
+      {
+        "text": "Náhodný výber k pôvodných príznakov.",
+        "correct": false
+      }
+    ],
+    "explanation": "Postup z prednášky: 1. štandardizácia, 2. kovariančná matica, 3. jej rozklad na vlastné vektory a vlastné čísla, 4. výber k vlastných vektorov s najväčšími vlastnými číslami (smery najväčšieho rozptylu), 5. matica W (d × k) z týchto vektorov, 6. transformácia d-rozmerných dát do k rozmerov, k < d. Dôsledok: nižší počet príznakov a nové príznaky."
+  },
+  {
+    "id": "t5-q35",
+    "topicId": "t5-vyber-pca-klastrovanie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde z ex_06 platia?",
+    "code": "data = pd.read_csv('market_research.csv')   # (2212, 23)\n\npca = PCA(n_components=3)\npca.fit(data)\ndata_reduced = pca.transform(data)\n\nprint(pca.explained_variance_ratio_.round(3))\n# [0.385 0.129 0.061]",
+    "options": [
+      {
+        "text": "`data_reduced.shape` je `(2212, 3)`.",
+        "correct": true
+      },
+      {
+        "text": "Tri komponenty spolu zachytia približne 57.5 % rozptylu pôvodných dát.",
+        "correct": true
+      },
+      {
+        "text": "`pca.fit` potrebuje aj cieľovú premennú `y`.",
+        "correct": false
+      },
+      {
+        "text": "Stĺpce `data_reduced` sú tri pôvodné príznaky s najväčším rozptylom.",
+        "correct": false
+      },
+      {
+        "text": "Tretí komponent zachytáva viac rozptylu ako prvý.",
+        "correct": false
+      }
+    ],
+    "explanation": "`PCA(n_components=3)` premietne 23 príznakov na 3 nové → `(2212, 3)`. `explained_variance_ratio_` hovorí, akú časť celkového rozptylu zachytáva každý komponent: 0.385 + 0.129 + 0.061 = 0.575. Komponenty sú zoradené zostupne podľa rozptylu, prvý ho zachytáva najviac. PCA je učenie bez učiteľa (`fit(data)` bez `y`) a nové stĺpce sú lineárne kombinácie všetkých pôvodných príznakov, nie vybrané pôvodné stĺpce."
+  }
+]

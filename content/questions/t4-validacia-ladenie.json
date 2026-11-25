@@ -1,0 +1,566 @@
+[
+  {
+    "id": "t4-q01",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o objekte `Pipeline` v scikit-learn sú pravdivé?",
+    "options": [
+      { "text": "Zoskupuje niekoľko krokov (predspracovanie a model) do jedného objektu.", "correct": true },
+      { "text": "Môže mať aj viac než dva kroky.", "correct": true },
+      { "text": "Posledným krokom je model; kroky pred ním dáta transformujú.", "correct": true },
+      { "text": "Pri `fit` sa každý krok trénuje nezávisle na pôvodných, netransformovaných dátach.", "correct": false },
+      { "text": "Pri `predict` sa transformačné kroky znova natrénujú (`fit`) na nových dátach.", "correct": false }
+    ],
+    "explanation": "Pipeline je „zgrupenie“ niekoľkých krokov a nie je obmedzená na dva členy. Pri `fit` každý transformátor spraví `fit` a `transform` a svoj výstup odovzdá ďalšiemu kroku – posledný krok (model) sa teda učí na už transformovaných dátach. Pri `predict` transformátory robia iba `transform` s parametrami naučenými pri trénovaní; nič sa znova netrénuje."
+  },
+  {
+    "id": "t4-q02",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Čo sa stane pri volaní `pipe_lr.predict(X_test)` na poslednom riadku?",
+    "code": "pipe_lr = Pipeline([('scl', StandardScaler()),\n                    ('clf', LogisticRegression(random_state=1))])\n\npipe_lr.fit(X_train, y_train)\ny_pred = pipe_lr.predict(X_test)",
+    "options": [
+      { "text": "`X_test` sa preškáluje priemerom a odchýlkou naučenými z `X_train` a logistická regresia predikuje triedy.", "correct": true },
+      { "text": "Scaler sa najprv natrénuje na `X_test` a potom ho preškáluje.", "correct": false },
+      { "text": "`X_test` ide do logistickej regresie bez škálovania, škálujú sa iba trénovacie dáta.", "correct": false },
+      { "text": "Logistická regresia sa pretrénuje na `X_test` a vráti svoje váhy.", "correct": false }
+    ],
+    "explanation": "`pipe_lr.fit` natrénoval scaler aj model na trénovacích dátach. `predict` už iba zavolá `transform` scalera (s parametrami z `X_train`) a výsledok pošle do `predict` logistickej regresie. Presne to je pravidlo „fit na trénovacích, transform na testovacích“ – pipeline ho stráži za nás."
+  },
+  {
+    "id": "t4-q03",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo charakterizuje podtrénovanie (underfitting)?",
+    "options": [
+      { "text": "Vysoká odchýlka (high bias).", "correct": true },
+      { "text": "Je dôsledkom príliš jednoduchého modelu.", "correct": true },
+      { "text": "Presnosť je nízka na trénovacích aj na validačných dátach.", "correct": true },
+      { "text": "Vysoký rozptyl (high variance).", "correct": false },
+      { "text": "Veľký rozdiel medzi vysokou trénovacou a nízkou validačnou presnosťou.", "correct": false }
+    ],
+    "explanation": "Podtrénovanie = vysoká odchýlka: model je príliš jednoduchý, aby zachytil vzory v dátach, preto je slabý už na trénovacích dátach a rovnako na validačných. Vysoký rozptyl a veľká medzera medzi trénovacou a validačnou presnosťou sú príznaky pretrénovania – modelu príliš tesne naviazaného na trénovacie dáta."
+  },
+  {
+    "id": "t4-q04",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Krivka učenia ukazuje pretrénovanie (overfitting). Čo podľa prednášky môže pomôcť?",
+    "options": [
+      { "text": "Získať viac trénovacích dát.", "correct": true },
+      { "text": "Znížiť komplexitu modelu.", "correct": true },
+      { "text": "Odobrať atribúty.", "correct": true },
+      { "text": "Pridať ďalšie atribúty.", "correct": false },
+      { "text": "Nahradiť krížovú validáciu jednoduchším hold-out rozdelením.", "correct": false }
+    ],
+    "explanation": "Proti pretrénovaniu prednáška uvádza: viac dát, znížiť komplexitu modelu, odobrať atribúty. Pridanie atribútov robí model zložitejším – to je liek na podtrénovanie. Spôsob validácie model nemení, iba meria; hold-out je navyše menej spoľahlivý odhad než krížová validácia. Viac dát je drahé a nie vždy pomôže, ale patrí medzi možnosti."
+  },
+  {
+    "id": "t4-q05",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Hyper-parametre ladíme tak, že ich opakovane meníme a model zakaždým vyhodnotíme na tej istej testovacej množine. Ktoré tvrdenia sú pravdivé?",
+    "options": [
+      { "text": "Testovacie dáta sa nepriamo stávajú súčasťou trénovania modelu.", "correct": true },
+      { "text": "Odhad výkonnosti na nových dátach bude príliš optimistický.", "correct": true },
+      { "text": "Riešením je pridať validačnú množinu (train / validation / test) alebo použiť krížovú validáciu.", "correct": true },
+      { "text": "Postup je v poriadku, pretože na testovacích dátach sa nikdy nevolal `fit`.", "correct": false }
+    ],
+    "explanation": "Prednáška: pri výbere modelu podľa testovacej množiny sú testovacie dáta nepriamo súčasťou natrénovania modelu → hrozba pretrénovania. Vyberáme totiž nastavenie, ktoré náhodou sedí práve týmto dátam. Preto sa pridáva validačná množina (ladí sa na nej, test ostáva na jediné záverečné overenie) alebo sa ladí krížovou validáciou na trénovacích dátach. Nestačí, že sa na teste nevolal `fit` – informácia preteká cez naše rozhodnutia."
+  },
+  {
+    "id": "t4-q06",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o k-násobnej krížovej validácii (k-fold) sú pravdivé?",
+    "options": [
+      { "text": "Dáta sa rozdelia na k častí (foldov) bez opakovania vzoriek.", "correct": true },
+      { "text": "V každom kole sa trénuje na k − 1 foldoch a vyhodnocuje na zvyšnom.", "correct": true },
+      { "text": "Každá vzorka je vo vyhodnocovacej časti práve raz.", "correct": true },
+      { "text": "Výsledný odhad výkonnosti je priemer skóre zo všetkých kôl.", "correct": true },
+      { "text": "Model sa trénuje iba raz, na všetkých foldoch naraz.", "correct": false }
+    ],
+    "explanation": "K-fold je krížová validácia bez vrátenia: dáta sa rozdelia na k foldov, model sa trénuje k-krát – vždy na k − 1 foldoch – a hodnotí na zvyšnom, takže každá vzorka sa na testovanie použije práve raz. Odhad je priemer k skóre (zvyčajne aj so smerodajnou odchýlkou). Jediné trénovanie zodpovedá hold-out metóde, nie k-foldu."
+  },
+  {
+    "id": "t4-q07",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o voľbe hodnoty k pri k-fold krížovej validácii?",
+    "options": [
+      { "text": "Tradičná hodnota je k = 10.", "correct": true },
+      { "text": "Pri veľkých dátových sadách sa používa k = 5.", "correct": true },
+      { "text": "Pri väčšom k sa v každom kole trénuje na väčšej časti dát.", "correct": true },
+      { "text": "Väčšie k skracuje čas validácie.", "correct": false },
+      { "text": "Počet vzoriek musí byť deliteľný hodnotou k.", "correct": false }
+    ],
+    "explanation": "Podľa prednášky: tradične k = 10, pri veľkých sadách k = 5; väčšie k znamená viac dát na trénovanie (výhoda pri menších datasetoch), ale dlhšie trvanie, lebo sa trénuje viac modelov. Deliteľnosť nie je podmienkou – foldy sa jednoducho líšia veľkosťou o jednu vzorku."
+  },
+  {
+    "id": "t4-q08",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dataset má 150 vzoriek a použijeme leave-one-out krížovú validáciu (LOOCV). Koľko modelov sa natrénuje a na koľkých vzorkách sa každý vyhodnotí?",
+    "options": [
+      { "text": "150 modelov, každý sa vyhodnotí na 1 vzorke.", "correct": true },
+      { "text": "150 modelov, každý sa vyhodnotí na 149 vzorkách.", "correct": false },
+      { "text": "1 model, vyhodnotí sa postupne na všetkých 150 vzorkách.", "correct": false },
+      { "text": "10 modelov, každý sa vyhodnotí na 15 vzorkách.", "correct": false }
+    ],
+    "explanation": "LOOCV je špeciálny prípad k-foldu s k = N (počet vzoriek): každý fold tvorí jediná vzorka. Trénuje sa teda 150 modelov, každý na 149 vzorkách, a testuje sa na tej jednej vynechanej. Desať modelov po 15 testovacích vzoriek je obyčajný 10-fold."
+  },
+  {
+    "id": "t4-q09",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "N = 1000\nX, y = make_regression(N, random_state=5)\n\nkfold = KFold(n_splits=10, shuffle=True, random_state=5)\n\nfor i, (train, test) in enumerate(kfold.split(X)):\n    print(i, len(train), len(test), test[:5])",
+    "options": [
+      { "text": "Cyklus prebehne 10-krát.", "correct": true },
+      { "text": "V každej iterácii je `len(train)` 900 a `len(test)` 100.", "correct": true },
+      { "text": "`train` a `test` sú polia indexov vzoriek, nie samotné dáta.", "correct": true },
+      { "text": "Tá istá vzorka sa môže objaviť v `test` vo viacerých iteráciách.", "correct": false },
+      { "text": "Bez `shuffle=True` by `kfold.split(X)` skončil chybou.", "correct": false }
+    ],
+    "explanation": "`n_splits=10` znamená 10 foldov, teda 10 iterácií; 1000 vzoriek sa rozdelí na 100 testovacích a 900 trénovacích. `split` vracia indexy – dáta foldu sa vyberú ako `X[train]`, `X[test]`. Každá vzorka je v testovacej časti práve raz. `shuffle` je voliteľný: bez neho sú testovacie foldy súvislé bloky (0–99, 100–199, …), s ním sú vzorky pred delením premiešané."
+  },
+  {
+    "id": "t4-q10",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o stratifikovanej k-fold krížovej validácii?",
+    "options": [
+      { "text": "Zastúpenie tried v každom folde zodpovedá ich zastúpeniu v celej dátovej sade.", "correct": true },
+      { "text": "Je dôležitá najmä pri nevyvážených triedach – vzácna trieda by inak mohla v niektorom folde úplne chýbať.", "correct": true },
+      { "text": "Triedy vyváži: každý fold obsahuje rovnaký počet vzoriek z každej triedy.", "correct": false },
+      { "text": "Používa sa pri regresných úlohách, kde nie sú triedy.", "correct": false }
+    ],
+    "explanation": "Stratifikácia zachováva pôvodný pomer tried, nevyrovnáva ho: ak má trieda 0 v dátach 0.5 % vzoriek, má ich približne 0.5 % aj v každom folde. Na cvičení 6 mala trieda 0 iba 30 vzoriek – obyčajný `KFold` ich rozdelil nerovnomerne (`[5, 9, 7, 4, 2]`), `StratifiedKFold` rovnomerne (`[6, 5, 5, 5, 6]`). Stratifikuje sa podľa tried, pri regresii teda nemá zmysel."
+  },
+  {
+    "id": "t4-q11",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "X, y = datasets.make_regression(10000, 10, random_state=5)\n\nrf = ensemble.RandomForestRegressor(max_features='log2')\nscores = model_selection.cross_val_score(rf, X, y, cv=5)\n\nprint(scores)\nprint(np.mean(scores))",
+    "options": [
+      { "text": "`scores` je pole 5 hodnôt – jedno skóre na každý fold.", "correct": true },
+      { "text": "Skóre je koeficient determinácie R², pretože `rf` je regresor.", "correct": true },
+      { "text": "Každý z piatich modelov sa trénuje na 8000 vzorkách a hodnotí na 2000.", "correct": true },
+      { "text": "Pred volaním `cross_val_score` treba zavolať `rf.fit(X, y)`.", "correct": false },
+      { "text": "Skóre je presnosť (accuracy) predikcií.", "correct": false }
+    ],
+    "explanation": "`cross_val_score` spraví celý k-fold cyklus sám: pri `cv=5` päťkrát natrénuje kópiu modelu na 4/5 dát (8000 vzoriek) a ohodnotí ju na zvyšnej pätine (2000). Vráti pole piatich skóre, ktoré sa zvyčajne spriemeruje. Model sa vopred netrénuje. Predvolené skóre je `score` daného modelu – pre regresory R² (1 = dokonalá predikcia), accuracy by to bola pri klasifikátore."
+  },
+  {
+    "id": "t4-q12",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré tvrdenia o bootstrap validácii sú pravdivé?",
+    "options": [
+      { "text": "Vzorky sa z pôvodnej množiny odoberajú náhodne s vrátením.", "correct": true },
+      { "text": "Každá bootstrap vzorka má rovnakú veľkosť ako pôvodná množina.", "correct": true },
+      { "text": "Model sa testuje na záznamoch, ktoré sa do bootstrap vzorky nedostali (out-of-bag dáta).", "correct": true },
+      { "text": "Postup sa opakuje veľakrát (zvyčajne 1000-krát alebo viac).", "correct": true },
+      { "text": "Ten istý záznam sa v jednej bootstrap vzorke nemôže vyskytnúť viackrát.", "correct": false }
+    ],
+    "explanation": "Bootstrap je prevzorkovacia technika s vrátením: tú istú „loptičku“ môžeme vytiahnuť viackrát (A, B, A), takže sa niektoré záznamy vo vzorke opakujú a iné v nej chýbajú. Na vzorke rovnakej veľkosti ako pôvodná množina sa trénuje, na chýbajúcich (out-of-bag) záznamoch sa testuje a celé sa to veľakrát opakuje, aby sa odhadla variácia výkonu. Bez vrátenia vzorkuje k-fold."
+  },
+  {
+    "id": "t4-q13",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ako sa validuje model pri predikcii časových radov?",
+    "options": [
+      { "text": "Trénuje sa na starších dátach a testuje na dátach, ktoré po nich v čase nasledujú.", "correct": true },
+      { "text": "Dáta sa náhodne premiešajú a rozdelia bežným k-foldom.", "correct": false },
+      { "text": "Trénuje sa na najnovších dátach a testuje na najstarších.", "correct": false },
+      { "text": "Použije sa bootstrap, lebo pri ňom na poradí vzoriek nezáleží.", "correct": false }
+    ],
+    "explanation": "Pri časových radoch musí validácia rešpektovať čas: testovacie dáta nasledujú po trénovacích, tak ako to bude v praxi (predpovedáme budúcnosť z minulosti). Náhodné premiešanie alebo bootstrap by modelu dovolili „vidieť budúcnosť“ a odhad by bol nereálne dobrý; testovanie na minulosti nezodpovedá tomu, ako sa model použije."
+  },
+  {
+    "id": "t4-q14",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo je na vodorovnej osi krivky učenia (learning curve) a validačnej krivky (validation curve)?",
+    "options": [
+      { "text": "Krivka učenia: počet trénovacích vzoriek.", "correct": true },
+      { "text": "Validačná krivka: hodnota hyper-parametra modelu.", "correct": true },
+      { "text": "Krivka učenia: hodnota hyper-parametra modelu.", "correct": false },
+      { "text": "Validačná krivka: počet trénovacích vzoriek.", "correct": false },
+      { "text": "Obe krivky: poradové číslo foldu krížovej validácie.", "correct": false }
+    ],
+    "explanation": "Krivka učenia zobrazuje presnosť predikcie ako funkciu veľkosti vzorky dát, validačná krivka ako funkciu parametra modelu (v prednáške `C` logistickej regresie). Na zvislej osi je v oboch prípadoch trénovacia a validačná presnosť. Foldy na osi nie sú – skóre z foldov sa spriemeruje (čiara) a ich smerodajná odchýlka sa kreslí ako pás okolo čiary."
+  },
+  {
+    "id": "t4-q15",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Na krivke učenia sú trénovacia aj validačná presnosť nízke, ležia blízko seba a s rastúcim počtom vzoriek sa nezlepšujú. Čo z toho vyplýva?",
+    "options": [
+      { "text": "Model je podtrénovaný (vysoká odchýlka).", "correct": true },
+      { "text": "Ďalšie trénovacie dáta pravdepodobne nepomôžu.", "correct": true },
+      { "text": "Pomôcť môže pridanie atribútov alebo zložitejší model.", "correct": true },
+      { "text": "Model je pretrénovaný (vysoký rozptyl).", "correct": false },
+      { "text": "Treba znížiť komplexitu modelu.", "correct": false }
+    ],
+    "explanation": "Nízka presnosť už na trénovacích dátach a malá medzera medzi krivkami znamenajú vysokú odchýlku – model je na dáta príliš jednoduchý. Viac dát mu nepomôže (získať ich je navyše drahé); treba pridať atribúty alebo zvýšiť komplexitu. Pretrénovanie vyzerá inak: vysoká trénovacia presnosť a výrazne nižšia validačná; vtedy sa komplexita znižuje."
+  },
+  {
+    "id": "t4-q16",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "lecture",
+    "text": "`pipe_lr` je pipeline so scalerom (`'scl'`) a logistickou regresiou (`'clf'`). Chceme zistiť, ako presnosť závisí od parametra `C` logistickej regresie. Ktoré volanie je správne?",
+    "code": "pipe_lr = Pipeline([('scl', StandardScaler()),\n                    ('clf', LogisticRegression(solver='lbfgs', random_state=1))])\nparam_range = [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000]",
+    "options": [
+      { "text": "`validation_curve(estimator=pipe_lr, X=X, y=y, param_name='clf__C', param_range=param_range, cv=10)`", "correct": true },
+      { "text": "`validation_curve(estimator=pipe_lr, X=X, y=y, param_name='C', param_range=param_range, cv=10)`", "correct": false },
+      { "text": "`learning_curve(estimator=pipe_lr, X=X, y=y, train_sizes=np.linspace(0.1, 1.0, 10), cv=10)`", "correct": false },
+      { "text": "`cross_val_score(estimator=pipe_lr, X=X, y=y, cv=10)`", "correct": false }
+    ],
+    "explanation": "Závislosť presnosti od hyper-parametra počíta `validation_curve`; parameter kroku pipeline sa pomenúva `<názov kroku>__<parameter>`, teda `'clf__C'`. S `param_name='C'` volanie skončí chybou – pipeline parameter `C` nemá. `learning_curve` mení veľkosť trénovacej množiny, nie hyper-parameter. `cross_val_score` vráti skóre iba pre jedno pevné nastavenie."
+  },
+  {
+    "id": "t4-q17",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré z nasledujúcich sú hyper-parametre – nastavujeme ich pred trénovaním, model sa ich z dát neučí?",
+    "options": [
+      { "text": "`C` pri SVC", "correct": true },
+      { "text": "`gamma` RBF kernela", "correct": true },
+      { "text": "`max_depth` rozhodovacieho stromu", "correct": true },
+      { "text": "počet susedov k pri KNN", "correct": true },
+      { "text": "váhy (koeficienty) logistickej regresie", "correct": false },
+      { "text": "prahy v uzloch natrénovaného rozhodovacieho stromu", "correct": false }
+    ],
+    "explanation": "Prednáška rozlišuje parametre modelu naučené z dát a parametre nastaviteľné, ktoré sa optimalizujú separátne (hyper-parametre). `C`, `gamma`, `max_depth` a počet susedov zadávame pri vytváraní modelu a ladíme ich napr. grid searchom. Váhy logistickej regresie a prahy, podľa ktorých strom delí dáta, vzniknú až pri `fit` – sú to naučené parametre."
+  },
+  {
+    "id": "t4-q18",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o metóde grid search?",
+    "options": [
+      { "text": "Je to brute-force prístup – vyskúša každú kombináciu zadaných hodnôt hyper-parametrov.", "correct": true },
+      { "text": "Počet kombinácií je súčin počtov hodnôt jednotlivých hyper-parametrov.", "correct": true },
+      { "text": "Hodnoty hyper-parametrov si z daných intervalov vyberá náhodne.", "correct": false },
+      { "text": "Najlepšia kombinácia nájdená na jednom rozdelení dát vyjde ako najlepšia aj pri každom inom rozdelení.", "correct": false }
+    ],
+    "explanation": "Grid search je spôsob hľadania optimálnych parametrov hrubou silou: prejde celú mriežku, napr. 2 hodnoty `criterion` × 3 hodnoty `max_features` = 6 kombinácií. Nič nevyberá náhodne. Na cvičení sa tá istá mriežka vyhodnotila na 5 rôznych rozdeleniach a víťazná kombinácia sa menila – preto sa kombinácie hodnotia krížovou validáciou, nie jediným rozdelením."
+  },
+  {
+    "id": "t4-q19",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "import itertools as it\n\ncriteria = ['gini', 'entropy']\nmax_features = ['sqrt', 5, None]\nparameter_space = list(it.product(criteria, max_features))\nprint(len(parameter_space))\nprint(parameter_space[:2])",
+    "options": [
+      { "text": "Prvý výpis je 6.", "correct": true },
+      { "text": "Druhý výpis je `[('gini', 'sqrt'), ('gini', 5)]`.", "correct": true },
+      { "text": "Prvý výpis je 5.", "correct": false },
+      { "text": "Druhý výpis je `[('gini', 'sqrt'), ('entropy', 'sqrt')]`.", "correct": false }
+    ],
+    "explanation": "`itertools.product` vytvorí karteziánsky súčin – každú hodnotu prvého zoznamu s každou hodnotou druhého: 2 × 3 = 6 dvojíc (nie 2 + 3). Poradie je ako pri vnorených cykloch: najprv všetky dvojice s `'gini'` (`'sqrt'`, `5`, `None`), potom s `'entropy'`. Na cvičení sa cez tieto dvojice iterovalo a pre každú sa natrénoval strom."
+  },
+  {
+    "id": "t4-q20",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Úryvok je z ručného prehľadávania mriežky (`X`, `y` je klasifikačný dataset). Ktoré tvrdenia sú pravdivé?",
+    "code": "rng = np.random.default_rng(5)\ntrain_set = rng.choice([True, False], size=len(y))\n\ndt = DecisionTreeClassifier(criterion='gini', max_features=5, random_state=5)\ndt.fit(X[train_set], y[train_set])\nacc = float((dt.predict(X[~train_set]) == y[~train_set]).mean())",
+    "options": [
+      { "text": "`train_set` je pole hodnôt True/False dĺžky `len(y)`; trénuje sa na vzorkách s hodnotou True.", "correct": true },
+      { "text": "`X[~train_set]` sú vzorky, ktoré sa na trénovanie nepoužili.", "correct": true },
+      { "text": "`acc` je podiel správne klasifikovaných vzoriek mimo trénovacej časti, teda accuracy.", "correct": true },
+      { "text": "Trénovacia časť má vždy presne polovicu vzoriek.", "correct": false },
+      { "text": "`acc` je presnosť na trénovacích dátach.", "correct": false }
+    ],
+    "explanation": "`rng.choice([True, False], size=len(y))` vylosuje pre každú vzorku True alebo False – maska rozdelí dáta približne (nie presne) na polovice. `X[train_set]` vyberie vzorky s True, operátor `~` masku neguje, takže `X[~train_set]` je zvyšok. Porovnanie predikcií so skutočnými triedami dá pole True/False a jeho priemer je podiel správnych predikcií – accuracy na testovacej časti."
+  },
+  {
+    "id": "t4-q21",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo robí `GridSearchCV` pri volaní `fit`?",
+    "options": [
+      { "text": "Prejde všetky kombinácie parametrov z `param_grid`.", "correct": true },
+      { "text": "Každú kombináciu vyhodnotí krížovou validáciou.", "correct": true },
+      { "text": "Najlepší model nakoniec pretrénuje na všetkých dátach, ktoré dostal vo `fit`.", "correct": true },
+      { "text": "Najlepšiu kombináciu vyberá podľa testovacej množiny, ktorú si z dát sám oddelí.", "correct": false },
+      { "text": "Každú kombináciu hodnotí presnosťou na trénovacích foldoch.", "correct": false }
+    ],
+    "explanation": "`GridSearchCV` spája grid search s krížovou validáciou: pre každú kombináciu spraví k-fold (trénuje na k − 1 foldoch, hodnotí na zvyšnom – validačnom) a kombinácie porovnáva podľa priemerného validačného skóre. Víťaza potom pretrénuje na celých dátach (`best_estimator_`). Žiadnu testovaciu množinu si neoddeľuje – tú musíme odložiť sami ešte pred ladením."
+  },
+  {
+    "id": "t4-q22",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o objekte `gs` po vykonaní tohto kódu sú pravdivé?",
+    "code": "lr = LogisticRegression(class_weight='balanced', solver='liblinear')\nparam_grid = {'l1_ratio': [0, 1],\n              'C': [0.001, 0.01, 0.1, 1, 10, 100]}\n\ngs = GridSearchCV(lr, param_grid, cv=5)\ngs.fit(X, y)",
+    "options": [
+      { "text": "`gs.best_params_` je slovník najlepšej kombinácie, napr. `{'C': 1, 'l1_ratio': 0}`.", "correct": true },
+      { "text": "`gs.best_score_` je priemerné skóre najlepšej kombinácie z validačných foldov.", "correct": true },
+      { "text": "`gs.cv_results_['mean_test_score']` obsahuje 12 hodnôt – jednu pre každú kombináciu.", "correct": true },
+      { "text": "`gs.predict(X_new)` predikuje modelom s najlepšou kombináciou parametrov.", "correct": true },
+      { "text": "`gs.best_estimator_` je model natrénovaný iba na poslednom folde.", "correct": false },
+      { "text": "`gs.best_score_` je presnosť na samostatnej testovacej množine.", "correct": false }
+    ],
+    "explanation": "Mriežka má 2 × 6 = 12 kombinácií, každá sa hodnotí 5-násobnou CV. `best_params_` a `best_score_` opisujú víťaza: slovník parametrov a jeho priemerné validačné skóre. `cv_results_` je slovník polí s jedným prvkom na kombináciu (`'params'`, `'mean_test_score'`, …). `best_estimator_` je víťaz pretrénovaný na všetkých dátach z `fit` a práve ten používajú `gs.predict` a `gs.score`. Testovaciu množinu `GridSearchCV` nepozná."
+  },
+  {
+    "id": "t4-q23",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Čo platí o hyper-parametroch logistickej regresie z cvičenia s `GridSearchCV`?",
+    "options": [
+      { "text": "`C` je prevrátená hodnota sily regularizácie – malé `C` znamená silnú regularizáciu.", "correct": true },
+      { "text": "`l1_ratio=0` znamená L2 regularizáciu, `l1_ratio=1` L1 regularizáciu.", "correct": true },
+      { "text": "`solver='liblinear'` podporuje L1 aj L2 regularizáciu.", "correct": true },
+      { "text": "Veľké `C` znamená silnú regularizáciu.", "correct": false },
+      { "text": "Hodnotu `C` si model nájde sám pri volaní `fit`.", "correct": false }
+    ],
+    "explanation": "Podľa zadania úlohy: `C` je inverzia sily regularizácie (čím menšie, tým silnejšia), `l1_ratio` volí jej typ (0 → L2, 1 → L1) a `liblinear` zvláda obe. Na cvičení pri `C = 0.001` s L1 klesla presnosť na 0.5 – príliš silná regularizácia vynulovala všetky váhy. `C` je hyper-parameter: z dát sa neučí, preto sa ladí grid searchom."
+  },
+  {
+    "id": "t4-q24",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Ktorý kľúč v `param_grid` pre `GridSearchCV` nastavuje parameter `gamma` klasifikátora SVC v tejto pipeline?",
+    "code": "pipe_svc = Pipeline([('scl', StandardScaler()),\n                     ('clf', SVC())])",
+    "options": [
+      { "text": "`'clf__gamma'`", "correct": true },
+      { "text": "`'clf_gamma'`", "correct": false },
+      { "text": "`'gamma'`", "correct": false },
+      { "text": "`'SVC__gamma'`", "correct": false },
+      { "text": "`'clf.gamma'`", "correct": false }
+    ],
+    "explanation": "Parametre krokov pipeline sa pomenúvajú `<názov kroku>__<parameter>` s dvoma podčiarkovníkmi. Krok s SVC sa volá `'clf'`, preto `'clf__gamma'`. Rozhoduje názov kroku zadaný v pipeline, nie názov triedy (`SVC`). Samotné `'gamma'` pipeline nepozná a jeden podčiarkovník či bodka nie sú platný zápis."
+  },
+  {
+    "id": "t4-q25",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Koľko kombinácií parametrov vyhodnotí `GridSearchCV` s touto mriežkou a koľko trénovaní prebehne počas krížovej validácie pri `cv=5` (bez záverečného pretrénovania víťaza)?",
+    "code": "param_range = [0.001, 0.01, 0.1, 1, 10, 100]\nparam_grid = [{'clf__kernel': ['linear'], 'clf__C': param_range},\n              {'clf__kernel': ['rbf'], 'clf__C': param_range, 'clf__gamma': param_range},\n              {'clf__kernel': ['poly'], 'clf__C': param_range, 'clf__gamma': param_range,\n               'clf__degree': [1, 2, 3]}]",
+    "options": [
+      { "text": "150 kombinácií, 750 trénovaní", "correct": true },
+      { "text": "324 kombinácií, 1620 trénovaní", "correct": false },
+      { "text": "150 kombinácií, 150 trénovaní", "correct": false },
+      { "text": "18 kombinácií, 90 trénovaní", "correct": false }
+    ],
+    "explanation": "Zoznam slovníkov znamená, že každý slovník je samostatná mriežka: linear 6, rbf 6 × 6 = 36, poly 6 × 6 × 3 = 108, spolu 150 kombinácií. Každá sa hodnotí na 5 foldoch → 750 trénovaní (plus jedno pretrénovanie víťaza). 324 by mala jedna spoločná mriežka 3 × 6 × 6 × 3, v ktorej by väčšina kombinácií nedávala zmysel (`gamma` pri lineárnom kerneli, `degree` mimo polynomiálneho)."
+  },
+  {
+    "id": "t4-q26",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Kód z cvičenia vypísal `Best score: 0.8495` a `Test accuracy: 0.7582`. Ktoré tvrdenia sú správne?",
+    "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)\n\ngs = GridSearchCV(estimator=pipe_svc, param_grid=param_grid, scoring='accuracy', cv=5, n_jobs=-1)\ngs = gs.fit(X_train, y_train)\n\nprint('Best score: ', gs.best_score_)\nprint('Test accuracy: ', gs.score(X_test, y_test))",
+    "options": [
+      { "text": "`gs.best_score_` je priemerná presnosť najlepšej kombinácie na validačných foldoch trénovacej množiny.", "correct": true },
+      { "text": "`gs.score(X_test, y_test)` vyhodnotí najlepší model, pretrénovaný na celej trénovacej množine, na odloženej testovacej množine.", "correct": true },
+      { "text": "Obe čísla by mali byť rovnaké; rozdiel znamená chybu v kóde.", "correct": false },
+      { "text": "Testovacia množina sa použila pri výbere najlepších parametrov.", "correct": false }
+    ],
+    "explanation": "`fit` dostal iba trénovaciu množinu, takže celé ladenie (5-násobná CV každej kombinácie) prebehlo na nej a `best_score_` je priemer z jej validačných foldov. Testovacia množina sa použila jediný raz – v `gs.score`, ktorý volá `best_estimator_`. Čísla sa zhodovať nemusia: `best_score_` je maximum zo 150 kombinácií, teda mierne optimistický odhad, a test má len 91 vzoriek."
+  },
+  {
+    "id": "t4-q27",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Prečo má byť scaler pri krížovej validácii (aj v `GridSearchCV`) súčasťou pipeline, a nie aplikovaný na všetky dáta vopred?",
+    "options": [
+      { "text": "V každom kole sa scaler naučí priemer a odchýlku iba z trénovacích foldov; škálovanie všetkých dát vopred by do trénovania prenieslo informáciu z validačných foldov.", "correct": true },
+      { "text": "Pipeline škáluje dáta výrazne rýchlejšie než samostatný scaler.", "correct": false },
+      { "text": "`GridSearchCV` nevie pracovať s dátami, ktoré boli preškálované vopred.", "correct": false },
+      { "text": "Scaler použitý mimo pipeline nemá metódu `transform`.", "correct": false }
+    ],
+    "explanation": "`GridSearchCV` (aj `cross_val_score`) trénuje v každom folde celú pipeline nanovo, takže scaler vidí iba trénovacie foldy a validačný fold sa transformuje naučenými parametrami. Keby sme všetky dáta preškálovali pred CV, priemer a odchýlka by obsahovali aj validačné vzorky – únik informácie. S rýchlosťou to nesúvisí a `GridSearchCV` vopred škálované dáta technicky spracuje, len je to metodicky nesprávne."
+  },
+  {
+    "id": "t4-q28",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Dáta sú rozdelené na `X_train`, `y_train` a hold-out množinu `X_test`, `y_test`. Ktorý výraz patrí na miesto `____`, aby bola `score` presnosť na validačnom folde?",
+    "code": "skf = StratifiedKFold(n_splits=5)\nscores = []\nfor train, test in skf.split(X_train, y_train):\n    pipe_svc.fit(X_train[train], y_train[train])\n    score = ____\n    scores.append(score)",
+    "options": [
+      { "text": "`pipe_svc.score(X_train[test], y_train[test])`", "correct": true },
+      { "text": "`pipe_svc.score(X_test, y_test)`", "correct": false },
+      { "text": "`pipe_svc.score(X_train[train], y_train[train])`", "correct": false },
+      { "text": "`pipe_svc.score(X[test], y[test])`", "correct": false }
+    ],
+    "explanation": "`skf.split(X_train, y_train)` vracia indexy do trénovacej množiny: `train` sú trénovacie foldy, `test` validačný fold. Validačné skóre je teda `pipe_svc.score(X_train[test], y_train[test])`. `X_test, y_test` je hold-out množina (na cvičení sa hodnotila zvlášť ako `ho_score`), `X_train[train]` sú dáta, na ktorých sa práve trénovalo, a indexy `test` nepatria do pôvodného `X` – vybrali by iné vzorky."
+  },
+  {
+    "id": "t4-q29",
+    "topicId": "t4-validacia-ladenie",
+    "week": 6,
+    "type": "practical",
+    "source": "moodle",
+    "text": "`pipe_svc` je pipeline so scalerom a klasifikátorom SVC, `y_train` obsahuje celočíselné označenia tried. Ktoré tvrdenia sú pravdivé?",
+    "code": "skf = StratifiedKFold(n_splits=5)\nfor train, test in skf.split(X_train, y_train):\n    print(np.bincount(y_train[train]))\n\nscores = cross_val_score(pipe_svc, X_train, y_train, cv=5)",
+    "options": [
+      { "text": "`skf.split` potrebuje aj `y_train`, aby v každom folde zachoval pomer tried.", "correct": true },
+      { "text": "`np.bincount(y_train[train])` vypíše počet trénovacích vzoriek každej triedy v danom kole.", "correct": true },
+      { "text": "`cross_val_score` s `cv=5` použije pre klasifikátor stratifikované foldy, takže dá rovnaké skóre ako ručný cyklus cez `skf`.", "correct": true },
+      { "text": "`cross_val_score` s `cv=5` vždy delí dáta obyčajným `KFold` s náhodným premiešaním.", "correct": false },
+      { "text": "Volanie `skf.split(X_train)` bez `y_train` by dalo rovnaké foldy.", "correct": false }
+    ],
+    "explanation": "Stratifikácia sa robí podľa tried, preto `split(X_train, y_train)`; bez `y` volanie skončí chybou. `np.bincount` spočíta výskyty celých čísel 0, 1, 2, … – na cvičení `[21 0 1362 1825 684]` (trieda 1 v dátach nie je). Pre klasifikátor znamená celočíselné `cv=5` v `cross_val_score` práve `StratifiedKFold(n_splits=5)` bez premiešania – na cvičení vyšli rovnaké čísla ako v ručnom cykle (0.658 ± 0.008)."
+  },
+  {
+    "id": "t4-q30",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "lecture",
+    "text": "`pipe_svc` je pipeline so scalerom a SVC, `param_grid` mriežka jej parametrov. Ktoré tvrdenia o tomto kóde sú pravdivé?",
+    "code": "gs = GridSearchCV(estimator=pipe_svc, param_grid=param_grid,\n                  scoring='accuracy', cv=2)\n\nscores = cross_val_score(gs, X, y, scoring='accuracy', cv=5)\nprint('CV accuracy: %.3f +/- %.3f' % (np.mean(scores), np.std(scores)))",
+    "options": [
+      { "text": "Ide o vnorenú krížovú validáciu (5 × 2).", "correct": true },
+      { "text": "Vonkajšia slučka (`cross_val_score`, 5 foldov) odhaduje výkonnosť.", "correct": true },
+      { "text": "Vnútorná slučka (`GridSearchCV`, 2 foldy) vyberá hyper-parametre na trénovacej časti vonkajšieho foldu.", "correct": true },
+      { "text": "`scores` obsahuje 10 hodnôt.", "correct": false },
+      { "text": "Hyper-parametre sa vyberajú podľa testovacieho foldu vonkajšej slučky.", "correct": false }
+    ],
+    "explanation": "Krížová validácia + ladenie parametrov prehľadávaním mriežky = vnorená krížová validácia. `cross_val_score` rozdelí dáta na 5 vonkajších foldov; v každom kole dostane `gs` iba trénovaciu časť a na nej si vnútornou 2-násobnou CV vyberie parametre. Víťaz sa potom ohodnotí na vonkajšom testovacom folde, ktorý ladenie nevidel. Výsledkom je 5 skóre (jedno na vonkajší fold), z ktorých sa počíta priemer ± odchýlka."
+  },
+  {
+    "id": "t4-q31",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Binárny klasifikátor a jeho matica zámien. Ktoré tvrdenia sú správne?",
+    "options": [
+      { "text": "FP (false positive) je negatívna vzorka označená ako pozitívna.", "correct": true },
+      { "text": "FN (false negative) je pozitívna vzorka označená ako negatívna.", "correct": true },
+      { "text": "Presnosť (accuracy) = (TP + TN) / počet všetkých vzoriek.", "correct": true },
+      { "text": "Chyba (error) = 1 − accuracy.", "correct": true },
+      { "text": "TP (true positive) je negatívna vzorka správne označená ako negatívna.", "correct": false }
+    ],
+    "explanation": "Prvé slovo hovorí, či je predikcia správna (true/false), druhé, čo model predikoval (positive/negative). FP: model povedal „pozitívna“, ale nesprávne; FN: povedal „negatívna“, ale nesprávne. Správne označená negatívna vzorka je TN, nie TP. Accuracy je podiel správnych predikcií (TP + TN) zo všetkých a chyba je jej doplnok do 1: (FP + FN) / všetky."
+  },
+  {
+    "id": "t4-q32",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Ktoré vzorce metrík sú správne?",
+    "options": [
+      { "text": "precision = TP / (TP + FP)", "correct": true },
+      { "text": "recall = TP / (TP + FN)", "correct": true },
+      { "text": "FPR (pomer nesprávnych pozitívnych) = FP / (FP + TN)", "correct": true },
+      { "text": "precision = TP / (TP + FN)", "correct": false },
+      { "text": "F1 = (precision + recall) / 2", "correct": false }
+    ],
+    "explanation": "Precision delí počtom **predikovaných** pozitívnych (TP + FP), recall – to isté ako TPR – počtom **skutočných** pozitívnych (TP + FN). FPR je podiel skutočných negatívnych, ktoré model označil za pozitívne. F1 nie je aritmetický, ale harmonický priemer: F1 = 2 · precision · recall / (precision + recall)."
+  },
+  {
+    "id": "t4-q33",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "practical",
+    "source": "lecture",
+    "text": "Trieda 1 je pozitívna. Ktoré tvrdenia o predikciách v kóde sú pravdivé?",
+    "code": "from sklearn.metrics import confusion_matrix\n\ny_true = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]\ny_pred = [1, 1, 1, 0, 1, 1, 0, 0, 0, 0]\nconfmat = confusion_matrix(y_true, y_pred)\nprint(confmat)",
+    "options": [
+      { "text": "Kód vypíše maticu s riadkami `[4 2]` a `[1 3]`.", "correct": true },
+      { "text": "Accuracy je 0.7.", "correct": true },
+      { "text": "Precision je 0.6.", "correct": true },
+      { "text": "Recall je 0.75.", "correct": true },
+      { "text": "Precision je 0.75.", "correct": false },
+      { "text": "Počet TP je 4.", "correct": false }
+    ],
+    "explanation": "`confusion_matrix` má v riadkoch skutočné a v stĺpcoch predikované triedy: `[[TN FP] [FN TP]]`. Zo 6 negatívnych sú 4 správne (TN = 4) a 2 označené ako pozitívne (FP = 2); zo 4 pozitívnych sú 3 nájdené (TP = 3) a 1 nie (FN = 1). Accuracy = (3 + 4)/10 = 0.7, precision = 3/(3 + 2) = 0.6, recall = 3/(3 + 1) = 0.75. Číslo 4 v ľavom hornom rohu je TN, nie TP."
+  },
+  {
+    "id": "t4-q34",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Dataset má 95 % negatívnych a 5 % pozitívnych vzoriek. Model označí každú vzorku ako negatívnu. Čo platí?",
+    "options": [
+      { "text": "Accuracy modelu je 0.95.", "correct": true },
+      { "text": "Recall pozitívnej triedy je 0.", "correct": true },
+      { "text": "Pri takto nevyvážených triedach sú vhodnejšie metriky ako precision, recall, F1 alebo TPR a FPR.", "correct": true },
+      { "text": "Accuracy tu spoľahlivo vystihuje kvalitu modelu.", "correct": false },
+      { "text": "Recall pozitívnej triedy je 0.95.", "correct": false }
+    ],
+    "explanation": "Všetkých 95 % negatívnych vzoriek je označených správne, takže accuracy = 0.95, hoci model nenašiel ani jednu pozitívnu vzorku: TP = 0, teda recall = 0/(0 + FN) = 0. Accuracy je pri nevyvážených triedach zavádzajúca, preto prednáška uvádza metriky vhodné pre nevyvážené triedy – TPR, FPR, precision, recall, F1."
+  },
+  {
+    "id": "t4-q35",
+    "topicId": "t4-validacia-ladenie",
+    "week": 5,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Čo platí o ROC krivke (receiver operator characteristic)?",
+    "options": [
+      { "text": "Zobrazuje pomer správnych pozitívnych (TPR) v závislosti od pomeru nesprávnych pozitívnych (FPR).", "correct": true },
+      { "text": "Diagonála grafu zodpovedá náhodnému hádaniu.", "correct": true },
+      { "text": "Dokonalý klasifikátor leží v pravom dolnom rohu grafu.", "correct": false },
+      { "text": "Na osiach sú precision a recall.", "correct": false }
+    ],
+    "explanation": "ROC krivka vzniká posúvaním rozhodovacieho prahu klasifikátora: na osi x je FPR, na osi y TPR. Klasifikátor, ktorý háda náhodne, leží na diagonále; dokonalý je v ľavom hornom rohu (TPR = 1, FPR = 0). Pravý dolný roh by znamenal samé chyby. Krivka sa zhŕňa plochou pod ňou (AUC)."
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "t1-q01",
+    "topicId": "t1-zoznamy",
+    "week": 1,
+    "type": "theory",
+    "source": "moodle",
+    "text": "Ktoré tvrdenia o zozname (`list`) v Pythone sú pravdivé?",
+    "options": [
+      { "text": "Zoznam je meniteľný.", "correct": true },
+      { "text": "Prvý prvok má index 1.", "correct": false },
+      { "text": "`xs[-1]` je posledný prvok.", "correct": true },
+      { "text": "Zoznam môže obsahovať iba čísla.", "correct": false }
+    ],
+    "explanation": "Zoznam je meniteľný a indexuje sa od nuly; záporný index počíta od konca. Typ prvkov nie je obmedzený."
+  },
+  {
+    "id": "t1-q02",
+    "topicId": "t1-zoznamy",
+    "week": 1,
+    "type": "theory",
+    "source": "lecture",
+    "text": "Akú zložitosť má `xs.insert(0, x)`?",
+    "options": [
+      { "text": "O(1)", "correct": false },
+      { "text": "O(n)", "correct": true },
+      { "text": "O(log n)", "correct": false },
+      { "text": "O(n²)", "correct": false }
+    ],
+    "explanation": "Vloženie na začiatok posunie všetky prvky, preto O(n). `append` je O(1)."
+  },
+  {
+    "id": "t1-q03",
+    "topicId": "t1-zoznamy",
+    "week": null,
+    "type": "theory",
+    "source": "generated",
+    "text": "Čo platí pre `range(5)`?",
+    "options": [
+      { "text": "Generuje čísla 0 až 4.", "correct": true },
+      { "text": "Generuje čísla 1 až 5.", "correct": false },
+      { "text": "Obsahuje 5 hodnôt.", "correct": true },
+      { "text": "Posledná hodnota je 5.", "correct": false },
+      { "text": "Prvá hodnota je 0.", "correct": true }
+    ],
+    "explanation": "`range(n)` dáva n hodnôt od 0 po n − 1."
+  },
+  {
+    "id": "t1-q04",
+    "topicId": "t1-zoznamy",
+    "week": 1,
+    "type": "practical",
+    "source": "moodle",
+    "text": "Čo vypíše tento kód?",
+    "code": "xs = [1, 2, 3, 4]\nprint(xs[1:3])",
+    "options": [
+      { "text": "`[2, 3]`", "correct": true },
+      { "text": "`[1, 2, 3]`", "correct": false },
+      { "text": "`[2, 3, 4]`", "correct": false },
+      { "text": "`[1, 2]`", "correct": false }
+    ],
+    "explanation": "Rez začína indexom 1 a horná hranica 3 sa nezapočíta: `[2, 3]`."
+  },
+  {
+    "id": "t1-q05",
+    "topicId": "t1-zoznamy",
+    "week": 1,
+    "type": "practical",
+    "source": "teams",
+    "text": "Ktorým riadkom nahradíš `???`, aby funkcia vrátila súčet párnych čísel?",
+    "code": "def sum_even(numbers):\n    total = 0\n    for x in numbers:\n        ???\n            total += x\n    return total",
+    "options": [
+      { "text": "`if x % 2 == 0:`", "correct": true },
+      { "text": "`if x % 2 == 1:`", "correct": false },
+      { "text": "`if not x % 2:`", "correct": true },
+      { "text": "`if x / 2 == 0:`", "correct": false }
+    ],
+    "explanation": "Párne číslo má zvyšok po delení dvoma nulový; `not x % 2` je to isté, lebo `0` je nepravda. Test s < a > sa nesmie pokaziť: `a < b && c > d`."
+  }
+]

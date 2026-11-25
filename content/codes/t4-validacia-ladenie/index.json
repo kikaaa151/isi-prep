@@ -1,0 +1,112 @@
+[
+  {
+    "id": "w05-kfold-split",
+    "title": "K-fold: rozdelenie dát na foldy",
+    "week": 5,
+    "file": "w05-kfold-split.py",
+    "source": "moodle/w05/tasks/ex_01_showcase.py",
+    "task": "Vygeneruj syntetický regresný dataset s `N = 1000` vzorkami (`make_regression(N, random_state=5)`). Vytvor `KFold` s 10 foldmi, s premiešaním a `random_state=5` (premenná `kfold`). V cykle cez `kfold.split(X)` vypíš pre každý fold jeho poradie, počet trénovacích a testovacích vzoriek a prvých 5 testovacích indexov (formátovací reťazec `output_string`).",
+    "explanation": "- `KFold(n_splits=10, shuffle=True, random_state=5)` – 10 foldov; `shuffle=True` vzorky pred delením premieša (dôležité, keď sú dáta zoradené), `random_state` robí premiešanie opakovateľným.\n- `kfold.split(X)` nevracia dáta, ale **indexy**: pri každej iterácii dvojicu polí `(train, test)`. Dáta foldu sa vyberú ako `X[train]`, `X[test]`.\n- `enumerate` pridá poradové číslo foldu, preto `for i, (train, test) in ...` so zátvorkami okolo dvojice.\n- Pri 1000 vzorkách a 10 foldoch má každý fold 900 trénovacích a 100 testovacích vzoriek; každá vzorka je v testovacej časti **práve raz**.\n- Bez `shuffle` sú testovacie foldy súvislé bloky (0–99, 100–199, …).\n- Pre klasifikáciu sa používa `StratifiedKFold`, ktorý v každom folde zachová pomer tried.",
+    "expectedOutput": "Fold: 0, N_train: 900, N_test: 100, first test indices: [ 3 11 12 23 28]\nFold: 1, N_train: 900, N_test: 100, first test indices: [ 35  57  59  97 104]\n... (spolu 10 riadkov)",
+    "tags": ["KFold", "cross-validation", "split", "shuffle"]
+  },
+  {
+    "id": "w05-cross-val-score",
+    "title": "cross_val_score: 5-fold krížová validácia regresora",
+    "week": 5,
+    "file": "w05-cross-val-score.py",
+    "source": "moodle/w05/tasks/ex_02_task.py",
+    "task": "Vygeneruj regresný dataset (`datasets.make_regression(10000, 10, random_state=5)`). Vytvor regresný model `rf = ensemble.RandomForestRegressor(max_features='log2')` a vyhodnoť ho 5-násobnou krížovou validáciou cez `model_selection.cross_val_score` (`scores`). Vypíš skóre každého foldu a priemerné skóre. Skóre foldov nakresli ako stĺpcový graf s priemerom ako vodorovnou čiarou. Bonus: rovnako vyhodnoť `linear_model.LinearRegression` (`lin`, `lin_scores`) a oba modely porovnaj boxplotom.",
+    "explanation": "- `cross_val_score(rf, X, y, cv=5)` spraví celý cyklus z predošlej úlohy: 5-krát natrénuje **kópiu** modelu na 4 foldoch, vyhodnotí ju na piatom a vráti pole 5 skóre.\n- Model sa vopred netrénuje (`fit` nevoláme) – funkcia si ho trénuje sama.\n- Pre regresory je predvolené skóre **R²** (1 = dokonalá predikcia), pre klasifikátory accuracy.\n- Výsledok sa zhrnie priemerom (`np.mean(scores)`), prípadne aj smerodajnou odchýlkou.\n- Náhodný les nemá nastavený `random_state`, takže čísla sa medzi spusteniami mierne líšia (R² ≈ 0.92).\n- Bonus: lineárna regresia dosiahne R² = 1.0, lebo `make_regression` generuje `y` ako **lineárnu kombináciu** atribútov – jednoduchší model tu presne zodpovedá dátam, les ich iba aproximuje.",
+    "expectedOutput": "[0.91152961 0.9105516  0.92230757 0.91912545 0.91721463]\nMean score: 0.9161457728853317\nLinear regression: 1.0\n(čísla lesa sa pri každom spustení mierne líšia)",
+    "tags": ["cross_val_score", "RandomForestRegressor", "R2", "cross-validation"]
+  },
+  {
+    "id": "w05-manual-grid",
+    "title": "Ručné prehľadávanie mriežky hyperparametrov",
+    "week": 5,
+    "file": "w05-manual-grid.py",
+    "source": "moodle/w05/tasks/ex_03_showcase.py",
+    "task": "Vygeneruj klasifikačný dataset (`datasets.make_classification(n_samples=2000, n_features=10, random_state=5)`). Definuj mriežku: `criteria = ['gini', 'entropy']`, `max_features = ['sqrt', 5, None]` a všetky kombinácie vytvor cez `itertools.product` (`parameter_space`). Dáta rozdeľ náhodnou maskou True/False (`rng = np.random.default_rng(5)`, `train_set = rng.choice(...)`). Pre každú kombináciu natrénuj `DecisionTreeClassifier` (`dt`, `random_state=5`) na trénovacej časti a jeho presnosť na zvyšku ulož do slovníka `accuracies` s kľúčom `(criterion, max_feature)`. Slovník vypíš a presnosti zobraz ako heatmapu (riadky = max_features, stĺpce = criterion).",
+    "explanation": "- **Hyperparametre** sa z dát neučia, musíme ich zvoliť. Grid search vyskúša každú kombináciu zvolených hodnôt.\n- `it.product(criteria, max_features)` vytvorí karteziánsky súčin – 2 × 3 = 6 dvojíc. `'sqrt'` znamená √10 ≈ 3 atribúty na delenie, `5` päť atribútov, `None` všetkých 10.\n- `rng.choice([True, False], size=len(y))` je náhodná maska: `X[train_set]` sú trénovacie vzorky (asi polovica), `X[~train_set]` testovacie.\n- V cykle sa pre každú dvojicu vytvorí **nový** strom, natrénuje sa a vyhodnotí; `(dt.predict(...) == y[...]).mean()` je podiel správnych predikcií, teda accuracy.\n- Slovník s kľúčom-dvojicou umožní potom ľahko poskladať `plot_array` pre `matshow`.\n- Najlepšia kombinácia je tu `('entropy', 'sqrt')`, ale rozdiely sú malé a pri inom rozdelení dát vyhrá iná kombinácia – jediné rozdelenie na výber hyperparametrov nestačí, preto krížová validácia.",
+    "expectedOutput": "{('gini', 'sqrt'): 0.944, ('gini', 5): 0.947, ('gini', None): 0.946, ('entropy', 'sqrt'): 0.953, ('entropy', 5): 0.948, ('entropy', None): 0.932} (zaokrúhlené) a heatmapa",
+    "tags": ["grid search", "itertools.product", "hyperparametre", "DecisionTreeClassifier"]
+  },
+  {
+    "id": "w05-grid-search",
+    "title": "Grid search vlastnými rukami: hold-out a krížová validácia",
+    "week": 5,
+    "file": "w05-grid-search.py",
+    "source": "moodle/w05/tasks/ex_04_task.py",
+    "task": "Vygeneruj dataset (`datasets.make_classification(n_samples=2000, n_features=10, random_state=59)`). Navrhni mriežku pre `DecisionTreeClassifier`: `criteria = ['gini', 'entropy']`, `max_features = ['sqrt', 5, None]`. Rozdeľ dáta cez `train_test_split` (`test_size=0.25`). Cez `itertools.product` prejdi všetky kombinácie, natrénuj strom (`dt`) a jeho testovaciu presnosť (`accuracy_score`) ulož do slovníka `accuracies`. Aby boli výsledky opakovateľné, použi pri rozdelení aj pri strome `random_state=5`. Bonus: každú kombináciu vyhodnoť aj cez `cross_val_score(cv=5)` iba na trénovacej množine (`cv_scores`). Vypíš oba slovníky a najlepšiu kombináciu podľa každého z nich; testovacie presnosti nakresli cez `plt.barh`.",
+    "explanation": "- Postup je ten istý ako v ukážke, len s riadnym `train_test_split` a `accuracy_score(y_test, dt.predict(X_test))`.\n- `random_state=5` pri rozdelení aj pri strome zadanie nevyžaduje – je tu len preto, aby boli výsledky opakovateľné (strom s `max_features='sqrt'` vyberá atribúty náhodne).\n- `max(accuracies, key=accuracies.get)` vráti **kľúč** s najväčšou hodnotou, teda najlepšiu dvojicu parametrov.\n- Bonus: `cross_val_score(dt, X_train, y_train, cv=5).mean()` hodnotí kombináciu priemerom z 5 foldov **iba z trénovacích dát** – testovacia množina sa na výber nepoužije a ostane na záverečné overenie.\n- Výsledok ukazuje, prečo na tom záleží: podľa jediného testovacieho rozdelenia vyhrá `('gini', None)` (0.966), podľa krížovej validácie `('entropy', 5)` (0.943). Výber podľa testovacej množiny je navyše optimistický – testovacie dáta sa nepriamo stali súčasťou ladenia.",
+    "expectedOutput": "{('gini', 'sqrt'): 0.942, ('gini', 5): 0.938, ('gini', None): 0.966, ('entropy', 'sqrt'): 0.928, ('entropy', 5): 0.936, ('entropy', None): 0.934}\nBest combination (test set): ('gini', None)\n{... ('entropy', 5): 0.9433 ...}\nBest combination (CV): ('entropy', 5)",
+    "tags": ["grid search", "itertools.product", "train_test_split", "accuracy_score", "cross_val_score"]
+  },
+  {
+    "id": "w05-gridsearchcv",
+    "title": "GridSearchCV: ladenie logistickej regresie",
+    "week": 5,
+    "file": "w05-gridsearchcv.py",
+    "source": "moodle/w05/tasks/ex_05_task.py",
+    "task": "Vygeneruj dataset (`make_classification(1000, n_features=5, random_state=5)`) a model `lr = LogisticRegression(class_weight='balanced', solver='liblinear')`. Definuj mriežku ako slovník `param_grid`: `'l1_ratio': [0, 1]` a `'C': [0.001, 0.01, 0.1, 1, 10, 100]`. Najlepšie parametre nájdi cez `GridSearchCV` s `cv=5` (`gs`, `fit(X, y)`). Vypíš `best_params_` a `best_score_` a potom priemerné testovacie skóre každej kombinácie z `cv_results_` (`'params'`, `'mean_test_score'`).",
+    "explanation": "- `GridSearchCV` spojí grid search s krížovou validáciou: prejde všetky kombinácie mriežky, každú vyhodnotí 5-násobnou CV a víťaza nakoniec **pretrénuje na všetkých dátach** (`best_estimator_`).\n- Mriežka je slovník *názov parametra → zoznam hodnôt*; kombinácií je 2 × 6 = 12, trénovaní 12 × 5 = 60 a jedno navyše na záverečné pretrénovanie.\n- `C` je **prevrátená hodnota** sily regularizácie (malé `C` = silná regularizácia); `l1_ratio` určuje typ: 0 = L2, 1 = L1. `solver='liblinear'` podporuje oba.\n- `gs.best_params_` – slovník víťaznej kombinácie, `gs.best_score_` – jej priemerné CV skóre (nie skóre na testovacích dátach).\n- `gs.cv_results_` je slovník polí; `zip` spojí `'params'` s `'mean_test_score'`.\n- Vo výsledkoch vidno, že pri `C=0.001` s L1 padne presnosť na 0.5 – silná L1 regularizácia vynuluje všetky váhy a model iba háda.",
+    "expectedOutput": "{'C': 1, 'l1_ratio': 0}\n0.9120000000000001\n{'C': 0.001, 'l1_ratio': 0} 0.896\n{'C': 0.001, 'l1_ratio': 1} 0.501\n... (12 riadkov)",
+    "tags": ["GridSearchCV", "param_grid", "best_params_", "best_score_", "cv_results_", "LogisticRegression"]
+  },
+  {
+    "id": "w05-gridsearchcv-results",
+    "title": "GridSearchCV: záverečný test a graf výsledkov",
+    "week": 5,
+    "file": "w05-gridsearchcv-results.py",
+    "source": "moodle/w05/tasks_notebooks/cv_05_ex_05_gridsearchcv_task.ipynb",
+    "task": "Pokračovanie úlohy s `GridSearchCV` (rovnaké dáta, `lr` aj `param_grid`). Bonus: dáta najprv rozdeľ na trénovaciu a testovaciu množinu (v riešení `test_size=0.25`, `random_state=5`), `GridSearchCV(cv=5)` spusti iba na trénovacej a najlepší model vyhodnoť na testovacej (`gs.score(X_test, y_test)`). Potom preveď `cv_results_` na pandas DataFrame (`results`) a nakresli `mean_test_score` v závislosti od `C` zvlášť pre L2 a L1 – logaritmická os x, smerodajná odchýlka ako chybové úsečky.",
+    "explanation": "- Metodicky správny postup: testovacia množina sa odloží **pred** ladením. Mriežka sa prehľadáva iba na trénovacích dátach, test slúži na jediné záverečné overenie. Veľkosť testovacej časti zadanie neurčuje – tu 25 %.\n- `gs.score(X_test, y_test)` použije `best_estimator_`, teda víťazný model pretrénovaný na celej trénovacej množine.\n- `best_score_` (0.919) je priemer z validačných foldov, testovacia presnosť (0.896) je odhad na úplne nových dátach – čísla sa nemusia zhodovať.\n- `pd.DataFrame(gs.cv_results_)` – jeden riadok na kombináciu; stĺpce `param_<názov>` (`param_C`, `param_l1_ratio`), `mean_test_score`, `std_test_score`, `rank_test_score`.\n- Filtrovaním podľa `param_l1_ratio` vzniknú dve krivky; `plt.errorbar(..., yerr=...)` pridá odchýlku medzi foldmi a `plt.xscale('log')` rozloží hodnoty `C` (mocniny 10) rovnomerne.\n- Na grafe: pri malom `C` (silná regularizácia) presnosť klesá, pri L1 až na úroveň hádania; od `C = 1` vyššie sú obe krivky prakticky rovnaké.",
+    "expectedOutput": "{'C': 1, 'l1_ratio': 1} 0.9186666666666667\nTest accuracy: 0.896\na graf s dvoma krivkami (L2, L1)",
+    "tags": ["GridSearchCV", "cv_results_", "train_test_split", "pandas", "errorbar"]
+  },
+  {
+    "id": "w06-gridsearch-pipeline",
+    "title": "GridSearchCV nad pipeline: scaler + SVC, viac kernelov",
+    "week": 6,
+    "file": "w06-gridsearch-pipeline.py",
+    "source": "moodle/w06/tasks/ex_01_task.py",
+    "task": "Načítaj dáta o srdcových chorobách (`np.load('./ex_01_data/X_data.npy', allow_pickle=True)`, rovnako `y_data.npy`). Vytvor pipeline `pipe_svc` so škálovačom (`'scl'`, `StandardScaler()`) a klasifikátorom (`'clf'`, `SVC()`) bez nastavených parametrov. Rozsah parametrov `param_range` nastav na mocniny 10 od 0.001 po 100. Mriežku `param_grid` definuj ako ZOZNAM troch slovníkov, jeden pre každý kernel: `linear` (`clf__C`), `rbf` (`clf__C`, `clf__gamma`), `poly` (`clf__C`, `clf__gamma`, `clf__degree` 1, 2, 3). Rozdeľ dáta (`test_size=0.3`, `random_state=1`), vytvor `GridSearchCV` (`scoring='accuracy'`, `cv=5`, `n_jobs=-1`) a natrénuj ho na trénovacej množine. Vypíš všetky priemerné CV skóre, najlepšie skóre, najlepšie parametre a testovaciu presnosť.",
+    "explanation": "- `Pipeline([('scl', StandardScaler()), ('clf', SVC())])` – zoznam dvojíc *(názov, objekt)*; posledný krok je model, kroky pred ním transformujú dáta.\n- Parametre krokov sa v mriežke volajú `<názov kroku>__<parameter>` s **dvoma podčiarkovníkmi**: `clf__C` je parameter `C` kroku `clf`.\n- **Zoznam slovníkov** = každý slovník sa prehľadáva zvlášť. `gamma` nemá pri lineárnom kerneli zmysel a `degree` používa iba polynomiálny, takže sa neskúšajú nezmyselné kombinácie: 6 + 36 + 108 = **150 kombinácií × 5 foldov = 750 trénovaní** (+ 1 pretrénovanie víťaza).\n- Scaler je **vnútri** pipeline: `GridSearchCV` v každom folde trénuje celú pipeline nanovo, takže priemer a odchýlku sa scaler učí iba z trénovacích foldov – žiadny únik informácie z validačného foldu.\n- `n_jobs=-1` využije všetky jadrá procesora.\n- `gs.best_score_` (0.850) je priemerná CV presnosť víťaza, `gs.score(X_test, y_test)` (0.758) presnosť na odloženej testovacej množine.",
+    "expectedOutput": "All scores:  [0.55182724 0.81638981 ... ] (150 hodnôt)\nBest score:  0.8495016611295683\nBest parameters:  {'clf__C': 1, 'clf__gamma': 0.1, 'clf__kernel': 'rbf'}\nTest accuracy:  0.7582417582417582",
+    "tags": ["GridSearchCV", "Pipeline", "StandardScaler", "SVC", "param_grid", "kernel"]
+  },
+  {
+    "id": "w06-gridsearch-pipeline-results",
+    "title": "GridSearchCV nad pipeline: rozbor výsledkov a význam škálovania",
+    "week": 6,
+    "file": "w06-gridsearch-pipeline-results.py",
+    "source": "moodle/w06/tasks_notebooks/cv_06_ex_01_gridsearch_pipeline_task.ipynb",
+    "task": "Pokračovanie predošlej úlohy (pipeline, mriežka, rozdelenie a `gs` sú rovnaké, v riešení zapísané skrátene). Preveď `gs.cv_results_` na DataFrame `results`, vypíš počet kombinácií a najlepšie priemerné skóre každého kernela (`groupby` podľa `param_clf__kernel`). Nakresli heatmapu kombinácií RBF: riadky = gamma, stĺpce = C (výber `rbf`, tabuľka `heat` cez `pivot_table`, `plt.matshow`). Bonus: vypočítaj 5-násobnú CV presnosť `SVC` s najlepšími parametrami BEZ škálovača (z `gs.best_params_` odstráň predponu `clf__` a odovzdaj ich ako `SVC(**params)`) a porovnaj ju s `gs.best_score_`.",
+    "explanation": "- `pd.DataFrame(gs.cv_results_)` má 150 riadkov – jeden na kombináciu; parametre sú v stĺpcoch `param_clf__kernel`, `param_clf__C`, `param_clf__gamma`.\n- `groupby('param_clf__kernel')['mean_test_score'].max()` – najlepšie skóre každého kernela: linear 0.831, poly 0.831, rbf 0.850.\n- `pivot_table(index=gamma, columns=C, values=mean_test_score)` poskladá z riadkov RBF tabuľku 6 × 6 pre `matshow`. Pri veľkej `gamma` je model veľmi lokálny – pretrénuje sa a CV presnosť padá na ≈ 0.54.\n- Bonus: slovníková komprehencia premenuje `clf__C` → `C` atď., aby parametre sedeli priamo na `SVC`; `**params` ich rozbalí ako pomenované argumenty.\n- Bez škálovania dosiahne ten istý SVC iba ≈ 0.543 oproti 0.850 v pipeline. Atribúty majú veľmi rozdielne mierky (cholesterol ≈ 250, `oldpeak` ≈ 1) a SVC s RBF kernelom pracuje so vzdialenosťami – bez škálovania rozhodujú len atribúty s veľkými číslami.",
+    "expectedOutput": "150\nlinear    0.830565\npoly      0.830565\nrbf       0.849502\nWithout scaling: 0.543, pipeline: 0.850",
+    "tags": ["GridSearchCV", "cv_results_", "pandas", "pivot_table", "škálovanie", "SVC"]
+  },
+  {
+    "id": "w06-stratified-kfold",
+    "title": "Stratifikovaný K-fold ručne vs. hold-out",
+    "week": 6,
+    "file": "w06-stratified-kfold.py",
+    "source": "moodle/w06/tasks/ex_02_task.py",
+    "task": "Načítaj nevyvážené dáta so 4 triedami (`np.load('./ex_02_data/X_data.npy', allow_pickle=True)`, rovnako `y_data.npy`). Vytvor pipeline `pipe_svc` so škálovačom a klasifikátorom `SVC(kernel='rbf', gamma=1, C=5)`. Rozdeľ dáta cez `train_test_split` (20 % test – hold-out, `random_state=4`), natrénuj pipeline na trénovacej množine a vypíš hold-out presnosť. Potom vytvor `StratifiedKFold` s 5 časťami (`skf`) a v cykle cez `skf.split(X_train, y_train)`: natrénuj pipeline na trénovacích foldoch, vyhodnoť ju na validačnom folde (`score`) aj na hold-out množine (`ho_score`), obe skóre ulož do zoznamov `scores` a `holdout_scores` a vypíš počty tried v trénovacích foldoch (`np.bincount`). Na záver vypíš skóre foldov a ich priemer ± smerodajnú odchýlku.",
+    "explanation": "- **Hold-out** = jediné rozdelenie; dá jedno číslo (0.706), ktoré závisí od šťastia pri delení.\n- `StratifiedKFold(n_splits=5)` zachová v každom folde pomer tried celej množiny. `split` preto potrebuje aj `y`: `skf.split(X_train, y_train)`.\n- `split` vracia indexy **do** `X_train`, preto `X_train[train]`, `y_train[train]` a `X_train[test]`, `y_train[test]`.\n- `pipe_svc.fit(...)` pipeline v každom folde natrénuje odznova (scaler aj SVC); `pipe_svc.score(...)` vráti accuracy.\n- `np.bincount(y_train[train])` spočíta vzorky každej triedy: `[21 0 1362 1825 684]` – nula je pri triede 1, ktorá v dátach nie je (triedy sú 0, 2, 3, 4). Vzácna trieda 0 je vďaka stratifikácii zastúpená v každom folde rovnako.\n- Validačné skóre sa medzi foldmi líši (0.647 – 0.674), preto sa uvádza priemer ± odchýlka: 0.658 ± 0.008.\n- Modely z foldov sú trénované na 4/5 trénovacej množiny, preto je ich hold-out presnosť o niečo nižšia než pri modeli natrénovanom na celej trénovacej množine.",
+    "expectedOutput": "Hold-Out Accuracy: 0.7058340180772391\nTrain class samples: [  21    0 1362 1825  684], Acc: 0.674, hold-out acc: 0.687\n... (5 riadkov)\nAccuracy mean: 0.658 +/- 0.008",
+    "tags": ["StratifiedKFold", "Pipeline", "hold-out", "cross-validation", "bincount", "SVC"]
+  },
+  {
+    "id": "w06-stratified-cross-val-score",
+    "title": "cross_val_score vs. ručný cyklus, KFold vs. StratifiedKFold",
+    "week": 6,
+    "file": "w06-stratified-cross-val-score.py",
+    "source": "moodle/w06/tasks/ex_02_task.py",
+    "task": "Druhá časť úlohy so stratifikovaným K-foldom (dáta, `pipe_svc` a rozdelenie sú rovnaké). Tú istú krížovú validáciu sprav jediným volaním `cross_val_score` s `cv=5` na trénovacej množine a vypíš skóre a ich priemer ± odchýlku. Potom vypíš hold-out skóre piatich modelov z foldov (`StratifiedKFold`, cyklus) a ich priemer ± odchýlku. Bonus: pre `KFold(n_splits=5)` a `StratifiedKFold(n_splits=5)` vypíš, koľko vzoriek vzácnej triedy 0 je v každom validačnom folde.",
+    "explanation": "- `cross_val_score(pipe_svc, X_train, y_train, cv=5)` vráti presne tie isté čísla ako ručný cyklus: pre **klasifikátor** znamená `cv=5` `StratifiedKFold(n_splits=5)`.\n- Funkcia trénuje kópie pipeline, pôvodný objekt `pipe_svc` nemení.\n- Hold-out skóre piatich modelov z foldov (≈ 0.674 ± 0.008) ukazujú, ako veľmi výsledok závisí od toho, na ktorých dátach bol model natrénovaný.\n- Bonus: `cv.split(X_train, y_train)` funguje pre oba objekty (`KFold` `y` ignoruje). `np.sum(y_train[test] == 0)` spočíta vzorky triedy 0 vo validačnom folde.\n- `KFold` bez premiešania delí dáta na súvislé bloky – počty vzácnej triedy kolíšu (`[5, 9, 7, 4, 2]`), pri ešte vzácnejšej triede by v niektorom folde nemusela byť vôbec. `StratifiedKFold` ich rozdelí rovnomerne (`[6, 5, 5, 5, 6]`).",
+    "expectedOutput": "cross_val_score results: [0.67351129 0.65570401 0.64748201 0.65775951 0.65673176]\nAccuracy mean: 0.658 +/- 0.008\nAccuracy mean for hold-out: 0.674 +/- 0.008\nKFold [5, 9, 7, 4, 2]\nStratifiedKFold [6, 5, 5, 5, 6]",
+    "tags": ["cross_val_score", "StratifiedKFold", "KFold", "hold-out", "nevyvážené triedy"]
+  }
+]

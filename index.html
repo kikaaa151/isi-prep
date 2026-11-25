@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#233d32">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ISI príprava">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <title>ISI príprava</title>
+  <script src="js/boot.js"></script>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/code.css">
+  <link rel="stylesheet" href="css/studio.css">
+  <link rel="stylesheet" href="css/reading.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">Preskočiť na obsah</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="#/" aria-label="ISI príprava – prehľad">
+        <span class="brand-mark" aria-hidden="true">i<span>.</span></span>
+        <span class="brand-name">ISI príprava<small>Študijný priestor</small></span>
+      </a>
+      <p class="nav-caption">PRÍPRAVA NA ZÁPOČET</p>
+      <nav id="nav" class="site-nav" aria-label="Hlavná navigácia"></nav>
+      <div class="sidebar-foot">
+      <a id="test-chip" class="test-chip" href="#/test" hidden></a>
+      <div class="theme-control"><span>Vzhľad prostredia</span><button id="theme-toggle" class="icon-button" type="button"></button></div>
+      <p class="sidebar-course">Inteligentné systémy<br>v informatike</p>
+      </div>
+    </div>
+  </header>
+  <main id="app" tabindex="-1">
+    <noscript><p class="note note-warn">Aplikácia potrebuje zapnutý JavaScript.</p></noscript>
+  </main>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/views/dashboard.js"></script>
+  <script src="js/views/test.js"></script>
+  <script src="js/views/practice.js"></script>
+  <script src="js/views/theory.js"></script>
+  <script src="js/views/codes.js"></script>
+  <script src="js/views/weeks.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
