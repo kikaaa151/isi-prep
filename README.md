@@ -46,7 +46,7 @@ and bump `CACHE`.
 | Test | Simulation of the test: 10 theory + 5 practical questions spread over the topics, points 6 / 8 (weights 3 : 4, sum exactly 100), countdown with a warning at 5:00 and auto-submit, no way back, survives a reload. Result with breakdowns, full review and "Precvičiť chybné". The last 30 attempts are kept. |
 | Otázky | Practice with immediate feedback; filters topic / week / type / source / state; unseen and recently wrong questions come first. |
 | Teória | Theory per topic with a table of contents, "prečítané" mark, full-text search (ignores diacritics), printable cram sheet "Ťahák". |
-| Kódy | Code exercises in three modes: *Čítať* (reference with key lines), *Doplniť* (type the key lines), *Naspamäť* (write the whole code; line diff against the reference, hints, score; mastered at ≥ 90 % without hints). |
+| Kódy | Code exercises in three modes: *Čítať* (reference with key lines), *Doplniť* (type the key lines), *Naspamäť* (write the whole code; line diff against the reference, hints, score; mastered at ≥ 90 % without hints). The list shows *Kódy z cvičení* by default – the typical exercise codes (`"core": true`), each with a plain step-by-step walkthrough "Jednoducho vysvetlené"; *Všetky* adds lecture codes, homework and helper parts. |
 | Týždne | Weeks 1–10: summary, the week's code exercises and questions. |
 | Nastavenia | Theme (auto / light / dark), export, import and reset of the progress. |
 
@@ -57,7 +57,7 @@ Keyboard: in Test and Otázky `1`–`6` toggle the options and `Enter` confirms.
 ## Content
 
 Everything shown comes from `content\` – the format is defined in [content/README.md](content/README.md)
-(`topics.json`, `theory\<topicId>.md`, `weeks\wNN.md`, `codes\<topicId>\index.json` + `.py`, `questions\*.json`).
+(`topics.json`, `theory\<topicId>.md`, `weeks\wNN.md`, `codes\<topicId>\index.json` + `.py` (+ `.md` walkthrough of core exercises), `questions\*.json`).
 After editing the content rebuild the generated `js\data.js` (never edit it by hand):
 
 ```powershell

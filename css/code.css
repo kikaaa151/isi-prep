@@ -106,3 +106,6 @@
   .score { flex-direction: column; align-items: stretch; gap: 10px; }
   .code, .editor { font-size: 0.84rem; }
 }
+.walkthrough { border-left: 3px solid var(--accent); }
+.walkthrough .prose { font-size: 1.03rem; }
+.walkthrough .prose h3 { margin-top: 1.3em; }

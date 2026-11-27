@@ -1,6 +1,7 @@
 [
   {
     "id": "w02-olivetti-svm",
+    "core": true,
     "title": "Rozpoznávanie tvárí (Olivetti faces) lineárnym SVM",
     "week": 2,
     "file": "w02-olivetti-svm.py",
@@ -18,6 +19,7 @@
   },
   {
     "id": "w02-tree-vs-svm",
+    "core": true,
     "title": "Rozhodovací strom vs. SVM na generovaných dátach",
     "week": 2,
     "file": "w02-tree-vs-svm.py",
@@ -34,6 +36,7 @@
   },
   {
     "id": "w02-tree-hyperparams",
+    "core": true,
     "title": "Ladenie hyperparametrov rozhodovacieho stromu (max_depth a ďalšie)",
     "week": 2,
     "file": "w02-tree-hyperparams.py",
@@ -51,6 +54,7 @@
   },
   {
     "id": "w02-svm-decision-boundary",
+    "core": true,
     "title": "Vizualizácia rozhodovacej hranice SVM",
     "week": 2,
     "file": "w02-svm-decision-boundary.py",
@@ -68,6 +72,7 @@
   },
   {
     "id": "w03-random-forest",
+    "core": true,
     "title": "Náhodný les: klasifikácia a accuracy",
     "week": 3,
     "file": "w03-random-forest.py",
@@ -84,6 +89,7 @@
   },
   {
     "id": "w03-rf-confidence",
+    "core": true,
     "title": "Istota náhodného lesa: predict_proba a presnosť podľa pravdepodobnosti",
     "week": 3,
     "file": "w03-rf-confidence.py",
@@ -100,6 +106,7 @@
   },
   {
     "id": "w03-classifier-challenge",
+    "core": true,
     "title": "Súťaž klasifikátorov na pripravených dátach (.npy)",
     "week": 3,
     "file": "w03-classifier-challenge.py",
@@ -150,6 +157,7 @@
   },
   {
     "id": "w03-svr-evaluation",
+    "core": true,
     "title": "Vyhodnotenie regresie: R² a stredná absolútna chyba",
     "week": 3,
     "file": "w03-svr-evaluation.py",

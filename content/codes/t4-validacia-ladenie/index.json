@@ -1,6 +1,7 @@
 [
   {
     "id": "w05-kfold-split",
+    "core": true,
     "title": "K-fold: rozdelenie dát na foldy",
     "week": 5,
     "file": "w05-kfold-split.py",
@@ -12,6 +13,7 @@
   },
   {
     "id": "w05-cross-val-score",
+    "core": true,
     "title": "cross_val_score: 5-fold krížová validácia regresora",
     "week": 5,
     "file": "w05-cross-val-score.py",
@@ -23,6 +25,7 @@
   },
   {
     "id": "w05-manual-grid",
+    "core": true,
     "title": "Ručné prehľadávanie mriežky hyperparametrov",
     "week": 5,
     "file": "w05-manual-grid.py",
@@ -45,6 +48,7 @@
   },
   {
     "id": "w05-gridsearchcv",
+    "core": true,
     "title": "GridSearchCV: ladenie logistickej regresie",
     "week": 5,
     "file": "w05-gridsearchcv.py",
@@ -100,6 +104,7 @@
   },
   {
     "id": "w06-gridsearch-pipeline",
+    "core": true,
     "title": "GridSearchCV nad pipeline: scaler + SVC, viac kernelov",
     "week": 6,
     "file": "w06-gridsearch-pipeline.py",
@@ -122,6 +127,7 @@
   },
   {
     "id": "w06-stratified-kfold",
+    "core": true,
     "title": "Stratifikovaný K-fold ručne vs. hold-out",
     "week": 6,
     "file": "w06-stratified-kfold.py",

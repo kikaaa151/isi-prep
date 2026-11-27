@@ -1,6 +1,7 @@
 [
   {
     "id": "w01-numpy-test",
+    "core": true,
     "title": "NumPy test: pole 3 × 5, tvar a súčty po osiach",
     "week": 1,
     "file": "w01-numpy-test.py",
@@ -19,6 +20,7 @@
   },
   {
     "id": "w01-matplotlib-digits",
+    "core": true,
     "title": "Matplotlib test: dataset číslic a imshow",
     "week": 1,
     "file": "w01-matplotlib-digits.py",

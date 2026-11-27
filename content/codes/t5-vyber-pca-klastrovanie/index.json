@@ -1,6 +1,7 @@
 [
   {
     "id": "w06-filter-variance-threshold",
+    "core": true,
     "title": "Filter: VarianceThreshold – odstránenie príznakov s nízkym rozptylom",
     "week": 6,
     "file": "w06-filter-variance-threshold.py",
@@ -33,6 +34,7 @@
   },
   {
     "id": "w06-filter-selectkbest",
+    "core": true,
     "title": "Filter s cieľom: SelectKBest (ANOVA F-test)",
     "week": 6,
     "file": "w06-filter-selectkbest.py",
@@ -49,6 +51,7 @@
   },
   {
     "id": "w06-wrapper-rfecv",
+    "core": true,
     "title": "Wrapper: RFECV s lineárnym SVC v pipeline",
     "week": 6,
     "file": "w06-wrapper-rfecv.py",
@@ -66,6 +69,7 @@
   },
   {
     "id": "w06-embedded-rf-importances",
+    "core": true,
     "title": "Embedded: dôležitosti náhodného lesa a SelectFromModel",
     "week": 6,
     "file": "w06-embedded-rf-importances.py",
@@ -99,6 +103,7 @@
   },
   {
     "id": "w06-kmeans-elbow",
+    "core": true,
     "title": "K-means a lakťová metóda na dátach zákazníkov",
     "week": 6,
     "file": "w06-kmeans-elbow.py",
@@ -115,6 +120,7 @@
   },
   {
     "id": "w06-pca-kmeans",
+    "core": true,
     "title": "PCA na 3 komponenty a K-means na redukovaných dátach",
     "week": 6,
     "file": "w06-pca-kmeans.py",

@@ -56,6 +56,8 @@ changed JS files. For UI changes, load the app in a browser and click through th
 The binding format is [content/README.md](content/README.md) – read it before touching content. In short:
 `topics.json` (8 fixed topics t1–t8), `theory\<topicId>.md`, `weeks\w01..w10.md`, `codes\<topicId>\index.json` +
 reference `.py` (key lines marked with a trailing `#!`), `questions\<topicId>.json` and `questions\quizlet.json`.
+Code entries with `"core": true` are the typical exercise codes (the default "Kódy z cvičení" list, 44 of 81); each
+needs a beginner-level walkthrough `codes\<topicId>\<id>.md` ("Jednoducho vysvetlené") – the build fails without it.
 Paths like `D:\SKOLA\ISI\...` in that file are from the original machine – adapt them to the local checkout.
 
 Rules that matter:

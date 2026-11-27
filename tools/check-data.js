@@ -28,6 +28,7 @@ data.codes.forEach((code) => {
   const same = L.diffCode(code.code, code.code, code.keyLines);
   check(same.score === 1 && same.rows.every((row) => row.type === 'ok'), code.id + ': the reference does not match itself');
   check(same.refLines > 0, code.id + ': no code lines');
+  check(!code.core === !code.simpleHtml, code.id + ': a walkthrough belongs to core exercises only');
   check(code.keyLines.every((index) => index >= 0 && index < lines.length && lines[index].trim()), code.id + ': key line out of range or blank');
   check(code.keyLines.length === 0 || same.rows.some((row) => row.isKey), code.id + ': key lines map to no logical line');
   L.fillLines(code.code, code.keyLines).forEach((index) => {

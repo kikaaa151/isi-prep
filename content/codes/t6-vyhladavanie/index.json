@@ -12,6 +12,7 @@
   },
   {
     "id": "w07-state-moves",
+    "core": true,
     "title": "PuzzleState: get_possible_moves a move_tile",
     "week": 7,
     "file": "w07-state-moves.py",
@@ -34,6 +35,7 @@
   },
   {
     "id": "w07-bfs",
+    "core": true,
     "title": "BFS – prehľadávanie do šírky",
     "week": 7,
     "file": "w07-bfs.py",
@@ -45,6 +47,7 @@
   },
   {
     "id": "w07-dfs",
+    "core": true,
     "title": "DFS – prehľadávanie do hĺbky s limitom expanzií",
     "week": 7,
     "file": "w07-dfs.py",
@@ -56,6 +59,7 @@
   },
   {
     "id": "w08-heuristics",
+    "core": true,
     "title": "Heuristiky: misplaced tiles a Manhattan distance",
     "week": 8,
     "file": "w08-heuristics.py",
@@ -67,6 +71,7 @@
   },
   {
     "id": "w08-greedy",
+    "core": true,
     "title": "Greedy best-first search",
     "week": 8,
     "file": "w08-greedy.py",
@@ -78,6 +83,7 @@
   },
   {
     "id": "w08-astar",
+    "core": true,
     "title": "A* search",
     "week": 8,
     "file": "w08-astar.py",

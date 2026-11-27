@@ -14,6 +14,7 @@
       questions: {},          // questionId -> { seen, right, wrong, last, lastAt }
       codes: {},              // codeId -> { attempts, best, bestClean, mastered, last, lastAt, fillAttempts, fillBest }
       drafts: {},             // codeId -> text typed in the from-memory editor
+      codeSet: 'core',        // list of codes: 'core' (typical exercise codes) | 'all'
       attempts: [],           // finished tests, newest first, at most MAX_ATTEMPTS
       activeTest: null,       // the test in progress
       testConfig: null,       // last used start-screen settings
@@ -32,6 +33,7 @@
     const state = Object.assign(base, raw);
     state.version = VERSION;
     if (['auto', 'light', 'dark'].indexOf(state.theme) < 0) state.theme = 'auto';
+    if (state.codeSet !== 'all') state.codeSet = 'core';
     ['theoryRead', 'questions', 'codes', 'drafts'].forEach(function (name) {
       if (!isObject(state[name])) state[name] = {};
     });

@@ -23,6 +23,7 @@
   },
   {
     "id": "w04-titanic-impute-age",
+    "core": true,
     "title": "Titanic 3: imputácia veku priemerom (ručne)",
     "week": 4,
     "file": "w04-titanic-impute-age.py",
@@ -34,6 +35,7 @@
   },
   {
     "id": "w04-titanic-label-encoder",
+    "core": true,
     "title": "Titanic 4: LabelEncoder pre pohlavie",
     "week": 4,
     "file": "w04-titanic-label-encoder.py",
@@ -45,6 +47,7 @@
   },
   {
     "id": "w04-titanic-one-hot",
+    "core": true,
     "title": "Titanic 5: one-hot kódovanie triedy cestujúceho",
     "week": 4,
     "file": "w04-titanic-one-hot.py",
@@ -56,6 +59,7 @@
   },
   {
     "id": "w04-titanic-decision-tree",
+    "core": true,
     "title": "Titanic 6: rozdelenie dát a rozhodovací strom",
     "week": 4,
     "file": "w04-titanic-decision-tree.py",
@@ -78,6 +82,7 @@
   },
   {
     "id": "w04-standard-scaler",
+    "core": true,
     "title": "Škálovanie: StandardScaler na datasete wine",
     "week": 4,
     "file": "w04-standard-scaler.py",
@@ -89,6 +94,7 @@
   },
   {
     "id": "w04-simple-imputer",
+    "core": true,
     "title": "Imputácia: SimpleImputer na datasete iris",
     "week": 4,
     "file": "w04-simple-imputer.py",

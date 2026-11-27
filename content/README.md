@@ -46,6 +46,7 @@ the reference.
 
 - `index.json` – a JSON array of entries, in learning order.
 - one `.py` file per entry – the reference solution.
+- one `.md` file per `core` entry – the plain-language walkthrough (see below).
 
 Entry:
 
@@ -59,12 +60,31 @@ Entry:
   "task": "Zadanie po slovensky: čo presne má študent napísať (dáta, model, parametre, čo vypísať). Musí stačiť na napísanie kódu naspamäť bez pohľadu na riešenie.",
   "explanation": "Markdown: vysvetlenie riešenia po krokoch – prečo je tam ktorý riadok, na čo si dať pozor.",
   "expectedOutput": "voliteľné: čo kód vypíše (skrátene)",
-  "tags": ["KFold", "cross-validation"]
+  "tags": ["KFold", "cross-validation"],
+  "core": true
 }
 ```
 
 - `id` is unique across all topics, starts with the week (`w05-…`), kebab-case; `file` = `<id>.py`.
 - `source` – where it comes from (`moodle/…`, `teams/…`, `archive/…`, `lecture/…`).
+- `core` (optional, `true`) – marks a **typical exercise code**: one that was written in class (Moodle week /
+  Teams `cv_NN`) and may appear on the test. The app lists these under "Kódy z cvičení" (the default list); the
+  rest (lecture codes, homework, helper parts, variations) is only under "Všetky". Keep the set small – one entry
+  per type of exercise.
+
+### Walkthrough of a core exercise: `<id>.md`
+
+Every `core` entry needs a plain-language walkthrough next to its `.py` file (the build fails without it). It is
+shown as "Jednoducho vysvetlené" right under the solution and must let a beginner understand the **whole** code:
+
+- `**O čo ide:**` – one or two sentences: what the code does and why, without jargon (explain every term used).
+- `### Krok za krokom` – a numbered list following the code top to bottom. Quote the line (or its important
+  part) in backticks **exactly as in the `.py`** and say in simple words what it does and why it is there.
+  Cover every line that is not a plain import or print.
+- `### Ako si to zapamätať` – 2–4 bullets: the skeleton of the code and the mnemonic.
+- Short sentences, concrete numbers from the real output, no new facts beyond the course materials. Caveats and
+  finer points stay in `explanation` (shown below as "Podrobnosti a na čo si dať pozor").
+- Same Markdown rules as the theory. Do not put fenced code blocks or tables inside list items.
 
 Reference `.py` rules:
 

@@ -1,6 +1,7 @@
 [
   {
     "id": "w01-sum-even",
+    "core": true,
     "title": "Súčet párnych čísel",
     "week": 1,
     "file": "w01-sum-even.py",

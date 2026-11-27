@@ -34,13 +34,19 @@
     slot.appendChild(statusBadge(code));
   }
 
-  function listItem(code) {
+  function listItem(code, hideCoreBadge) {
     return h('li', { class: 'code-item' },
       h('a', { href: '#/kody/' + code.id, class: 'code-item-title' }, code.title),
       h('span', { class: 'badges' },
+        code.core && hideCoreBadge !== true ? ui.badge('z cvičenia', 'accent', 'Typový kód z cvičenia s jednoduchým vysvetlením') : null,
         ui.badge(code.week + '. týždeň'),
         code.tags.slice(0, 3).map(function (tag) { return ui.badge(tag, 'tag'); }),
         statusBadge(code)));
+  }
+
+  // The codes of the chosen set: only the typical exercise codes, or all of them.
+  function codesOfSet(all) {
+    return all ? ISI.data.codes : ISI.data.codes.filter(function (c) { return c.core; });
   }
 
   // ---------------------------------------------------------------- list
@@ -49,15 +55,22 @@
     const data = ISI.data;
     const byWeek = ctx.query.get('group') === 'week';
     const topicFilter = data.topicById[ctx.query.get('topic')] ? ctx.query.get('topic') : '';
-    const codes = data.codes.filter(function (c) { return !topicFilter || c.topicId === topicFilter; });
+    const requested = ctx.query.get('set');
+    const hasCore = data.codes.some(function (c) { return c.core; });
+    const showAll = !hasCore || (requested ? requested === 'all' : store.state.codeSet === 'all');
+    if ((requested === 'all' || requested === 'core') && store.state.codeSet !== requested) {
+      store.update(function (state) { state.codeSet = requested; });
+    }
+    const inTopic = function (c) { return !topicFilter || c.topicId === topicFilter; };
+    const codes = codesOfSet(showAll).filter(inTopic);
     const mastered = codes.filter(function (c) { return (store.state.codes[c.id] || {}).mastered; }).length;
 
-    function hash(group, topic) {
+    function hash(group, topic, all) {
       const params = new URLSearchParams();
+      params.set('set', all ? 'all' : 'core');
       if (group) params.set('group', 'week');
       if (topic) params.set('topic', topic);
-      const text = params.toString();
-      return '#/kody' + (text ? '?' + text : '');
+      return '#/kody?' + params.toString();
     }
 
     const groups = byWeek
@@ -69,31 +82,41 @@
       });
 
     const topicSelect = h('select', { id: 'codes-topic', onchange: function () {
-      ISI.app.navigate(hash(byWeek, topicSelect.value).slice(1), true);
+      ISI.app.navigate(hash(byWeek, topicSelect.value, showAll).slice(1), true);
     } }, [h('option', { value: '' }, 'Všetky témy')].concat(data.topics.map(function (t) {
       return h('option', { value: t.id }, t.short + ' · ' + t.title);
     })));
     topicSelect.value = topicFilter;
+    const coreCount = codesOfSet(false).filter(inTopic).length;
+    const allCount = data.codes.filter(inTopic).length;
 
     ctx.container.appendChild(h('div', { class: 'page' },
       h('header', { class: 'page-head' },
         h('h1', null, 'Kódy'),
-        h('p', { class: 'lead' }, 'Kódy z cvičení s vysvetlením. Vyber si čítanie, dopĺňanie alebo písanie naspamäť.')),
+        h('p', { class: 'lead' }, showAll
+          ? 'Všetky kódy: typové kódy z cvičení a k nim kódy z prednášok, domáce úlohy a pomocné časti.'
+          : 'Typové kódy z cvičení – tie, ktoré sa môžu objaviť na písomke. Každý má jednoduché vysvetlenie krok za krokom; ' +
+            'potom si ho skús doplniť a napísať naspamäť.')),
       h('section', { class: 'card filters' },
         h('div', { class: 'field-row' },
+          hasCore ? h('div', { class: 'field' },
+            h('span', { class: 'field-label', id: 'set-label' }, 'Zobraziť'),
+            h('div', { class: 'segmented', role: 'group', 'aria-labelledby': 'set-label' },
+              h('a', { href: hash(byWeek, topicFilter, false), 'aria-current': showAll ? null : 'true' }, 'Kódy z cvičení (' + coreCount + ')'),
+              h('a', { href: hash(byWeek, topicFilter, true), 'aria-current': showAll ? 'true' : null }, 'Všetky (' + allCount + ')'))) : null,
           h('div', { class: 'field' }, h('label', { for: 'codes-topic' }, 'Téma'), topicSelect),
           h('div', { class: 'field' },
             h('span', { class: 'field-label', id: 'group-label' }, 'Zoskupiť podľa'),
             h('div', { class: 'segmented', role: 'group', 'aria-labelledby': 'group-label' },
-              h('a', { href: hash(false, topicFilter), 'aria-current': byWeek ? null : 'true' }, 'tém'),
-              h('a', { href: hash(true, topicFilter), 'aria-current': byWeek ? 'true' : null }, 'týždňov')))),
+              h('a', { href: hash(false, topicFilter, showAll), 'aria-current': byWeek ? null : 'true' }, 'tém'),
+              h('a', { href: hash(true, topicFilter, showAll), 'aria-current': byWeek ? 'true' : null }, 'týždňov')))),
         h('div', { class: 'bar-cell' },
           ui.progressBar(codes.length ? mastered / codes.length : 0, 'Zvládnuté kódy', 'ok'),
           h('span', null, 'Zvládnuté ' + mastered + ' / ' + codes.length))),
       codes.length ? groups.filter(function (g) { return g.items.length; }).map(function (group) {
         return h('section', { class: 'card' },
           h('h2', null, h('a', { href: group.href }, group.title)),
-          h('ul', { class: 'code-list' }, group.items.map(listItem)));
+          h('ul', { class: 'code-list' }, group.items.map(function (code) { return listItem(code, !showAll); })));
       }) : ui.emptyState('Žiadne kódy', 'Pre tento výber zatiaľ nie sú žiadne kódy z cvičení.')));
     return null;
   }
@@ -107,8 +130,11 @@
         ui.codeBlock(code.code, { keyLines: code.keyLines, numbers: true }),
         code.keyLines.length ? h('p', { class: 'muted small' },
           h('span', { class: 'key-swatch', 'aria-hidden': 'true' }), ' Zvýraznené sú kľúčové riadky – tie nesú myšlienku riešenia.') : null),
+      code.simpleHtml ? h('section', { class: 'card walkthrough' },
+        h('h2', null, 'Jednoducho vysvetlené'),
+        ui.article(code.simpleHtml)) : null,
       h('section', { class: 'card' },
-        h('h2', null, 'Vysvetlenie'),
+        h('h2', null, code.simpleHtml ? 'Podrobnosti a na čo si dať pozor' : 'Vysvetlenie'),
         ui.article(code.explanationHtml)),
       code.expectedOutput ? h('section', { class: 'card' },
         h('h2', null, 'Očakávaný výstup'),
@@ -481,7 +507,7 @@
             h('div', null, h('h3', null, 'Tvoj kód'), ui.codeBlock(editor.area.value || ' ', { numbers: true })),
             h('div', null, h('h3', null, 'Riešenie'), ui.codeBlock(code.code, { keyLines: code.keyLines, numbers: true }))),
           h('h3', null, 'Vysvetlenie'),
-          ui.article(code.explanationHtml)));
+          ui.article(code.simpleHtml || code.explanationHtml)));
       }
     }
 
@@ -533,9 +559,11 @@
 
   function renderExercise(ctx, code, mode) {
     const data = ISI.data;
-    const index = data.codes.indexOf(code);
-    const previous = data.codes[index - 1];
-    const next = data.codes[index + 1];
+    // The pager stays inside the chosen set, so the typical exercise codes can be walked through in a row.
+    const siblings = code.core && store.state.codeSet !== 'all' ? codesOfSet(false) : data.codes;
+    const index = siblings.indexOf(code);
+    const previous = siblings[index - 1];
+    const next = siblings[index + 1];
     const topic = data.topicById[code.topicId];
     const base = '#/kody/' + code.id;
     if (fill && fill.id !== code.id) fill = null;
@@ -551,6 +579,7 @@
           topic ? h('a', { class: 'badge badge-accent', href: '#/teoria/' + topic.id }, topic.short + ' · ' + topic.title) : null,
           h('a', { class: 'badge', href: '#/tyzdne/' + code.week }, code.week + '. týždeň'),
           ui.badge(code.source, null, 'Zdroj cvičenia'),
+          code.core ? ui.badge('z cvičenia', 'accent', 'Typový kód z cvičenia') : null,
           h('span', { 'data-code-status': '' }, statusBadge(code)))),
       h('nav', { class: 'tabs', 'aria-label': 'Režim cvičenia' }, MODES.map(function (item) {
         return h('a', { href: base + (item[0] ? '/' + item[0] : ''), 'aria-current': item[0] === mode ? 'page' : null }, item[1]);

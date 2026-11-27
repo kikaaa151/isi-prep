@@ -24,7 +24,7 @@ QUESTION_TYPES = ("theory", "practical")
 QUESTION_SOURCES = ("moodle", "lecture", "teams", "archive", "quizlet", "generated")
 CODE_SOURCE_PREFIXES = ("moodle", "teams", "archive", "lecture")
 QUESTION_KEYS = {"id", "topicId", "week", "type", "source", "text", "code", "options", "explanation", "disputed"}
-CODE_KEYS = {"id", "title", "week", "file", "source", "task", "explanation", "expectedOutput", "tags"}
+CODE_KEYS = {"id", "title", "week", "file", "source", "task", "explanation", "expectedOutput", "tags", "core"}
 MAX_CODE_LINES = 40
 MAX_QUESTION_CODE_LINES = 25
 SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
@@ -457,7 +457,7 @@ def build_codes(content, topics, rep):
             continue
         if not entries:
             rep.warn(index_path, "no code exercises yet")
-        listed = set()
+        listed, walkthroughs = set(), set()
         for position, entry in enumerate(entries):
             label = entry.get("id") if isinstance(entry, dict) and isinstance(entry.get("id"), str) else f"#{position + 1}"
             if not isinstance(entry, dict):
@@ -475,6 +475,9 @@ def build_codes(content, topics, rep):
                 rep.warn(index_path, f"unknown field `{field}`", label)
             if "expectedOutput" in entry and entry["expectedOutput"] is not None and not isinstance(entry["expectedOutput"], str):
                 rep.error(index_path, "`expectedOutput` must be a string", label)
+                ok = False
+            if not isinstance(entry.get("core", False), bool):
+                rep.error(index_path, "`core` must be true or false", label)
                 ok = False
             tags = entry.get("tags", [])
             if tags is None:
@@ -514,6 +517,18 @@ def build_codes(content, topics, rep):
             if processed is None:
                 continue
             code, key_lines = processed
+            # A core exercise (the typical codes done in class) has a plain walkthrough in `<id>.md`.
+            core = entry.get("core", False)
+            simple_html = None
+            if core:
+                simple_path = base / f"{code_id}.md"
+                walkthroughs.add(simple_path.name)
+                simple = read_text(simple_path, rep) if simple_path.is_file() else None
+                if simple is None or not simple.strip():
+                    rep.error(index_path, f"core exercise needs the walkthrough `{simple_path.name}`", label)
+                    continue
+                check_markdown_rules(simple, simple_path, rep)
+                simple_html = decorate_html(render_markdown(simple.strip()))[0]
             codes.append({
                 "id": code_id,
                 "topicId": topic["id"],
@@ -526,9 +541,13 @@ def build_codes(content, topics, rep):
                 "tags": [tag.strip() for tag in tags if tag.strip()],
                 "code": code,
                 "keyLines": key_lines,
+                "core": core,
+                "simpleHtml": simple_html,
             })
         for extra in sorted(p.name for p in base.glob("*.py") if p.name not in listed):
             rep.warn(base / extra, "code file is not listed in index.json")
+        for extra in sorted(p.name for p in base.glob("*.md") if p.name not in walkthroughs):
+            rep.warn(base / extra, "walkthrough does not belong to a `core` exercise of index.json")
     return codes
 
 

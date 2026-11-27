@@ -1,6 +1,7 @@
 [
   {
     "id": "w10-nqueens-conflicts",
+    "core": true,
     "title": "N-dám: heuristika conflicts (počet ohrozujúcich sa dvojíc)",
     "week": 10,
     "file": "w10-nqueens-conflicts.py",
@@ -49,6 +50,7 @@
   },
   {
     "id": "w10-hill-climbing",
+    "core": true,
     "title": "Hill climbing na N-dámach",
     "week": 10,
     "file": "w10-hill-climbing.py",
@@ -81,6 +83,7 @@
   },
   {
     "id": "w10-simulated-annealing",
+    "core": true,
     "title": "Simulované žíhanie na N-dámach",
     "week": 10,
     "file": "w10-simulated-annealing.py",
@@ -113,6 +116,7 @@
   },
   {
     "id": "w10-genetic-algorithm",
+    "core": true,
     "title": "Genetický algoritmus na N-dámach",
     "week": 10,
     "file": "w10-genetic-algorithm.py",

@@ -1,6 +1,7 @@
 [
   {
     "id": "w09-sudoku-is-valid",
+    "core": true,
     "title": "Sudoku: kontrola ohraničení is_valid",
     "week": 9,
     "file": "w09-sudoku-is-valid.py",
@@ -33,6 +34,7 @@
   },
   {
     "id": "w09-sudoku-get-domain",
+    "core": true,
     "title": "Sudoku: doména bunky get_domain",
     "week": 9,
     "file": "w09-sudoku-get-domain.py",
@@ -81,6 +83,7 @@
   },
   {
     "id": "w09-sudoku-backtracking-dfs",
+    "core": true,
     "title": "Sudoku: backtracking _dfs s voliteľným MRV a LCV",
     "week": 9,
     "file": "w09-sudoku-backtracking-dfs.py",
@@ -98,6 +101,7 @@
   },
   {
     "id": "w09-sudoku-mrv",
+    "core": true,
     "title": "Sudoku: heuristika MRV select_unassigned_mrv",
     "week": 9,
     "file": "w09-sudoku-mrv.py",
@@ -115,6 +119,7 @@
   },
   {
     "id": "w09-sudoku-lcv",
+    "core": true,
     "title": "Sudoku: heuristika LCV sort_values_lcv",
     "week": 9,
     "file": "w09-sudoku-lcv.py",
@@ -132,6 +137,7 @@
   },
   {
     "id": "w09-sudoku-forward-checking",
+    "core": true,
     "title": "Sudoku: forward checking _fc",
     "week": 9,
     "file": "w09-sudoku-forward-checking.py",
