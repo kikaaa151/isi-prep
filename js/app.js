@@ -10,6 +10,7 @@
 
   const SECTIONS = [
     { id: '', label: 'Prehľad', view: 'dashboard' },
+    { id: 'speed', label: 'Speed mód', view: 'speed' },
     { id: 'test', label: 'Test', view: 'test' },
     { id: 'otazky', label: 'Otázky', view: 'practice' },
     { id: 'teoria', label: 'Teória', view: 'theory' },

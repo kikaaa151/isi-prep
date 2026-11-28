@@ -141,3 +141,37 @@ a single wrong tick means zero points for the question.
 - Optional `"disputed": true` + a sentence in `explanation` when a Quizlet answer contradicts the lectures.
 - Every fact must be backed by the course materials (for the search/CSP topics: the exercise materials, the
   lectures of J. Gazda from 2026 and 2020, and standard AIMA definitions). No trick questions on trivia.
+
+## `speed.json`
+
+The "Speed mód" – a playful digest for a student who only wants the exam facts (exercises, code snippets,
+libraries). Facts come from the codes, theory and questions above; nothing new beyond the course materials.
+
+```json
+{
+  "levels": [
+    {
+      "id": "s4", "topicId": "t4-validacia-ladenie", "icon": "🔬",
+      "title": "Validácia a ladenie: K-fold, GridSearch, Pipeline",
+      "tagline": "one playful sentence",
+      "flow": [{ "icon": "🧱", "text": "`Pipeline([...])`" }],
+      "hook": "mnemonic",
+      "traps": ["typical exam trap"],
+      "cards": [
+        { "id": "s4-01", "icon": "🍰", "q": "question", "a": "answer", "code": "optional snippet", "codeId": "w05-kfold-split" }
+      ]
+    }
+  ],
+  "libraries": [
+    { "module": "sklearn.model_selection", "icon": "✂️", "nick": "Deliareň", "import": "from sklearn.model_selection import ...",
+      "items": [{ "name": "KFold", "what": "k foldov na krížovú validáciu" }] }
+  ]
+}
+```
+
+- One level per topic, in topic order. `flow` = 2–7 steps of the exercise as a picture recipe (icon + short text);
+  `hook` = one mnemonic; `traps` = typical exam traps.
+- Cards: ids unique, short question `q` and answer `a` (inline code in backticks allowed); `code` ≤ 8 lines, copied
+  from the reference `.py` (same names and values); `codeId` must be an existing code exercise id.
+- Libraries: one shelf per module with the import line as used in the exercise codes. Item `name`s are unique and
+  their `what` texts should differ – the 60-second quiz uses other modules / descriptions as wrong options.

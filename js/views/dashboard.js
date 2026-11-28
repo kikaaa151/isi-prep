@@ -53,6 +53,7 @@
         h('h2', null, state.lastStudy ? state.lastStudy.label : nextTopic ? nextTopic.title : 'Prehľad tém'),
         h('a', { class: 'text-action', href: route }, state.lastStudy ? 'Pokračovať v učení' : 'Otvoriť tému', ui.icon('arrow')),
         h('div', { class: 'continue-foot' },
+          h('a', { href: '#/speed' }, 'Speed mód – len fakty na zápočet', ui.icon('speed')),
           h('a', { href: '#/teoria/tahak' }, 'Ťahák ku všetkým témam', ui.icon('theory')),
           weak.length ? h('a', { href: '#/otazky?set=weak' }, 'Precvičiť slabé miesta (' + weak.length + ')', ui.icon('arrow')) : null)));
   }

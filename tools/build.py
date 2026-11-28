@@ -25,8 +25,12 @@ QUESTION_SOURCES = ("moodle", "lecture", "teams", "archive", "quizlet", "generat
 CODE_SOURCE_PREFIXES = ("moodle", "teams", "archive", "lecture")
 QUESTION_KEYS = {"id", "topicId", "week", "type", "source", "text", "code", "options", "explanation", "disputed"}
 CODE_KEYS = {"id", "title", "week", "file", "source", "task", "explanation", "expectedOutput", "tags", "core"}
+SPEED_LEVEL_KEYS = {"id", "topicId", "icon", "title", "tagline", "flow", "hook", "traps", "cards"}
+SPEED_CARD_KEYS = {"id", "icon", "q", "a", "code", "codeId"}
+SPEED_LIBRARY_KEYS = {"module", "icon", "nick", "import", "items"}
 MAX_CODE_LINES = 40
 MAX_QUESTION_CODE_LINES = 25
+MAX_SPEED_CODE_LINES = 8
 SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 SUMMARY_HEADING = re.compile(r"^##\s+r[ýy]chle\s+zhrnutie\s*$", re.IGNORECASE)
 BANNED_OPTIONS = re.compile(r"^(všetky|vsetky|žiadna|ziadna|žiadne|ziadne)\s+(z\s+)?(uveden|vyššie|vyssie)", re.IGNORECASE)
@@ -701,9 +705,172 @@ def build_questions(content, topics, rep):
     return questions
 
 
+# ---------------------------------------------------------------- speed mode
+
+def build_speed_card(card, path, label, code_ids, rep):
+    if not isinstance(card, dict):
+        rep.error(path, "card must be an object", label)
+        return None
+    for field in sorted(set(card) - SPEED_CARD_KEYS):
+        rep.warn(path, f"unknown field `{field}`", label)
+    ok = True
+    for field in ("id", "icon", "q", "a"):
+        if not is_text(card.get(field)):
+            rep.error(path, f"`{field}` is required", label)
+            ok = False
+    if ok and not SAFE_ID.match(card["id"]):
+        rep.error(path, "`id` may contain only letters, digits, - _ .", label)
+        ok = False
+    code_id = card.get("codeId")
+    if code_id is not None and code_id not in code_ids:
+        rep.error(path, f"`codeId` {code_id!r} is not a code exercise id", label)
+        ok = False
+    code = card.get("code")
+    if code is not None:
+        if not isinstance(code, str) or not code.strip():
+            rep.error(path, "`code` must be a non-empty string", label)
+            ok = False
+        else:
+            code = "\n".join(line.rstrip() for line in code.replace("\t", "    ").split("\n")).strip("\n")
+            if code.count("\n") + 1 > MAX_SPEED_CODE_LINES:
+                rep.warn(path, f"`code` has more than {MAX_SPEED_CODE_LINES} lines", label)
+    if not ok:
+        return None
+    return {"id": card["id"], "icon": card["icon"].strip(), "q": card["q"].strip(), "a": card["a"].strip(),
+            "code": code, "codeId": code_id}
+
+
+def build_speed(content, topics, codes, rep):
+    """speed.json: levels of flip cards per topic and the library shelves of the speed mode."""
+    path = content / "speed.json"
+    result = {"levels": [], "libraries": []}
+    if not path.is_file():
+        rep.warn(path, "no speed mode content yet")
+        return result
+    data = read_json(path, rep)
+    if data is None:
+        return result
+    if not isinstance(data, dict):
+        rep.error(path, "must be a JSON object with `levels` and `libraries`")
+        return result
+    known = {t["id"] for t in topics}
+    code_ids = {c["id"] for c in codes}
+    seen = set()
+
+    levels = data.get("levels")
+    if not isinstance(levels, list):
+        rep.error(path, "`levels` must be an array")
+        levels = []
+    for index, level in enumerate(levels):
+        label = level.get("id") if isinstance(level, dict) and isinstance(level.get("id"), str) else f"level #{index + 1}"
+        if not isinstance(level, dict):
+            rep.error(path, "level must be an object", label)
+            continue
+        for field in sorted(set(level) - SPEED_LEVEL_KEYS):
+            rep.warn(path, f"unknown field `{field}`", label)
+        ok = True
+        for field in ("id", "icon", "title", "tagline", "hook"):
+            if not is_text(level.get(field)):
+                rep.error(path, f"`{field}` is required", label)
+                ok = False
+        if ok and (not SAFE_ID.match(level["id"]) or level["id"] in seen):
+            rep.error(path, "`id` is a duplicate or contains characters other than letters, digits, - _ .", label)
+            ok = False
+        if not isinstance(level.get("topicId"), str) or level["topicId"] not in known:
+            rep.error(path, f"`topicId` {level.get('topicId')!r} is not a topic id of topics.json", label)
+            ok = False
+        flow = level.get("flow")
+        if not isinstance(flow, list) or not all(isinstance(s, dict) and is_text(s.get("icon")) and is_text(s.get("text")) for s in flow):
+            rep.error(path, "`flow` must be an array of `{icon, text}`", label)
+            ok = False
+        elif not 2 <= len(flow) <= 7:
+            rep.warn(path, f"`flow` has {len(flow)} steps (expected 2-7)", label)
+        traps = level.get("traps", [])
+        if not isinstance(traps, list) or not all(is_text(t) for t in traps):
+            rep.error(path, "`traps` must be an array of strings", label)
+            ok = False
+        cards = []
+        raw_cards = level.get("cards")
+        if not isinstance(raw_cards, list) or not raw_cards:
+            rep.error(path, "`cards` must be a non-empty array", label)
+            ok = False
+            raw_cards = []
+        for position, raw in enumerate(raw_cards):
+            card_label = raw.get("id") if isinstance(raw, dict) and isinstance(raw.get("id"), str) else f"{label} card #{position + 1}"
+            card = build_speed_card(raw, path, card_label, code_ids, rep)
+            if card is None:
+                continue
+            if card["id"] in seen:
+                rep.error(path, "duplicate speed card id", card_label)
+                continue
+            seen.add(card["id"])
+            cards.append(card)
+        if not ok:
+            continue
+        seen.add(level["id"])
+        result["levels"].append({
+            "id": level["id"],
+            "topicId": level["topicId"],
+            "icon": level["icon"].strip(),
+            "title": level["title"].strip(),
+            "tagline": level["tagline"].strip(),
+            "flow": [{"icon": s["icon"].strip(), "text": s["text"].strip()} for s in flow],
+            "hook": level["hook"].strip(),
+            "traps": [t.strip() for t in traps],
+            "cards": cards,
+        })
+
+    libraries = data.get("libraries")
+    if not isinstance(libraries, list):
+        rep.error(path, "`libraries` must be an array")
+        libraries = []
+    modules, names, whats = set(), set(), set()
+    for index, library in enumerate(libraries):
+        label = library.get("module") if isinstance(library, dict) and isinstance(library.get("module"), str) else f"library #{index + 1}"
+        if not isinstance(library, dict):
+            rep.error(path, "library must be an object", label)
+            continue
+        for field in sorted(set(library) - SPEED_LIBRARY_KEYS):
+            rep.warn(path, f"unknown field `{field}`", label)
+        ok = True
+        for field in ("module", "icon", "nick", "import"):
+            if not is_text(library.get(field)):
+                rep.error(path, f"`{field}` is required", label)
+                ok = False
+        if ok and library["module"] in modules:
+            rep.error(path, "duplicate module", label)
+            ok = False
+        items = library.get("items")
+        if not isinstance(items, list) or not items or not all(
+                isinstance(i, dict) and is_text(i.get("name")) and is_text(i.get("what")) for i in items):
+            rep.error(path, "`items` must be a non-empty array of `{name, what}`", label)
+            continue
+        for item in items:
+            if item["name"] in names:
+                rep.error(path, f"duplicate library item `{item['name']}`", label)
+                ok = False
+            names.add(item["name"])
+            if item["what"].strip() in whats:
+                rep.warn(path, f"two items share the description of `{item['name']}`", label)
+            whats.add(item["what"].strip())
+        if not ok:
+            continue
+        modules.add(library["module"])
+        result["libraries"].append({
+            "module": library["module"].strip(),
+            "icon": library["icon"].strip(),
+            "nick": library["nick"].strip(),
+            "import": library["import"].strip(),
+            "items": [{"name": i["name"].strip(), "what": i["what"].strip()} for i in items],
+        })
+    if result["libraries"] and len(result["libraries"]) < 4:
+        rep.warn(path, "fewer than 4 libraries - the quiz needs 4 modules for full options")
+    return result
+
+
 # ---------------------------------------------------------------- output
 
-def print_summary(topics, weeks, codes, questions):
+def print_summary(topics, weeks, codes, questions, speed):
     def count(topic_id, kind):
         return sum(1 for q in questions if q["topicId"] == topic_id and q["type"] == kind)
 
@@ -721,6 +888,8 @@ def print_summary(topics, weeks, codes, questions):
           f"{total_theory:>8}  {len(questions) - total_theory:>11}")
     missing = [w["id"] for w in weeks if not w["html"]]
     print(f"Weeks: {len(weeks) - len(missing)}/{len(weeks)} summaries" + (f" (missing: {', '.join(missing)})" if missing else ""))
+    print(f"Speed: {len(speed['levels'])} levels, {sum(len(level['cards']) for level in speed['levels'])} cards, "
+          f"{sum(len(library['items']) for library in speed['libraries'])} library items")
 
 
 def main(argv=None):
@@ -745,6 +914,7 @@ def main(argv=None):
     weeks = build_weeks(content, topics, rep)
     codes = build_codes(content, topics, rep)
     questions = build_questions(content, topics, rep)
+    speed = build_speed(content, topics, codes, rep)
 
     for message in rep.warnings:
         print(f"WARN   {message}")
@@ -753,7 +923,7 @@ def main(argv=None):
     sys.stderr.flush()
     if rep.warnings or rep.errors:
         print()
-    print_summary(topics, weeks, codes, questions)
+    print_summary(topics, weeks, codes, questions, speed)
     print(f"\n{len(rep.errors)} error(s), {len(rep.warnings)} warning(s)")
 
     if args.check:
@@ -768,6 +938,7 @@ def main(argv=None):
         "weeks": weeks,
         "codes": codes,
         "questions": questions,
+        "speed": speed,
     }
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
     args.out.parent.mkdir(parents=True, exist_ok=True)

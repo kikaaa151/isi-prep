@@ -1,0 +1,876 @@
+{
+  "levels": [
+    {
+      "id": "s1",
+      "topicId": "t1-zaklady",
+      "icon": "🧰",
+      "title": "Náradie: NumPy, Matplotlib a recept ML",
+      "tagline": "Každý kód z cvičení je ten istý recept – len s inými prísadami.",
+      "flow": [
+        { "icon": "📦", "text": "Načítaj `load_iris()`" },
+        { "icon": "✂️", "text": "Rozdeľ `train_test_split`" },
+        { "icon": "🏋️", "text": "Nauč `fit(X_train, y_train)`" },
+        { "icon": "🔮", "text": "Predikuj `predict(X_test)`" },
+        { "icon": "🎯", "text": "Skóruj `accuracy_score`" }
+      ],
+      "hook": "Lenivý Študent Fituje Pred Skúškou = Load → Split → Fit → Predict → Score.",
+      "traps": [
+        "`LogisticRegression` je klasifikátor – „regression“ je len v názve.",
+        "`train_test_split` vracia `X_train, X_test, y_train, y_test` – najprv obe X, potom obe y.",
+        "Os, ktorú zadáš v `sum(axis)`, zmizne: tvar (3, 5) → `sum(0)` dĺžky 5, `sum(1)` dĺžky 3."
+      ],
+      "cards": [
+        {
+          "id": "s1-01",
+          "icon": "📐",
+          "q": "`a = np.arange(15).reshape(3, 5)` – koľko je `a.shape` a `a.size`?",
+          "a": "`a.shape` = `(3, 5)` a `a.size` = `15`. Tri riadky × päť stĺpcov = 15 prvkov 0 … 14.",
+          "codeId": "w01-numpy-test"
+        },
+        {
+          "id": "s1-02",
+          "icon": "➕",
+          "q": "Čo vypíše `a.sum(0)` a `a.sum(1)` pre to isté pole 3 × 5?",
+          "a": "`sum(0)` = `[15 18 21 24 27]` (sčíta stĺpce), `sum(1)` = `[10 35 60]` (sčíta riadky), `a.sum()` = `105`.",
+          "code": "a = np.arange(15).reshape(3, 5)\nprint(a.sum())\nprint(a.sum(1))\nprint(a.sum(0))",
+          "codeId": "w01-numpy-test"
+        },
+        {
+          "id": "s1-03",
+          "icon": "🔄",
+          "q": "Aký je rozdiel medzi `reshape(1, -1)` a `reshape(-1, 1)`?",
+          "a": "`-1` znamená „dopočítaj sám“. `(1, -1)` = jedna vzorka (jeden riadok), `(-1, 1)` = jeden príznak (jeden stĺpec)."
+        },
+        {
+          "id": "s1-04",
+          "icon": "🖼️",
+          "q": "Dataset číslic `load_digits()` – aké tvary a ako nakreslíš číslicu?",
+          "a": "`digits.data` má tvar `(1797, 64)`, `digits.target` `(1797,)`; obrázok 8 × 8 je v `digits.images` a kreslí ho `plt.imshow`.",
+          "code": "digits = datasets.load_digits()\nX = digits.data\ny = digits.target\nplt.imshow(digits.images[idx], cmap=plt.cm.gray_r)",
+          "codeId": "w01-matplotlib-digits"
+        },
+        {
+          "id": "s1-05",
+          "icon": "🧱",
+          "q": "Riadok, stĺpec a `y` v tabuľke dát – ako sa volajú?",
+          "a": "Riadok = vzorka, stĺpec = príznak (počet príznakov = dimenzionalita), `y` = cieľová premenná."
+        },
+        {
+          "id": "s1-06",
+          "icon": "🏷️",
+          "q": "Klasifikácia vs. regresia – čo predpovedajú?",
+          "a": "Klasifikácia → diskrétnu triedu (napr. druh kosatca), regresia → spojité číslo (napr. cenu pizze). Obe sú učenie s učiteľom."
+        },
+        {
+          "id": "s1-07",
+          "icon": "🧮",
+          "q": "Vzorce accuracy, precision a recall?",
+          "a": "accuracy = (TP + TN) / všetky; precision = TP / (TP + FP); recall = TP / (TP + FN)."
+        },
+        {
+          "id": "s1-08",
+          "icon": "✂️",
+          "q": "Čo vráti `train_test_split(X, y, test_size=0.25, random_state=33)`?",
+          "a": "Štyri polia v poradí `X_train, X_test, y_train, y_test`. Iris (150 vzoriek) sa rozdelí na 112 / 38.",
+          "code": "X_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.25, random_state=33)"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "topicId": "t2-klasifikacia",
+      "icon": "🌳",
+      "title": "Klasifikátory: SVM, strom, les, KNN",
+      "tagline": "Model vymeníš jedným riadkom – zvyšok kódu ostáva rovnaký.",
+      "flow": [
+        { "icon": "🏗️", "text": "Vytvor `SVC(kernel='linear')`" },
+        { "icon": "🏋️", "text": "`clf.fit(X_train, y_train)`" },
+        { "icon": "🔮", "text": "`y_pred = clf.predict(X_test)`" },
+        { "icon": "🎯", "text": "`accuracy_score(y_test, y_pred)`" }
+      ],
+      "hook": "Každý model v sklearn má tri tlačidlá: vytvor → `fit` → `predict`. Mení sa len meno triedy a riadok `import`.",
+      "traps": [
+        "Veľké `C` aj veľká `gamma` v SVM → pretrénovanie.",
+        "Strom škálovanie nepotrebuje; KNN a SVM áno.",
+        "Malé `k` v KNN → overfitting, veľké `k` → underfitting.",
+        "`score` regresora vracia R², nie accuracy."
+      ],
+      "cards": [
+        {
+          "id": "s2-01",
+          "icon": "🧑‍🤝‍🧑",
+          "q": "Rozpoznávanie tvárí Olivetti – aký model a aké rozdelenie dát?",
+          "a": "`SVC(kernel='linear')`; `train_test_split(..., test_size=0.25, random_state=0, stratify=faces.target)`. 400 tvárí 64 × 64 → `faces.data` má tvar `(400, 4096)`.",
+          "code": "faces = fetch_olivetti_faces()\nsvc = SVC(kernel='linear')\nsvc.fit(X_train, y_train)\ny_predict = svc.predict(X_test)",
+          "codeId": "w02-olivetti-svm"
+        },
+        {
+          "id": "s2-02",
+          "icon": "🥊",
+          "q": "Strom vs. SVM na `make_classification` – kto vyhral?",
+          "a": "`DecisionTreeClassifier()` ≈ 0.84, `SVC(kernel='linear')` 0.88. Dáta: `n_samples=1000, n_features=3`.",
+          "codeId": "w02-tree-vs-svm"
+        },
+        {
+          "id": "s2-03",
+          "icon": "📏",
+          "q": "Ktoré hyperparametre stromu sa ladili a ako vznikli kombinácie?",
+          "a": "`criterion` (`'gini'` / `'entropy'`), `max_depth`, `min_samples_leaf`, `min_samples_split` – každá s každou cez `itertools.product`.",
+          "code": "for crit, depth, leaf, split in product(['gini', 'entropy'], range(1, 11), [1, 5, 10], [2, 10, 20]):",
+          "codeId": "w02-tree-hyperparams"
+        },
+        {
+          "id": "s2-04",
+          "icon": "🌲",
+          "q": "Náhodný les = ? A odkiaľ ho importuješ?",
+          "a": "Ensemble stromov: bagging (bootstrap s opakovaním) + náhodný výber atribútov + hlasovanie väčšinou. `from sklearn.ensemble import RandomForestClassifier`.",
+          "codeId": "w03-random-forest"
+        },
+        {
+          "id": "s2-05",
+          "icon": "🗳️",
+          "q": "Čo vráti `rf.predict_proba(X_test)`?",
+          "a": "Pre každú vzorku pravdepodobnosť každej triedy = podiel hlasov stromov. Na cvičení sa zaokrúhlila `np.around(probs, 1)` a zoskupila cez pandas `groupby`.",
+          "codeId": "w03-rf-confidence"
+        },
+        {
+          "id": "s2-06",
+          "icon": "🏆",
+          "q": "Súťaž klasifikátorov na dátach `.npy` – aké bolo poradie?",
+          "a": "Strom 0.70 < les 0.82 < KNN (`n_neighbors=15`) 0.85 < SVM `rbf` 0.86. Modely sú v slovníku a prejdú sa cyklom.",
+          "code": "for name, clf in classifiers.items():\n    clf.fit(X_train, y_train)",
+          "codeId": "w03-classifier-challenge"
+        },
+        {
+          "id": "s2-07",
+          "icon": "📉",
+          "q": "Ako sa vyhodnocuje regresia (SVR)?",
+          "a": "`metrics.r2_score` (koeficient determinácie, 1 = dokonalé) a `metrics.mean_absolute_error`. Predtým `StandardScaler`: `fit_transform` na train, `transform` na test.",
+          "code": "X_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)\nclf_svr = svm.SVR(kernel='linear')",
+          "codeId": "w03-svr-evaluation"
+        },
+        {
+          "id": "s2-08",
+          "icon": "⚔️",
+          "q": "SVM: čo robí `C`, `kernel` a `gamma`?",
+          "a": "`C` = kompromis medzi šírkou marginu a chybami (veľké C → pretrénovanie). `kernel` = `'linear'`, `'rbf'`, `'poly'` (kernelizácia pre lineárne neseparovateľné dáta). `gamma` pri RBF – veľká → pretrénovanie."
+        },
+        {
+          "id": "s2-09",
+          "icon": "👯",
+          "q": "KNN v jednej vete?",
+          "a": "Lenivý, instance-based klasifikátor: o triede hlasuje `k` najbližších susedov. Potrebuje škálovanie a trpí kliatbou dimenzionality."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "topicId": "t3-predspracovanie",
+      "icon": "🧼",
+      "title": "Čistiareň dát: Titanic, imputácia, škálovanie",
+      "tagline": "Model zje len čísla bez dier – tu sa dáta umyjú a preložia.",
+      "flow": [
+        { "icon": "🕳️", "text": "Zaplátaj NaN `SimpleImputer`" },
+        { "icon": "🔤", "text": "Slová → čísla `LabelEncoder` / `OneHotEncoder`" },
+        { "icon": "✂️", "text": "Rozdeľ `train_test_split`" },
+        { "icon": "⚖️", "text": "Škáluj `StandardScaler`" },
+        { "icon": "🌳", "text": "Trénuj model" }
+      ],
+      "hook": "Titanic v štyroch krokoch: diera (NaN) → záplata (priemer) → preklad (`sex` na 0/1, `pclass` na 3 stĺpce) → strom.",
+      "traps": [
+        "`LabelEncoder` čísluje abecedne: `female` = 0, `male` = 1.",
+        "Label encoding nominálneho atribútu vymyslí neexistujúce poradie → použi one-hot.",
+        "`OneHotEncoder` chce 2D vstup (`reshape(-1, 1)`) a vracia riedku maticu → `.toarray()`.",
+        "Škálovač sa `fit`-uje iba na tréningových dátach, na test len `transform`."
+      ],
+      "cards": [
+        {
+          "id": "s3-01",
+          "icon": "🕳️",
+          "q": "Ako sa ručne doplnil chýbajúci vek na Titanicu?",
+          "a": "Priemer zo známych hodnôt (bez NaN) sa dosadil na miesta NaN – priemerný vek 31.19.",
+          "code": "mean_age = np.mean(ages[~np.isnan(ages)])\nages[np.isnan(ages)] = mean_age",
+          "codeId": "w04-titanic-impute-age"
+        },
+        {
+          "id": "s3-02",
+          "icon": "🩹",
+          "q": "`SimpleImputer` – aká je predvolená stratégia a aké sú ďalšie?",
+          "a": "Predvolene `mean`; ďalej `strategy='median'` a `'most_frequent'`. Volá sa `fit_transform(X)`.",
+          "code": "impute = SimpleImputer()\niris_X_prime = impute.fit_transform(iris_X)\nimpute = SimpleImputer(strategy='median')",
+          "codeId": "w04-simple-imputer"
+        },
+        {
+          "id": "s3-03",
+          "icon": "🔤",
+          "q": "`LabelEncoder` na stĺpci `sex` – čo vráti `enc.classes_`?",
+          "a": "`['female' 'male']` – abecedne, takže `female` → 0 a `male` → 1.",
+          "code": "enc = LabelEncoder()\nenc.fit(titanic_reduced['sex'])\ntitanic_reduced['sex'] = enc.transform(titanic_reduced['sex'])",
+          "codeId": "w04-titanic-label-encoder"
+        },
+        {
+          "id": "s3-04",
+          "icon": "🎛️",
+          "q": "One-hot triedy cestujúceho `pclass` – koľko stĺpcov vznikne?",
+          "a": "Tri triedy → tri stĺpce 0/1 (`class 1`, `class 2`, `class 3`); pôvodný stĺpec `pclass` sa zahodí cez `drop`.",
+          "code": "ohe = OneHotEncoder()\npclass_reshaped = np.array(titanic_reduced['pclass']).reshape(-1, 1)\none_hot_encoder = ohe.fit(pclass_reshaped)\nohe_coded = ohe.transform(pclass_reshaped).toarray()",
+          "codeId": "w04-titanic-one-hot"
+        },
+        {
+          "id": "s3-05",
+          "icon": "🚢",
+          "q": "Titanic – aký strom a s akými parametrami?",
+          "a": "`tree.DecisionTreeClassifier(criterion='entropy', max_depth=5, min_samples_leaf=5)`, rozdelenie `test_size=0.25, random_state=33`; accuracy ≈ 0.78.",
+          "codeId": "w04-titanic-decision-tree"
+        },
+        {
+          "id": "s3-06",
+          "icon": "⚖️",
+          "q": "Čo spraví `StandardScaler` a ako sa to overilo?",
+          "a": "Každý príznak má potom priemer ≈ 0 a smerodajnú odchýlku 1 – overené `X2.mean(axis=0)` a `X2.std(axis=0)`. Dataset wine, porovnanie cez `boxplot`.",
+          "code": "my_scaler = preprocessing.StandardScaler()\nmy_scaler.fit(X[:, :3])\nX2 = my_scaler.transform(X[:, :3])",
+          "codeId": "w04-standard-scaler"
+        },
+        {
+          "id": "s3-07",
+          "icon": "📏",
+          "q": "Normalizácia vs. štandardizácia?",
+          "a": "Normalizácia = min-max do [0, 1] (`MinMaxScaler`); štandardizácia = priemer 0, odchýlka 1 (`StandardScaler`)."
+        },
+        {
+          "id": "s3-08",
+          "icon": "👕",
+          "q": "Ordinálny vs. nominálny atribút – ako ich zakóduješ?",
+          "a": "Ordinálny má poradie (S < M < L) → `map` so slovníkom. Nominálny poradie nemá (farby) → one-hot."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "topicId": "t4-validacia-ladenie",
+      "icon": "🔬",
+      "title": "Validácia a ladenie: K-fold, GridSearch, Pipeline",
+      "tagline": "Nehádaj hyperparametre – nech ich skúša počítač na foldoch.",
+      "flow": [
+        { "icon": "🧱", "text": "`Pipeline([('scl', StandardScaler()), ('clf', SVC())])`" },
+        { "icon": "🗺️", "text": "`param_grid = {'clf__C': [...]}`" },
+        { "icon": "🔁", "text": "`GridSearchCV(pipe, param_grid, cv=5)`" },
+        { "icon": "🏋️", "text": "`gs.fit(X_train, y_train)`" },
+        { "icon": "🏅", "text": "`best_params_`, `best_score_`" }
+      ],
+      "hook": "Dva podčiarkovníky `__` sú dvere do kroku pipeline: `clf__C` = parameter `C` kroku `clf`.",
+      "traps": [
+        "Počet trénovaní GridSearchCV = kombinácie × foldy (+ 1 finálne pretrénovanie).",
+        "`cross_val_score` klasifikátora použije stratifikovaný K-fold a accuracy, regresora K-fold a R².",
+        "Ladenie na testovacej množine = únik informácie (data leakage).",
+        "Zoznam slovníkov v `param_grid` = samostatné mriežky (každý kernel má svoju)."
+      ],
+      "cards": [
+        {
+          "id": "s4-01",
+          "icon": "🍰",
+          "q": "`KFold(n_splits=10, shuffle=True, random_state=5)` na 1000 vzorkách – aké sú foldy?",
+          "a": "10 foldov, v každom 900 train / 100 test. `kfold.split(X)` vracia indexy `(train, test)`.",
+          "code": "kfold = KFold(n_splits=10, shuffle=True, random_state=5)\nfor i, (train, test) in enumerate(kfold.split(X)):\n    print(i, len(train), len(test))",
+          "codeId": "w05-kfold-split"
+        },
+        {
+          "id": "s4-02",
+          "icon": "🔁",
+          "q": "Čo vráti `cross_val_score(rf, X, y, cv=5)`?",
+          "a": "Pole piatich skóre (pri regresore R²), priemer cez `np.mean(scores)`. Na cvičení `RandomForestRegressor` ≈ 0.92, `LinearRegression` 1.0.",
+          "code": "rf = ensemble.RandomForestRegressor(max_features='log2')\nscores = model_selection.cross_val_score(rf, X, y, cv=5)\nprint(np.mean(scores))",
+          "codeId": "w05-cross-val-score"
+        },
+        {
+          "id": "s4-03",
+          "icon": "🧮",
+          "q": "Ručná mriežka: `criteria = ['gini', 'entropy']`, `max_features = ['sqrt', 5, None]` – koľko stromov?",
+          "a": "`it.product(criteria, max_features)` = každá s každou: 2 × 3 = 6 stromov.",
+          "codeId": "w05-manual-grid"
+        },
+        {
+          "id": "s4-04",
+          "icon": "🔍",
+          "q": "Čo si vytiahneš z natrénovaného `GridSearchCV`?",
+          "a": "`best_params_`, `best_score_`, `best_estimator_` a `cv_results_` (napr. `params`, `mean_test_score`).",
+          "code": "gs = GridSearchCV(lr, param_grid, cv=5)\ngs.fit(X, y)\nprint(gs.best_params_)\nprint(gs.best_score_)",
+          "codeId": "w05-gridsearchcv"
+        },
+        {
+          "id": "s4-05",
+          "icon": "🚪",
+          "q": "Ako zapíšeš parameter kroku pipeline v `param_grid`?",
+          "a": "`'krok__parameter'`, napr. `'clf__C'`, `'clf__gamma'`, `'clf__kernel'`.",
+          "code": "pipe_svc = Pipeline([('scl', StandardScaler()), ('clf', SVC())])\nparam_grid = [{'clf__kernel': ['linear'], 'clf__C': param_range}]",
+          "codeId": "w06-gridsearch-pipeline"
+        },
+        {
+          "id": "s4-06",
+          "icon": "⚖️",
+          "q": "Prečo `StratifiedKFold` a čo potrebuje v `split`?",
+          "a": "Zachová pomer tried v každom folde – pri nevyvážených triedach. `skf.split(X_train, y_train)` potrebuje aj `y`.",
+          "code": "skf = StratifiedKFold(n_splits=5)\nfor train, test in skf.split(X_train, y_train):\n    pipe_svc.fit(X_train[train], y_train[train])",
+          "codeId": "w06-stratified-kfold"
+        },
+        {
+          "id": "s4-07",
+          "icon": "🎢",
+          "q": "Overfitting vs. underfitting – ako ich spoznáš?",
+          "a": "Overfitting: train výborný, test/validácia slabá (vysoký rozptyl). Underfitting: chyba vysoká všade (vysoká odchýlka)."
+        },
+        {
+          "id": "s4-08",
+          "icon": "📊",
+          "q": "Krivka učenia vs. validačná krivka?",
+          "a": "Krivka učenia: presnosť vs. počet trénovacích vzoriek. Validačná krivka: presnosť vs. hodnota hyperparametra."
+        },
+        {
+          "id": "s4-09",
+          "icon": "🧪",
+          "q": "Parameter vs. hyperparameter?",
+          "a": "Parametre sa model učí vo `fit()` (napr. `coef_`), hyperparametre nastavíš ty pred učením (`C`, `max_depth`, `k`)."
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "topicId": "t5-vyber-pca-klastrovanie",
+      "icon": "🎯",
+      "title": "Výber príznakov, PCA a K-means",
+      "tagline": "Menej stĺpcov, menej pretrénovania – a zhluky bez učiteľa.",
+      "flow": [
+        { "icon": "🧹", "text": "Filter `VarianceThreshold`, `SelectKBest`" },
+        { "icon": "🔁", "text": "Wrapper `RFECV`" },
+        { "icon": "🌲", "text": "Embedded `SelectFromModel`" },
+        { "icon": "🗜️", "text": "`PCA(n_components=3)`" },
+        { "icon": "🫧", "text": "`KMeans(n_clusters=3)`" }
+      ],
+      "hook": "F-W-E: Filter = sito (štatistika bez modelu), Wrapper = ochutnávač (trénuje model stále dookola), Embedded = model to povie sám (`feature_importances_`).",
+      "traps": [
+        "Výber príznakov ponecháva pôvodné stĺpce; PCA vytvára nové (lineárne kombinácie).",
+        "`VarianceThreshold` nepoužíva `y` a závisí od mierky dát.",
+        "K-means potrebuje zadať K; DBSCAN nie (šum má značku −1).",
+        "`RFECV.ranking_` = 1 znamená vybraný príznak."
+      ],
+      "cards": [
+        {
+          "id": "s5-01",
+          "icon": "🧹",
+          "q": "Ako funguje `VarianceThreshold(threshold=0.05)`?",
+          "a": "Zahodí príznaky s rozptylom pod prahom (bez `y`). Ponechané mená: `get_feature_names_out()`, maska: `get_support()`.",
+          "code": "selector = VarianceThreshold(threshold=0.05)\nnew_selection = selector.fit_transform(data)",
+          "codeId": "w06-filter-variance-threshold"
+        },
+        {
+          "id": "s5-02",
+          "icon": "🏅",
+          "q": "`SelectKBest(f_classif, k=5)` – podľa čoho vyberá?",
+          "a": "ANOVA F-test – každý príznak hodnotí samostatne, skóre sú v `scores_`; nechá 5 najlepších.",
+          "code": "kbest = SelectKBest(f_classif, k=5).fit(X, y)\nX_selected = kbest.transform(X)",
+          "codeId": "w06-filter-selectkbest"
+        },
+        {
+          "id": "s5-03",
+          "icon": "🔁",
+          "q": "Ako pracuje `RFECV` a koľko príznakov nechal na cvičení?",
+          "a": "Po jednom (`step=1`) odstraňuje príznak s najmenšou |váhou| lineárneho SVC; počet určí krížová validácia – `n_features_` = 11 z 13.",
+          "code": "selector = RFECV(clf, step=1, cv=5, scoring='accuracy',\n                 importance_getter='named_steps.clf.coef_')\nX_selected = selector.fit_transform(X, y)",
+          "codeId": "w06-wrapper-rfecv"
+        },
+        {
+          "id": "s5-04",
+          "icon": "🌲",
+          "q": "Embedded výber s náhodným lesom – ako?",
+          "a": "`feature_importances_` lesa (súčet 1) → `SelectFromModel(rf, threshold='mean', prefit=True)` nechá nadpriemerne dôležité.",
+          "code": "rf = RandomForestClassifier(n_estimators=200, random_state=5)\nrf.fit(X, y)\nselector = SelectFromModel(rf, threshold='mean', prefit=True)\nX_selected = selector.transform(X)",
+          "codeId": "w06-embedded-rf-importances"
+        },
+        {
+          "id": "s5-05",
+          "icon": "💪",
+          "q": "Lakťová metóda – čo sa ukladá a čo hľadáš?",
+          "a": "Pre K = 1 … 10 ulož `km.inertia_` (SSE vnútri klastrov), nakresli a hľadaj zlom „lakťa“ – na cvičení K = 3. Potom `km.fit_predict(data)`.",
+          "code": "for i in range(1, 11):\n    km = KMeans(n_clusters=i, random_state=5)\n    km.fit(data)\n    distortions.append(km.inertia_)",
+          "codeId": "w06-kmeans-elbow"
+        },
+        {
+          "id": "s5-06",
+          "icon": "🗜️",
+          "q": "PCA na cvičení – koľko komponentov a koľko rozptylu zachovali?",
+          "a": "`PCA(n_components=3)`; `explained_variance_ratio_` = `[0.385 0.129 0.061]` → spolu 57.5 % z 23 príznakov.",
+          "code": "pca = PCA(n_components=3)\npca.fit(data)\ndata_reduced = pd.DataFrame(pca.transform(data), columns=['col1', 'col2', 'col3'])",
+          "codeId": "w06-pca-kmeans"
+        },
+        {
+          "id": "s5-07",
+          "icon": "🔄",
+          "q": "Algoritmus K-means v štyroch krokoch?",
+          "a": "Náhodné centroidy → každý bod k najbližšiemu centroidu → centroid do priemeru svojich bodov → opakuj. Minimalizuje SSE (`inertia_`), čaká guľaté klastre."
+        },
+        {
+          "id": "s5-08",
+          "icon": "🌌",
+          "q": "DBSCAN – čím sa líši od K-means?",
+          "a": "Body delí na hlavné / hraničné / šum podľa `eps` a `min_samples`; počet klastrov netreba, zvládne neguľaté tvary, šum má značku −1."
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "topicId": "t6-vyhladavanie",
+      "icon": "🧭",
+      "title": "Hľadanie cesty: BFS, DFS, Greedy, A*",
+      "tagline": "Štyri algoritmy, jedna kostra – líšia sa len tým, koho vytiahnu z hranice.",
+      "flow": [
+        { "icon": "🌊", "text": "BFS – rad `popleft()` (FIFO)" },
+        { "icon": "🕳️", "text": "DFS – zásobník `pop()` (LIFO)" },
+        { "icon": "🏃", "text": "Greedy – halda podľa `h(n)`" },
+        { "icon": "⭐", "text": "A* – halda podľa `g(n) + h(n)`" }
+      ],
+      "hook": "Greedy je chamtivec – pozerá len dopredu (`h`). A* je účtovník – ráta aj to, čo už zaplatil (`g + h`).",
+      "traps": [
+        "`popleft()` ↔ `pop()` – jedno slovo mení BFS na DFS.",
+        "Greedy nie je optimálny: na 8-puzzle 36 ťahov namiesto 14.",
+        "Medzera (0) sa do heuristík nepočíta.",
+        "A* je optimálny s prípustnou heuristikou `h(n) ≤ h*(n)`."
+      ],
+      "cards": [
+        {
+          "id": "s6-01",
+          "icon": "🧩",
+          "q": "8-puzzle: ako vzniknú ťahy a nový stav?",
+          "a": "Medzera sa skúša posunúť 4 smermi, kontrola hraníc `0 <= nr < self.size`, nová doska je kópia `[row[:] for row in self.board]`.",
+          "code": "for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:",
+          "codeId": "w07-state-moves"
+        },
+        {
+          "id": "s6-02",
+          "icon": "🌊",
+          "q": "Kostra BFS?",
+          "a": "Rad `deque`, množina `visited`, `popleft()`, test cieľa, nových susedov `append`. Optimálny pri rovnakých cenách krokov.",
+          "code": "frontier = deque([start_state])\nvisited = {start_state}\nwhile frontier:\n    current_state = frontier.popleft()",
+          "codeId": "w07-bfs"
+        },
+        {
+          "id": "s6-03",
+          "icon": "🕳️",
+          "q": "Kostra DFS a jeho slabina?",
+          "a": "`stack = [start_state]`, `stack.pop()`, limit expanzií `if expanded >= limit`. Málo pamäte, ale cesta môže byť obrovská (40 828 ťahov namiesto 16).",
+          "codeId": "w07-dfs"
+        },
+        {
+          "id": "s6-04",
+          "icon": "📐",
+          "q": "Misplaced tiles a Manhattan pre `8 1 3 / 4 _ 2 / 7 6 5`?",
+          "a": "Misplaced = 5, Manhattan = 10 (optimum je 14 ťahov). Obe sú prípustné, Manhattan dominuje.",
+          "code": "goal_r = (val - 1) // self.size\ngoal_c = (val - 1) % self.size\ndistance += abs(goal_r - r) + abs(goal_c - c)",
+          "codeId": "w08-heuristics"
+        },
+        {
+          "id": "s6-05",
+          "icon": "🏃",
+          "q": "Greedy best-first – čo je v halde?",
+          "a": "Záznam `(heuristic(stav), state_id, stav)`, výber `heapq.heappop`, spracované v `closed_list`. Rýchly, ale 36 ťahov namiesto 14.",
+          "codeId": "w08-greedy"
+        },
+        {
+          "id": "s6-06",
+          "icon": "⭐",
+          "q": "A* – ako sa počíta priorita a ako dopadol?",
+          "a": "`f = g + h`; `g = {start_state: 0}`, sused dostane `g[current] + 1`, ak je to lepšie. 14 ťahov a 77 expanzií (BFS 5961).",
+          "code": "tentative_g = g[current] + 1\nif tentative_g < g.get(neighbor, float('inf')):\n    g[neighbor] = tentative_g",
+          "codeId": "w08-astar"
+        },
+        {
+          "id": "s6-07",
+          "icon": "🎟️",
+          "q": "Prečo je v halde aj `state_id`?",
+          "a": "Pri rovnakej priorite rozhodne počítadlo – inak by Python porovnával stavy a `PuzzleState` nemá `<` → `TypeError`."
+        },
+        {
+          "id": "s6-08",
+          "icon": "🧾",
+          "q": "Prípustná vs. konzistentná heuristika?",
+          "a": "Prípustná: `h(n) ≤ h*(n)` (nikdy nepreceňuje). Konzistentná: `h(n) ≤ c(n, n') + h(n')`. Konzistentná ⇒ prípustná."
+        }
+      ]
+    },
+    {
+      "id": "s7",
+      "topicId": "t7-csp",
+      "icon": "🔢",
+      "title": "Sudoku a CSP: backtracking, MRV, LCV, FC",
+      "tagline": "Skús číslo, zanor sa, a keď to nejde – zmaž a skús ďalšie.",
+      "flow": [
+        { "icon": "✅", "text": "`is_valid(r, c, val)`" },
+        { "icon": "📋", "text": "`get_domain(r, c)`" },
+        { "icon": "🔙", "text": "Backtracking `_dfs`" },
+        { "icon": "🎯", "text": "MRV – bunka s najmenšou doménou" },
+        { "icon": "🤝", "text": "LCV – poradie hodnôt" },
+        { "icon": "🔮", "text": "Forward checking `_fc`" }
+      ],
+      "hook": "MRV = „najprv najťažšia bunka“ (fail-first), LCV = „buď ohľaduplný k susedom“, forward checking = „pozri sa dopredu, či niekomu nezostala prázdna doména“.",
+      "traps": [
+        "MRV vyberá premennú (bunku), LCV určuje poradie hodnôt.",
+        "LCV v kóde z cvičenia počíta susedov, ktorí hodnotu nemôžu vziať (opačne ako učebnica), a radí vzostupne.",
+        "Prázdna doména nepriradenej bunky = okamžitý návrat.",
+        "CSP je identifikačný problém – záleží na cieľovom stave, nie na ceste."
+      ],
+      "cards": [
+        {
+          "id": "s7-01",
+          "icon": "🔢",
+          "q": "Sudoku ako CSP – premenné, domény, ohraničenia?",
+          "a": "81 premenných, doména 1–9, 27 ohraničení `alldiff` (9 riadkov + 9 stĺpcov + 9 blokov); každá bunka má 20 susedov."
+        },
+        {
+          "id": "s7-02",
+          "icon": "📦",
+          "q": "Ako `is_valid` nájde začiatok bloku 3 × 3?",
+          "a": "Celočíselným delením: `(r // 3) * 3` a `(c // 3) * 3`. Kontroluje riadok, stĺpec a blok.",
+          "code": "block_row = (r // 3) * 3\nblock_col = (c // 3) * 3\nfor i in range(block_row, block_row + 3):",
+          "codeId": "w09-sudoku-is-valid"
+        },
+        {
+          "id": "s7-03",
+          "icon": "📋",
+          "q": "Čo vráti `get_domain(r, c)`?",
+          "a": "Pre vyplnenú bunku `[]`; inak hodnoty 1–9, pre ktoré `is_valid` vráti `True`.",
+          "codeId": "w09-sudoku-get-domain"
+        },
+        {
+          "id": "s7-04",
+          "icon": "🔙",
+          "q": "Srdce backtrackingu v `_dfs`?",
+          "a": "Pre každú hodnotu z domény: priraď, zanor sa; keď rekurzia uspeje → `True`, inak bunku vynuluj. Keď nevyšla žiadna hodnota → `False`.",
+          "code": "for val in domain:\n    self.board.grid[r][c] = val\n    if self._dfs(use_mrv, use_lcv):\n        return True\n    self.board.grid[r][c] = 0\nreturn False",
+          "codeId": "w09-sudoku-backtracking-dfs"
+        },
+        {
+          "id": "s7-05",
+          "icon": "🎯",
+          "q": "MRV – ako vyberie bunku a koľko pomôže?",
+          "a": "Prejde prázdne bunky a nechá tú s najmenšou doménou (`len(domain) < len(best_domain)`). Ťažká doska: 8892 → 215 expanzií.",
+          "codeId": "w09-sudoku-mrv"
+        },
+        {
+          "id": "s7-06",
+          "icon": "🤝",
+          "q": "LCV – ako zoradí hodnoty?",
+          "a": "Každej hodnote spočíta skóre cez susedov (`peers`) a zoradí `sorted(domain, key=lambda v: value_scores[v])`.",
+          "codeId": "w09-sudoku-lcv"
+        },
+        {
+          "id": "s7-07",
+          "icon": "🔮",
+          "q": "Forward checking – čo kontroluje po priradení?",
+          "a": "Že každá prázdna bunka má ešte neprázdnu doménu: `all(self.board.get_domain(rr, cc) ...)`. Ťažká doska: 8892 → 5138 expanzií.",
+          "codeId": "w09-sudoku-forward-checking"
+        },
+        {
+          "id": "s7-08",
+          "icon": "🔗",
+          "q": "Hranová konzistencia (AC-3)?",
+          "a": "`X → Y` je konzistentná, ak každé `x` má podporu v `D(Y)`. Zmenšuje domény, ale riešenie negarantuje."
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "topicId": "t8-lokalne-vyhladavanie",
+      "icon": "⛰️",
+      "title": "Lokálne vyhľadávanie na N-dámach",
+      "tagline": "Žiadna cesta, len jeden stav, ktorý sa postupne vylepšuje.",
+      "flow": [
+        { "icon": "👑", "text": "`queens[col] = row`" },
+        { "icon": "💥", "text": "`conflicts()` = ohrozujúce sa dvojice" },
+        { "icon": "⛰️", "text": "Hill climbing" },
+        { "icon": "🔥", "text": "Simulované žíhanie" },
+        { "icon": "🧬", "text": "Genetický algoritmus" }
+      ],
+      "hook": "Horolezec ide len hore a uviazne. Kováč občas urobí krok späť, kým je železo horúce. Evolúcia chová celú populáciu.",
+      "traps": [
+        "Lokálne vyhľadávanie vracia koncový stav, nie cestu.",
+        "Žiadny z týchto algoritmov nezaručuje globálne optimum.",
+        "Hill climbing na 8 dámach uspeje len asi v 14 % prípadov."
+      ],
+      "cards": [
+        {
+          "id": "s8-01",
+          "icon": "💥",
+          "q": "Ako sa počítajú konflikty N dám?",
+          "a": "Pre riadky, diagonály (`r - c`) a antidiagonály (`r + c`) spočítaj dámy `k`; konflikty = súčet `k * (k - 1) // 2`. `(0, 1, 2, 3)` → 6, `(1, 3, 0, 2)` → 0.",
+          "codeId": "w10-nqueens-conflicts"
+        },
+        {
+          "id": "s8-02",
+          "icon": "⛰️",
+          "q": "Kedy hill climbing skončí?",
+          "a": "Keď je v cieli alebo keď najlepší sused nie je lepší (`>=`).",
+          "code": "neighbor = current.best_neighbor()\nif neighbor.conflicts() >= current.conflicts():\n    break\ncurrent = neighbor",
+          "codeId": "w10-hill-climbing"
+        },
+        {
+          "id": "s8-03",
+          "icon": "🔥",
+          "q": "Simulované žíhanie – kedy prijme horšieho suseda?",
+          "a": "Lepšieho vždy, horšieho s pravdepodobnosťou `exp(-delta / T)`. Teplota klesá `T = T * cooling` (predvolene `t_start=2.0`, `cooling=0.995`).",
+          "code": "delta = neighbor.conflicts() - current.conflicts()\nif delta < 0 or random.random() < math.exp(-delta / T):\n    current = neighbor\nT = T * cooling",
+          "codeId": "w10-simulated-annealing"
+        },
+        {
+          "id": "s8-04",
+          "icon": "🧬",
+          "q": "Jedna generácia genetického algoritmu?",
+          "a": "Zoraď podľa `conflicts()` → elita prejde rovno → turnajom vyber rodičov → `crossover` → s pravdepodobnosťou `mutation_rate` `mutate`.",
+          "code": "population.sort(key=lambda s: s.conflicts())\nnew_population = population[:elite]",
+          "codeId": "w10-genetic-algorithm"
+        },
+        {
+          "id": "s8-05",
+          "icon": "🏔️",
+          "q": "Kde hill climbing uviazne a čo pomôže?",
+          "a": "Lokálne maximum, planina (plateau), hrebeň. Pomôže random restart – očakávane `1 / p` behov."
+        },
+        {
+          "id": "s8-06",
+          "icon": "🌡️",
+          "q": "Vysoká vs. nízka teplota v žíhaní?",
+          "a": "Vysoká T = prieskum (berie aj horšie stavy), nízka T = správa sa ako hill climbing."
+        },
+        {
+          "id": "s8-07",
+          "icon": "📊",
+          "q": "Úspešnosť na náhodných 8 × 8 doskách?",
+          "a": "Hill climbing ≈ 14 %, simulované žíhanie ≈ 85 %, genetický algoritmus ≈ 80 % (do 1000 generácií)."
+        },
+        {
+          "id": "s8-08",
+          "icon": "🗺️",
+          "q": "Kto hľadá cestu a kto len cieľový stav?",
+          "a": "Cestu: DFS, BFS, UCS, Greedy, A*. Len cieľový stav (identifikačné problémy): backtracking, min-conflicts, hill climbing, žíhanie, GA."
+        }
+      ]
+    }
+  ],
+  "libraries": [
+    {
+      "module": "numpy",
+      "icon": "🔢",
+      "nick": "Kalkulačka",
+      "import": "import numpy as np",
+      "items": [
+        { "name": "np.arange", "what": "postupnosť čísel 0 … n − 1" },
+        { "name": "np.isnan", "what": "maska, kde je NaN" },
+        { "name": "np.where", "what": "indexy, kde platí podmienka" },
+        { "name": "np.argsort", "what": "indexy, ktoré pole zoradia" },
+        { "name": "np.cumsum", "what": "kumulatívny súčet" },
+        { "name": "np.load", "what": "načíta pole zo súboru `.npy`" }
+      ]
+    },
+    {
+      "module": "pandas",
+      "icon": "🐼",
+      "nick": "Tabuľkár",
+      "import": "import pandas as pd",
+      "items": [
+        { "name": "pd.read_csv", "what": "načíta CSV do DataFrame" },
+        { "name": "pd.DataFrame", "what": "tabuľka s pomenovanými stĺpcami" },
+        { "name": "df.groupby", "what": "zoskupí riadky podľa stĺpca" },
+        { "name": "df.drop", "what": "zahodí stĺpce (`columns=[...]`)" },
+        { "name": "df.iloc", "what": "výber podľa poradia riadkov a stĺpcov" }
+      ]
+    },
+    {
+      "module": "matplotlib.pyplot",
+      "icon": "🎨",
+      "nick": "Maliar",
+      "import": "import matplotlib.pyplot as plt",
+      "items": [
+        { "name": "plt.imshow", "what": "vykreslí obrázok (napr. číslicu)" },
+        { "name": "plt.subplots", "what": "mriežka grafov `fig, axes`" },
+        { "name": "ax.boxplot", "what": "krabicový graf rozloženia hodnôt" },
+        { "name": "plt.plot", "what": "čiarový graf (lakťová metóda)" },
+        { "name": "ax.scatter", "what": "bodový graf" }
+      ]
+    },
+    {
+      "module": "sklearn.datasets",
+      "icon": "📦",
+      "nick": "Sklad dát",
+      "import": "from sklearn import datasets",
+      "items": [
+        { "name": "load_iris", "what": "kosatce: 150 vzoriek, 3 triedy" },
+        { "name": "load_digits", "what": "číslice 8 × 8: 1797 vzoriek" },
+        { "name": "load_wine", "what": "vína – škálovanie na cvičení" },
+        { "name": "make_classification", "what": "vygeneruje klasifikačné dáta" },
+        { "name": "make_blobs", "what": "vygeneruje zhluky bodov" },
+        { "name": "make_regression", "what": "vygeneruje regresné dáta" },
+        { "name": "fetch_olivetti_faces", "what": "400 tvárí 64 × 64" }
+      ]
+    },
+    {
+      "module": "sklearn.model_selection",
+      "icon": "✂️",
+      "nick": "Deliareň",
+      "import": "from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cross_val_score, GridSearchCV",
+      "items": [
+        { "name": "train_test_split", "what": "rozdelí dáta na train a test" },
+        { "name": "KFold", "what": "k foldov na krížovú validáciu" },
+        { "name": "StratifiedKFold", "what": "foldy so zachovaným pomerom tried" },
+        { "name": "cross_val_score", "what": "skóre modelu v každom folde" },
+        { "name": "GridSearchCV", "what": "skúsi všetky kombinácie hyperparametrov s CV" }
+      ]
+    },
+    {
+      "module": "sklearn.preprocessing",
+      "icon": "⚖️",
+      "nick": "Prekladač",
+      "import": "from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder, OneHotEncoder",
+      "items": [
+        { "name": "StandardScaler", "what": "priemer 0, smerodajná odchýlka 1" },
+        { "name": "MinMaxScaler", "what": "škáluje do intervalu [0, 1]" },
+        { "name": "LabelEncoder", "what": "kategórie → čísla 0 … k − 1 (abecedne)" },
+        { "name": "OneHotEncoder", "what": "kategória → stĺpce 0/1" }
+      ]
+    },
+    {
+      "module": "sklearn.impute",
+      "icon": "🩹",
+      "nick": "Záplata",
+      "import": "from sklearn.impute import SimpleImputer",
+      "items": [
+        { "name": "SimpleImputer", "what": "doplní NaN priemerom alebo mediánom" }
+      ]
+    },
+    {
+      "module": "sklearn.svm",
+      "icon": "⚔️",
+      "nick": "Šermiar",
+      "import": "from sklearn.svm import SVC, SVR",
+      "items": [
+        { "name": "SVC", "what": "SVM klasifikátor (`kernel`, `C`, `gamma`)" },
+        { "name": "SVR", "what": "SVM na regresiu" }
+      ]
+    },
+    {
+      "module": "sklearn.tree",
+      "icon": "🌳",
+      "nick": "Strom",
+      "import": "from sklearn.tree import DecisionTreeClassifier",
+      "items": [
+        { "name": "DecisionTreeClassifier", "what": "rozhodovací strom (`max_depth`, `criterion`)" }
+      ]
+    },
+    {
+      "module": "sklearn.ensemble",
+      "icon": "🌲",
+      "nick": "Les",
+      "import": "from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor",
+      "items": [
+        { "name": "RandomForestClassifier", "what": "les stromov, hlasovanie väčšinou" },
+        { "name": "RandomForestRegressor", "what": "les stromov na regresiu" }
+      ]
+    },
+    {
+      "module": "sklearn.neighbors",
+      "icon": "👯",
+      "nick": "Susedia",
+      "import": "from sklearn.neighbors import KNeighborsClassifier",
+      "items": [
+        { "name": "KNeighborsClassifier", "what": "KNN – hlasuje k najbližších susedov" }
+      ]
+    },
+    {
+      "module": "sklearn.linear_model",
+      "icon": "📈",
+      "nick": "Priamka",
+      "import": "from sklearn.linear_model import LinearRegression, LogisticRegression",
+      "items": [
+        { "name": "LinearRegression", "what": "regresná priamka y = A + B·x" },
+        { "name": "LogisticRegression", "what": "klasifikátor (napriek menu)" }
+      ]
+    },
+    {
+      "module": "sklearn.metrics",
+      "icon": "🎯",
+      "nick": "Rozhodca",
+      "import": "from sklearn.metrics import accuracy_score, r2_score, mean_absolute_error",
+      "items": [
+        { "name": "accuracy_score", "what": "podiel správnych predikcií" },
+        { "name": "r2_score", "what": "koeficient determinácie R²" },
+        { "name": "mean_absolute_error", "what": "priemerná absolútna chyba" }
+      ]
+    },
+    {
+      "module": "sklearn.pipeline",
+      "icon": "🧱",
+      "nick": "Montážna linka",
+      "import": "from sklearn.pipeline import Pipeline",
+      "items": [
+        { "name": "Pipeline", "what": "reťaz krokov ako jeden model" }
+      ]
+    },
+    {
+      "module": "sklearn.feature_selection",
+      "icon": "🧹",
+      "nick": "Sito",
+      "import": "from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif, RFECV, SelectFromModel",
+      "items": [
+        { "name": "VarianceThreshold", "what": "zahodí príznaky s malým rozptylom" },
+        { "name": "SelectKBest", "what": "nechá k najlepších príznakov podľa testu" },
+        { "name": "f_classif", "what": "ANOVA F-test pre `SelectKBest`" },
+        { "name": "RFECV", "what": "rekurzívne odoberá príznaky + krížová validácia" },
+        { "name": "SelectFromModel", "what": "vyberie príznaky podľa dôležitosti z modelu" }
+      ]
+    },
+    {
+      "module": "sklearn.cluster",
+      "icon": "🫧",
+      "nick": "Zhlukovač",
+      "import": "from sklearn.cluster import KMeans, DBSCAN",
+      "items": [
+        { "name": "KMeans", "what": "K klastrov okolo centroidov" },
+        { "name": "DBSCAN", "what": "klastre podľa hustoty, šum = −1" }
+      ]
+    },
+    {
+      "module": "sklearn.decomposition",
+      "icon": "🗜️",
+      "nick": "Lis",
+      "import": "from sklearn.decomposition import PCA",
+      "items": [
+        { "name": "PCA", "what": "nové osi s najväčším rozptylom" }
+      ]
+    },
+    {
+      "module": "collections",
+      "icon": "🚶",
+      "nick": "Rad",
+      "import": "from collections import deque",
+      "items": [
+        { "name": "deque", "what": "rad s `popleft()` pre BFS" }
+      ]
+    },
+    {
+      "module": "heapq",
+      "icon": "🏔️",
+      "nick": "Halda",
+      "import": "import heapq",
+      "items": [
+        { "name": "heapq.heappush", "what": "vloží záznam do open listu (haldy)" },
+        { "name": "heapq.heappop", "what": "vyberie záznam s najmenšou prioritou" }
+      ]
+    },
+    {
+      "module": "itertools",
+      "icon": "🔀",
+      "nick": "Kombinátor",
+      "import": "from itertools import product",
+      "items": [
+        { "name": "product", "what": "všetky kombinácie hodnôt (mriežka)" }
+      ]
+    }
+  ]
+}

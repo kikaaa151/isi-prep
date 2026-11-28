@@ -18,7 +18,8 @@
       attempts: [],           // finished tests, newest first, at most MAX_ATTEMPTS
       activeTest: null,       // the test in progress
       testConfig: null,       // last used start-screen settings
-      lastStudy: null         // { route, label, at } for "continue where I left off"
+      lastStudy: null,        // { route, label, at } for "continue where I left off"
+      speed: { known: {}, best: 0, plays: 0 }  // speed mode: cardId -> timestamp, best quiz score, quiz rounds played
     };
   }
 
@@ -45,6 +46,12 @@
     }
     if (!isObject(state.testConfig)) state.testConfig = null;
     if (!isObject(state.lastStudy)) state.lastStudy = null;
+    const speed = isObject(state.speed) ? state.speed : {};
+    state.speed = {
+      known: isObject(speed.known) ? speed.known : {},
+      best: Number.isFinite(speed.best) && speed.best > 0 ? Math.floor(speed.best) : 0,
+      plays: Number.isFinite(speed.plays) && speed.plays > 0 ? Math.floor(speed.plays) : 0
+    };
     return state;
   }
 

@@ -1,13 +1,13 @@
 // Offline support for the installed app: network first (content updates show up at once), cache when offline.
 // Bump CACHE when SHELL changes.
-const CACHE = 'isi-prep-v1';
+const CACHE = 'isi-prep-v2';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
-  'css/base.css', 'css/components.css', 'css/code.css', 'css/studio.css', 'css/reading.css',
+  'css/base.css', 'css/components.css', 'css/code.css', 'css/studio.css', 'css/reading.css', 'css/speed.css',
   'js/boot.js', 'js/data.js', 'js/logic.js', 'js/store.js', 'js/ui.js', 'js/app.js',
   'js/views/dashboard.js', 'js/views/test.js', 'js/views/practice.js', 'js/views/theory.js',
-  'js/views/codes.js', 'js/views/weeks.js', 'js/views/settings.js'
+  'js/views/codes.js', 'js/views/weeks.js', 'js/views/settings.js', 'js/views/speed.js'
 ];
 // On a slow mobile connection the cached copy is served after this delay.
 const NETWORK_TIMEOUT_MS = 4000;

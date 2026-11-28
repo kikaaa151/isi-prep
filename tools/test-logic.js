@@ -518,5 +518,46 @@ test('question hash changes with the options', () => {
   assert.strictEqual(L.questionHash(a), L.questionHash(question('a', 'theory', 't1')));
 });
 
+// ---------------------------------------------------------------- speed mode quiz
+
+const SHELVES = [
+  { module: 'm1', items: [{ name: 'A', what: 'a' }, { name: 'B', what: 'b' }] },
+  { module: 'm2', items: [{ name: 'C', what: 'c' }] },
+  { module: 'm3', items: [{ name: 'D', what: 'd' }] },
+  { module: 'm4', items: [{ name: 'E', what: 'e' }] },
+  { module: 'm5', items: [{ name: 'F', what: 'f' }] }
+];
+
+test('a quiz round has up to 4 distinct options and the right answer among them', () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const round = L.blitzRound(SHELVES, L.mulberry32(seed));
+    assert.ok(round.options.length === 4 && new Set(round.options).size === 4);
+    const expected = round.kind === 'module' ? round.module : round.what;
+    assert.strictEqual(round.options[round.answer], expected);
+    const shelf = SHELVES.find((s) => s.module === round.module);
+    assert.ok(shelf.items.some((i) => i.name === round.name && i.what === round.what));
+  }
+});
+
+test('a quiz round never repeats the previous name and uses both kinds', () => {
+  const kinds = new Set();
+  for (let seed = 1; seed <= 100; seed++) {
+    const round = L.blitzRound(SHELVES, L.mulberry32(seed), 'A');
+    assert.notStrictEqual(round.name, 'A');
+    kinds.add(round.kind);
+  }
+  assert.deepStrictEqual([...kinds].sort(), ['module', 'what']);
+});
+
+test('a quiz round works with few shelves and returns null without items', () => {
+  const one = [{ module: 'm1', items: [{ name: 'A', what: 'a' }, { name: 'B', what: 'b' }] }];
+  for (let seed = 1; seed <= 20; seed++) {
+    const round = L.blitzRound(one, L.mulberry32(seed));
+    assert.strictEqual(round.kind, 'what');
+    assert.strictEqual(round.options.length, 2);
+  }
+  assert.strictEqual(L.blitzRound([], L.mulberry32(1)), null);
+});
+
 console.log(passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);

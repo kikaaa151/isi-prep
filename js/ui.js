@@ -20,6 +20,7 @@
       weeks: raw.weeks || [],
       codes: raw.codes || [],
       questions: raw.questions || [],
+      speed: raw.speed || { levels: [], libraries: [] },
       topicById: {},
       codeById: {},
       questionById: {}
@@ -53,6 +54,7 @@
   function icon(name) {
     const paths = {
       dashboard: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+      speed: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
       test: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v4H9zM9 12h6m-6 4h4"/>',
       practice: '<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5A8.5 8.5 0 0 1 10.5 3H13a8 8 0 0 1 8 8.5Z"/><path d="m8 12 3 3 5-6"/>',
       theory: '<path d="M12 5C9 3 5 3 2 4v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v15"/>',

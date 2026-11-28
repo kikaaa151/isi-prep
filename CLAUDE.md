@@ -29,7 +29,7 @@ python -m venv ..\.venv
 .\start.ps1                                   # build js\data.js, serve http://127.0.0.1:5173/, open browser
 ..\.venv\Scripts\python tools\build.py        # validate content + rebuild js\data.js
 ..\.venv\Scripts\python tools\build.py --check
-node tools\test-logic.js                      # tests of js\logic.js (53 tests)
+node tools\test-logic.js                      # tests of js\logic.js (56 tests)
 node tools\check-data.js                      # checks the built data.js against the logic
 ```
 
@@ -55,7 +55,8 @@ changed JS files. For UI changes, load the app in a browser and click through th
 
 The binding format is [content/README.md](content/README.md) – read it before touching content. In short:
 `topics.json` (8 fixed topics t1–t8), `theory\<topicId>.md`, `weeks\w01..w10.md`, `codes\<topicId>\index.json` +
-reference `.py` (key lines marked with a trailing `#!`), `questions\<topicId>.json` and `questions\quizlet.json`.
+reference `.py` (key lines marked with a trailing `#!`), `questions\<topicId>.json` and `questions\quizlet.json`,
+`speed.json` (Speed mód: levels of flip cards, library shelves for the 60-second import quiz).
 Code entries with `"core": true` are the typical exercise codes (the default "Kódy z cvičení" list, 44 of 81); each
 needs a beginner-level walkthrough `codes\<topicId>\<id>.md` ("Jednoducho vysvetlené") – the build fails without it.
 Paths like `D:\SKOLA\ISI\...` in that file are from the original machine – adapt them to the local checkout.

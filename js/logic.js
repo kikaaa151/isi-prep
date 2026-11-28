@@ -867,6 +867,32 @@
     return results.slice(0, limit || 30);
   }
 
+  // ---------------------------------------------------------------- speed mode quiz
+
+  /**
+   * One round of the speed quiz from the library shelves: where does `name` live ('module') or what does it do
+   * ('what'). Never repeats the name `previous`. Returns { name, module, what, kind, options, answer } or null.
+   */
+  function blitzRound(libraries, rng, previous) {
+    const random = rng || Math.random;
+    const items = [];
+    libraries.forEach(function (library) {
+      library.items.forEach(function (item) { items.push({ name: item.name, what: item.what, module: library.module }); });
+    });
+    const candidates = items.length > 1 ? items.filter(function (item) { return item.name !== previous; }) : items;
+    if (!candidates.length) return null;
+    const pick = candidates[Math.floor(random() * candidates.length)];
+    const modules = libraries.map(function (library) { return library.module; });
+    let kind = random() < 0.5 ? 'module' : 'what';
+    if (kind === 'module' && modules.length < 2) kind = 'what';
+    const answer = kind === 'module' ? pick.module : pick.what;
+    const pool = (kind === 'module' ? modules : items.map(function (item) { return item.what; }))
+      .filter(function (value, index, all) { return value !== answer && all.indexOf(value) === index; });
+    if (!pool.length) return null;
+    const options = shuffle([answer].concat(shuffle(pool, random).slice(0, 3)), random);
+    return { name: pick.name, module: pick.module, what: pick.what, kind: kind, options: options, answer: options.indexOf(answer) };
+  }
+
   return {
     mulberry32: mulberry32,
     shuffle: shuffle,
@@ -904,6 +930,7 @@
     codeStatus: codeStatus,
     updateCodeStat: updateCodeStat,
     fillLines: fillLines,
-    searchSections: searchSections
+    searchSections: searchSections,
+    blitzRound: blitzRound
   };
 });

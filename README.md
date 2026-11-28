@@ -43,6 +43,7 @@ and bump `CACHE`.
 | Section | What it does |
 |---|---|
 | Prehľad | Progress per topic (theory read, codes mastered, question accuracy), last tests with a trend, weakest topics and questions, quick actions. |
+| Speed mód | Exam digest for a quick run-through: 8 colour-coded levels (one per topic) with a picture recipe of the exercise, a memory hook, flip cards ("Viem" / "Ešte nie", show all, shuffle) and exam traps; *Mapa knižníc* (one shelf per module with its import line, imports can be blurred for self-testing); *Bleskovka* – 60-second quiz "which module / what does it do" with streaks and a best score. Content from `content/speed.json`. |
 | Test | Simulation of the test: 10 theory + 5 practical questions spread over the topics, points 6 / 8 (weights 3 : 4, sum exactly 100), countdown with a warning at 5:00 and auto-submit, no way back, survives a reload. Result with breakdowns, full review and "Precvičiť chybné". The last 30 attempts are kept. |
 | Otázky | Practice with immediate feedback; filters topic / week / type / source / state; unseen and recently wrong questions come first. |
 | Teória | Theory per topic with a table of contents, "prečítané" mark, full-text search (ignores diacritics), printable cram sheet "Ťahák". |
@@ -57,7 +58,7 @@ Keyboard: in Test and Otázky `1`–`6` toggle the options and `Enter` confirms.
 ## Content
 
 Everything shown comes from `content\` – the format is defined in [content/README.md](content/README.md)
-(`topics.json`, `theory\<topicId>.md`, `weeks\wNN.md`, `codes\<topicId>\index.json` + `.py` (+ `.md` walkthrough of core exercises), `questions\*.json`).
+(`topics.json`, `theory\<topicId>.md`, `weeks\wNN.md`, `codes\<topicId>\index.json` + `.py` (+ `.md` walkthrough of core exercises), `questions\*.json`, `speed.json`).
 After editing the content rebuild the generated `js\data.js` (never edit it by hand):
 
 ```powershell
